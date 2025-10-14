@@ -8,8 +8,6 @@ Craft a subscription-ready SaaS fast: Next.js 15 (App Router) · Postgres · Aut
 
 </div>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
 ## What you get
 - Auth-first flow with Auth.js Credentials (email + password) and a built-in register endpoint
 - Tier gating: free vs premium with a simple guard component and server helpers
