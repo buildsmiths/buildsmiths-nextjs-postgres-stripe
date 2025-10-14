@@ -31,7 +31,7 @@ describe('Header navigation accessibility', () => {
     expect(html).toMatch(/<a[^>]*href=\"\/dashboard\"[^>]*>/);
     // aria-current present on Dashboard link
     expect(html).toMatch(/<a[^>]*href=\"\/dashboard\"[^>]*aria-current=\"page\"/);
-    // Settings link present
-    expect(html).toMatch(/<a[^>]*href=\"\/settings\"[^>]*>/);
+    // Settings link removed (settings merged into account)
+    expect(html).not.toMatch(/<a[^>]*href=\"\/settings\"[^>]*>/);
   });
 });

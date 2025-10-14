@@ -10,7 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "db:schema": "node scripts/db-apply.mjs db/init.sql",
-    "db:seed": "tsx scripts/seed.ts"
+    "db:seed": "node scripts/seed.mjs"
   },
   "engines": {
     "node": ">=22.12 <23"
