@@ -1,6 +1,6 @@
-# Minimal test suite
+# Test suite
 
-This repo ships with a lean, fast test baseline (~20 tests) that exercises the essentials:
+This repo ships with a lean, fast test baseline that exercises the essentials:
 
 - `tests/contract` — API contract and envelope behavior for auth, billing, and webhooks.
 - `tests/integration` — End-to-end flows like upgrade and webhook idempotency, plus signed-in/out UI states.
