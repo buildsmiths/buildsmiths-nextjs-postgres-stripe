@@ -1,4 +1,4 @@
--- Quickstart Starter - Initial Database Bootstrap
+-- BuildSmiths StarterKit - Initial Database Bootstrap
 -- One-shot, idempotent setup for any Postgres (hosted or local).
 -- Safe to re-run.
 

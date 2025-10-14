@@ -1,6 +1,6 @@
 <div align="center">
 
-# Buildsmiths Starter (v1)
+# BuildSmiths StarterKit (v1)
 
 Craft a subscription-ready SaaS fast: Next.js 15 (App Router) · Postgres · Auth.js (credentials) · optional Stripe · Tailwind v4 · Vitest · JSON logs + audit hooks.
 

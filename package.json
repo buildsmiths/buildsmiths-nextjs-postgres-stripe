@@ -1,5 +1,5 @@
 {
-  "name": "quickstart-subscription-template",
+  "name": "buildsmiths-nextjs-postgres-stripe",
   "version": "1.0.0",
   "private": true,
   "scripts": {
