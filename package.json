@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "db:schema": "tsx scripts/db-apply.ts db/init.sql",
+    "db:schema": "node scripts/db-apply.mjs db/init.sql",
     "db:seed": "tsx scripts/seed.ts"
   },
   "engines": {
@@ -19,6 +19,7 @@
     "@stripe/stripe-js": "^7.9.0",
     "autoprefixer": "^10.4.21",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^17.2.2",
     "next": "^15.5.3",
     "next-auth": "^4.24.11",
     "pg": "^8.12.0",
@@ -40,7 +41,6 @@
     "@typescript-eslint/eslint-plugin": "^8.8.1",
     "@typescript-eslint/parser": "^8.8.1",
     "@vitest/ui": "^3.2.4",
-    "dotenv": "^17.2.2",
     "eslint": "^9.11.0",
     "eslint-config-next": "^15.5.3",
     "eslint-plugin-import": "^2.29.1",

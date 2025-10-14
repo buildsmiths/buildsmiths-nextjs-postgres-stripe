@@ -41,20 +41,14 @@ Stripe keys in the example are safe placeholders; billing stays disabled until y
 
 3) Apply the database schema (idempotent; safe to re-run)
 
-Option A — use your .env.local directly:
+Option A — one command (works in Codespaces):
 ```bash
 npm run db:schema
 ```
+Reads `DATABASE_URL` from `.env.local` (shell values override).
 
-Note on env precedence for `db:schema`:
-- Shell environment > `.env.local` (non-empty values) > `.env` (non-empty values)
-- Empty assignments in `.env.local` do not mask values from `.env`.
-This ensures a default in `.env` still works if `.env.local` omits or leaves a variable empty.
-
-Option B — with psql and an exported DATABASE_URL:
-```bash
-psql "$DATABASE_URL" -f db/init.sql
-```
+Option B — copy/paste in your DB dashboard:
+Open your database console, paste `db/init.sql`, and run it. If your/provider blocks the `pgcrypto` extension, just remove the first line.
 
 4) Run the app
 
@@ -116,12 +110,18 @@ Optional but recommended:
 - Set NEXTAUTH_URL to the same value as NEXT_PUBLIC_SITE_URL if you see Auth.js warnings locally or in CI. At runtime the app infers NEXTAUTH_URL from NEXT_PUBLIC_SITE_URL, so leaving it unset is fine.
 
 4) Apply the database schema
+
+Default (recommended, no psql required):
 ```bash
-psql "$DATABASE_URL" -f db/init.sql
+npm run db:schema
 ```
 This starter does not auto-migrate. Tables are created when you run the bootstrap script above. It’s idempotent and safe to run again.
 
-Tip: `psql` reads the shell environment, not `.env.local`. The `db:schema` script reads `.env.local` for you. If you prefer raw psql, set `DATABASE_URL` in your shell or pass the URL inline.
+Alternatives:
+- Provider console: paste `db/init.sql` in your dashboard and run it.
+- Raw psql: `psql "$DATABASE_URL" -f db/init.sql` (set `DATABASE_URL` in your shell).
+
+Tip: `psql` reads the shell environment, not `.env.local`. The `db:schema` script reads `.env.local` for you.
 
 - macOS/Linux (bash):
 ```bash
@@ -198,7 +198,7 @@ npm start
 - build / start: production build and run
 - typecheck: TypeScript check
 - test / test:watch: run tests (single run or watch)
-- db:schema: apply `db/init.sql` using `.env.local`'s DATABASE_URL
+- db:schema: apply `db/init.sql` using `.env.local`'s DATABASE_URL (Node-only; no psql required)
 - db:seed: seed a dev user (optional)
 
 ---
