@@ -169,20 +169,25 @@ npm test
 npm run build
 ```
 
-9) Deploy (Vercel recommended)
-- Create a new Vercel project from this repo.
-- Set these env vars in Vercel Project Settings:
+9) Deploy
+- Provision a Node 22+ environment on your platform of choice (any Node host, container platform, or PaaS).
+- Set these environment variables in your runtime:
    - NEXT_PUBLIC_SITE_URL (your production URL)
    - NEXTAUTH_SECRET (new strong value for prod)
    - DATABASE_URL (production Postgres connection string)
    - ENFORCE_HTTPS=true
    - NEXTAUTH_URL (optional — set equal to NEXT_PUBLIC_SITE_URL)
    - Optional: Stripe keys when going beyond placeholder mode
-- Apply the schema to your production database:
+- Apply the schema to your production database (one-time, idempotent):
 ```bash
 psql "$DATABASE_URL" -f db/init.sql
 ```
-- Deploy and verify /api/health and auth flows.
+- Build and run the app in your environment:
+```bash
+npm run build
+npm start
+```
+- Verify `/api/health`, auth flows, and gated pages on your deployed URL.
 
 10) Optional Stripe test-mode
 - Replace placeholder Stripe keys with test keys.
@@ -328,7 +333,7 @@ npm run dev 2>&1 | grep -E 'auth_session\.|dev_bearer_present_but_disabled'
 ---
 
 ## Deploying
-Vercel or any Node host works. Remember:
+Any Node host works. Remember:
 - Set `NEXT_PUBLIC_SITE_URL` to your deployed URL
 - Provide `NEXTAUTH_SECRET`
 - Configure Stripe keys when enabling real billing
