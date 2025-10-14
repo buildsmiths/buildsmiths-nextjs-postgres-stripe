@@ -53,6 +53,10 @@ export default async function AccountPage() {
                     );
                 })()}
             </section>
+            <section aria-label="Preferences" className="space-y-2 pt-2">
+                <h2 className="text-xl font-medium">Preferences</h2>
+                <p className="text-sm text-gray-700">Coming soon.</p>
+            </section>
             <section aria-label="Billing" className="pt-4">
                 {state.tier === 'premium' ? (
                     <div>
