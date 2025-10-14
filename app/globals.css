@@ -1,0 +1,29 @@
+/* Global stylesheet pulling in Tailwind layers */
+@import "tailwindcss";
+
+/* Base design tokens (can expand later) */
+:root {
+    --color-bg: 255 255 255;
+    /* Token for focus ring color (Tailwind color var) */
+    --focus-ring: 56 189 248;
+    /* tailwind blue-400 */
+}
+
+html,
+body {
+    min-height: 100%;
+    background-color: rgb(var(--color-bg));
+}
+
+/* Accessibility tweaks */
+* {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* Utilities */
+/* Shared focus ring utility to standardize outlines across controls */
+.focus-ring:focus-visible {
+    outline: 2px solid rgb(var(--focus-ring));
+    outline-offset: 2px;
+}
