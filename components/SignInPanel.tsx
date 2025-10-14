@@ -70,8 +70,11 @@ export const SignInPanel: React.FC = () => {
                 const data = await res.json();
                 if (!res.ok || !data?.ok) throw new Error(data?.code || 'REGISTER_FAILED');
             }
-            const result = await signIn('credentials', { email, password, redirect: true, callbackUrl: '/dashboard' });
+            const result = await signIn('credentials', { email, password, redirect: false, callbackUrl: '/dashboard' });
             if ((result as any)?.error) throw new Error((result as any).error);
+            // On success, either NextAuth returns a URL or we fallback to our dashboard
+            const url = (result as any)?.url || '/dashboard';
+            window.location.assign(url);
         } catch (err: any) {
             setError(err?.message || 'Auth failed');
         } finally {

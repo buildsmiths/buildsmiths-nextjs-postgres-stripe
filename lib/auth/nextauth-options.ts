@@ -4,6 +4,10 @@ import { query } from '../db/simple';
 
 export const authOptions = {
     session: { strategy: 'jwt' as const },
+    pages: {
+        signIn: '/auth',
+        error: '/auth'
+    },
     providers: [
         Credentials({
             name: 'Credentials',
