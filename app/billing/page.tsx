@@ -64,9 +64,22 @@ export default async function BillingPage() {
                     </div>
                 )}
             </section>
-            <section className="text-xs text-gray-500 space-y-1">
-                <p>Non-production runs return mock checkout/portal identifiers. Configure real Stripe keys and webhooks before launch.</p>
-                <p>Need help? See Quickstart in the README for setup steps.</p>
+            <section aria-label="Getting started" className="border rounded p-4 bg-white text-sm space-y-3">
+                <h3 className="font-semibold text-sm">Next steps</h3>
+                <ul className="list-disc pl-5 space-y-1 marker:text-gray-400">
+                    <li>
+                        In non-production, endpoints return mock checkout/portal identifiers until real Stripe keys are set.
+                    </li>
+                    <li>
+                        Review your <a className="text-blue-600 hover:underline" href="/account">Account</a> and confirm your tier.
+                    </li>
+                    <li>
+                        Try the gated API: <a className="text-blue-600 hover:underline" href="/api/feature/premium-example">/api/feature/premium-example</a> {premium ? '(unlocked on Premium)' : '(403 on free)'}.
+                    </li>
+                    <li>
+                        Need help? See the quickstart in the README for setup steps.
+                    </li>
+                </ul>
             </section>
         </div>
     );
