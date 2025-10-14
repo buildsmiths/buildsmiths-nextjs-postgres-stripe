@@ -6,6 +6,9 @@ Craft a subscription-ready SaaS fast: Next.js 15 (App Router) · Postgres · Aut
 
 <sub>Minimal by design. Start with billing disabled, enable Stripe when ready. Postgres is required; tests run locally without live Stripe.</sub>
 
+<br />
+<img src="public/screenshot.png" alt="App homepage screenshot" width="800" />
+
 </div>
 
 ## What you get
@@ -23,8 +26,8 @@ Craft a subscription-ready SaaS fast: Next.js 15 (App Router) · Postgres · Aut
 1) Install and set env
 
 ```bash
-git clone https://github.com/graham-fleming/speckit-buildsmiths.git
-cd speckit-buildsmiths
+git clone https://github.com/buildsmiths/buildsmiths-nextjs-postgres-stripe.git
+cd buildsmiths-nextjs-postgres-stripe
 npm install
 cp .env.example .env.local
 ```
@@ -36,7 +39,7 @@ cp .env.example .env.local
 
 Stripe keys in the example are safe placeholders; billing stays disabled until you add real keys.
 
-4) Apply the database schema (idempotent; safe to re-run)
+3) Apply the database schema (idempotent; safe to re-run)
 
 Option A — use your .env.local directly:
 ```bash
@@ -72,9 +75,11 @@ npm run test:watch # watch mode
 This is a complete path from a fresh clone to a deployed app.
 
 1) Prerequisites
-- Node 20+ and npm
+- Node 22+ and npm
 - A Postgres database (hosted or local)
 - A strong secret for Auth.js sessions
+
+Note: If you use nvm, you can pin a version with the provided `.nvmrc`.
 
 2) Create a database (pick one)
 - Hosted Postgres: Use any managed Postgres provider; create a database and copy the connection string.
@@ -278,13 +283,8 @@ npm run test:watch
 ---
 
 ## Quick API calls (HTTP examples)
-HTTP request examples live in `specs/http/` and work great with VS Code REST Client or similar tools. Set a SITE variable to your running app (for local dev, http://localhost:3000) and execute requests:
+This repository doesn’t include ready-made HTTP request files. You can use any REST client (VS Code REST Client, Postman, curl) against your running app. A helpful tip is to export a SITE variable for local requests:
 
-- `specs/http/auth.http` — register, credentials sign-in, auth status
-- `specs/http/subscriptions.http` — checkout/portal envelope calls
-- `specs/http/webhooks.http` — dev-mode webhook payloads
-
-Tip: You can also export a shell variable and manually replace {{SITE}}:
 ```bash
 SITE=http://localhost:3000
 ```
@@ -332,7 +332,7 @@ Vercel or any Node host works. Remember:
 ---
 
 ## FAQ
-- Why multiple Vitest configs? Consolidated: see `vitest.config.ts` in scripts.
+- Why multiple Vitest configs? Consolidated: see `vitest.config.ts` at the repository root.
 - Do files need to live at the repo root? For V1, keep Next.js, Tailwind, PostCSS, and Vitest configs at the root unless you re‑wire scripts.
 - When are the DB tables created? When you run `psql "$DATABASE_URL" -f db/init.sql`. The script is idempotent; re-run it any time (e.g., after pointing at a fresh database).
 
@@ -340,5 +340,3 @@ Vercel or any Node host works. Remember:
 
 ## License
 MIT — see `LICENSE`.
-
-"# buildsmiths-nextjs-postgres-stripe" 
