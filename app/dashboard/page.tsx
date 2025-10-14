@@ -3,6 +3,7 @@ import { deriveSubscriptionStateAsync } from '../../lib/access/subscriptionState
 import { headers } from 'next/headers';
 import React from 'react';
 import PostCallbackStatus from '../../components/PostCallbackStatus';
+import SignedOutPrompt from '../../components/SignedOutPrompt';
 
 // Dashboard (T049): simple authenticated shell using header-based mock session.
 // Uses NextAuth server session today; expand with real per-user DB queries as needed.
@@ -18,14 +19,7 @@ export default async function DashboardPage() {
             reqLike = { headers: { get: (_key: string) => null } } as any;
         }
         const state = await deriveSubscriptionStateAsync(reqLike);
-        if (!state.authenticated) {
-            return (
-                <main aria-label="Dashboard" className="max-w-lg mx-auto mt-24 p-6 border rounded bg-white space-y-4 text-center">
-                    <h1 className="text-xl font-semibold" aria-current="page">Please sign in</h1>
-                    <p className="text-sm text-gray-600">Access the dashboard after authenticating.</p>
-                </main>
-            );
-        }
+        if (!state.authenticated) return <SignedOutPrompt ariaLabel="Dashboard" />;
 
         // Usage quotas removed in Phase 1; keep dashboard minimal.
 

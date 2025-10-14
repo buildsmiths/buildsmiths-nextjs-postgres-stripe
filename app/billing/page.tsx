@@ -2,6 +2,7 @@ import React from 'react';
 import { deriveSubscriptionStateAsync } from '../../lib/access/subscriptionState';
 import { isStripeConfigured } from '../../lib/config';
 import { headers } from 'next/headers';
+import SignedOutPrompt from '../../components/SignedOutPrompt';
 
 // Billing Page (T050)
 // Provides upgrade (checkout) and portal management entry points.
@@ -37,6 +38,7 @@ export default async function BillingPage() {
         reqLike = { headers: { get: (_key: string) => null } } as any;
     }
     const state = await deriveSubscriptionStateAsync(reqLike);
+    if (!state.authenticated) return <SignedOutPrompt ariaLabel="Billing" />;
     const premium = state.tier === 'premium';
     return (
         <div className="max-w-3xl mx-auto px-4 py-12 space-y-10">

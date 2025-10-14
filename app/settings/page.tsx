@@ -1,6 +1,7 @@
 import React from 'react';
 import { headers } from 'next/headers';
 import { deriveSubscriptionStateAsync } from '../../lib/access/subscriptionState';
+import SignedOutPrompt from '../../components/SignedOutPrompt';
 
 export default async function SettingsPage() {
     let reqLike: any;
@@ -11,6 +12,8 @@ export default async function SettingsPage() {
         reqLike = { headers: { get: (_key: string) => null } } as any;
     }
     const state = await deriveSubscriptionStateAsync(reqLike);
+
+    if (!state.authenticated) return <SignedOutPrompt ariaLabel="Settings" />;
 
     const userId = (state.rawSession as any)?.userId ?? null;
     const email = (state.rawSession as any)?.email ?? null;

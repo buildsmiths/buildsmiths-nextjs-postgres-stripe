@@ -1,6 +1,7 @@
 import React from 'react';
 import { headers } from 'next/headers';
 import { deriveSubscriptionStateAsync } from '../../lib/access/subscriptionState';
+import SignedOutPrompt from '../../components/SignedOutPrompt';
 
 export default async function AccountPage() {
     let reqLike: any;
@@ -12,14 +13,7 @@ export default async function AccountPage() {
     }
     const state = await deriveSubscriptionStateAsync(reqLike);
 
-    if (!state.authenticated) {
-        return (
-            <main aria-label="Account" className="max-w-lg mx-auto mt-24 p-6 border rounded bg-white space-y-4 text-center">
-                <h1 className="text-xl font-semibold">Please sign in</h1>
-                <p className="text-sm text-gray-600">Access your account after authenticating.</p>
-            </main>
-        );
-    }
+    if (!state.authenticated) return <SignedOutPrompt ariaLabel="Account" />;
 
     return (
         <main aria-label="Account" className="max-w-2xl mx-auto px-4 py-10 space-y-6">
