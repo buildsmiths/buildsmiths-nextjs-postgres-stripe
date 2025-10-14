@@ -4,6 +4,7 @@ import { headers } from 'next/headers';
 import React from 'react';
 import PostCallbackStatus from '../../components/PostCallbackStatus';
 import SignedOutPrompt from '../../components/SignedOutPrompt';
+import NextStepsCard from '../../components/NextStepsCard';
 
 // Dashboard (T049): simple authenticated shell using header-based mock session.
 // Uses NextAuth server session today; expand with real per-user DB queries as needed.
@@ -38,28 +39,21 @@ export default async function DashboardPage() {
                 {/* Brief status indicator shown immediately after OAuth callback; auto-hides shortly. */}
                 <PostCallbackStatus />
                 <section className="grid md:grid-cols-2 gap-6">
-                    <div className="border rounded p-4 bg-white text-sm space-y-3">
-                        <h3 className="font-semibold text-sm">Getting started</h3>
-                        <ul className="list-disc pl-5 space-y-1 marker:text-gray-400">
-                            <li>
-                                Review your profile on <a className="text-blue-600 hover:underline" href="/account">Account</a>.
-                            </li>
-                            <li>
-                                Manage your plan on <a className="text-blue-600 hover:underline" href="/billing">Billing</a> {state.tier !== 'premium' ? '(upgrade to unlock premium)' : '(you are on Premium)'}.
-                            </li>
-                            <li>
-                                Check service health at <a className="text-blue-600 hover:underline" href="/api/health">/api/health</a>.
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="border rounded p-4 bg-white text-sm space-y-3">
-                        <h3 className="font-semibold text-sm">Tips</h3>
-                        <ul className="list-disc pl-5 space-y-1 marker:text-gray-400">
-                            <li>Use the free tier to build; enable Stripe later with real keys.</li>
-                            <li>Protect premium features with the included guard utilities.</li>
-                            <li>See README for quickstart, envs, and deployment notes.</li>
-                        </ul>
-                    </div>
+                    <NextStepsCard
+                        items={[
+                            <span>Review your profile on <a className="text-blue-600 hover:underline" href="/account">Account</a>.</span>,
+                            <span>Manage your plan on <a className="text-blue-600 hover:underline" href="/billing">Billing</a> {state.tier !== 'premium' ? '(upgrade to unlock premium)' : '(you are on Premium)'}.</span>,
+                            <span>Check service health at <a className="text-blue-600 hover:underline" href="/api/health">/api/health</a>.</span>,
+                        ]}
+                    />
+                    <NextStepsCard
+                        title="Tips"
+                        items={[
+                            <span>Use the free tier to build; enable Stripe later with real keys.</span>,
+                            <span>Protect premium features with the included guard utilities.</span>,
+                            <span>See README for quickstart, envs, and deployment notes.</span>,
+                        ]}
+                    />
                 </section>
             </main>
         );

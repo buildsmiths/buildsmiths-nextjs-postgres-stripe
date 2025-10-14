@@ -3,6 +3,7 @@ import { deriveSubscriptionStateAsync } from '../../lib/access/subscriptionState
 import { isStripeConfigured } from '../../lib/config';
 import { headers } from 'next/headers';
 import SignedOutPrompt from '../../components/SignedOutPrompt';
+import NextStepsCard from '../../components/NextStepsCard';
 
 // Billing Page (T050)
 // Provides upgrade (checkout) and portal management entry points.
@@ -64,23 +65,14 @@ export default async function BillingPage() {
                     </div>
                 )}
             </section>
-            <section aria-label="Getting started" className="border rounded p-4 bg-white text-sm space-y-3">
-                <h3 className="font-semibold text-sm">Next steps</h3>
-                <ul className="list-disc pl-5 space-y-1 marker:text-gray-400">
-                    <li>
-                        In non-production, endpoints return mock checkout/portal identifiers until real Stripe keys are set.
-                    </li>
-                    <li>
-                        Review your <a className="text-blue-600 hover:underline" href="/account">Account</a> and confirm your tier.
-                    </li>
-                    <li>
-                        Try the gated API: <a className="text-blue-600 hover:underline" href="/api/feature/premium-example">/api/feature/premium-example</a> {premium ? '(unlocked on Premium)' : '(403 on free)'}.
-                    </li>
-                    <li>
-                        Need help? See the quickstart in the README for setup steps.
-                    </li>
-                </ul>
-            </section>
+            <NextStepsCard
+                items={[
+                    <span>In non-production, endpoints return mock checkout/portal identifiers until real Stripe keys are set.</span>,
+                    <span>Review your <a className="text-blue-600 hover:underline" href="/account">Account</a> and confirm your tier.</span>,
+                    <span>Try the gated API: <a className="text-blue-600 hover:underline" href="/api/feature/premium-example">/api/feature/premium-example</a> {premium ? '(unlocked on Premium)' : '(403 on free)'}.</span>,
+                    <span>Need help? See the quickstart in the README for setup steps.</span>,
+                ]}
+            />
         </div>
     );
 }
