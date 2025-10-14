@@ -1,5 +1,5 @@
 import { deriveSubscriptionStateAsync } from '../../lib/access/subscriptionState';
-import { isStripeConfigured } from '../../lib/config';
+import DevStatusChips from '../../components/DevStatusChips';
 // perf metrics removed in lean profile
 import { headers } from 'next/headers';
 import React from 'react';
@@ -33,14 +33,7 @@ export default async function DashboardPage() {
                         <span>Current tier:</span>
                         <code className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 text-xs">{state.tier}</code>
                     </p>
-                    <div className="flex items-center gap-2 text-xs">
-                        <span className={`px-2 py-0.5 rounded ${process.env.DATABASE_URL ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                            DB {process.env.DATABASE_URL ? 'connected' : 'missing URL'}
-                        </span>
-                        <span className={`px-2 py-0.5 rounded ${isStripeConfigured() ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                            Stripe {isStripeConfigured() ? 'configured' : 'placeholder'}
-                        </span>
-                    </div>
+                    <DevStatusChips />
                     {state.rawSession?.userId && (
                         <p className="text-xs text-gray-500">Signed in as <code>{state.rawSession.userId}</code></p>
                     )}
