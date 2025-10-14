@@ -1,173 +1,88 @@
-# Project Spec (v1)
+# Project Spec
 
-This document describes the architecture, behavior, and contracts for the Next.js + Postgres + Stripe starter in this repo. It mirrors the current implementation and test suite so newcomers can confidently build on it.
+A concise spec for this starter so you can understand the moving parts and extend it safely. Focused on correctness, minimalism, and portability.
 
-## 1) Architecture overview
+## Stack and layout
+- Next.js 15 (App Router)
+  - Pages/UI in `app/`
+  - API routes in `app/api/*`
+- Auth.js (NextAuth) — Credentials provider (email + password), JWT sessions
+- Postgres — required persistence (users, subscriptions, audit, webhook idempotency)
+- Stripe — optional; mocked in dev, real in production
+- Tailwind CSS v4
+- Vitest — contract, integration, unit tests
 
-- Next.js 15 App Router
-  - UI routes under `app/`
-  - API routes under `app/api/*`
-- Auth.js (NextAuth)
-  - Credentials provider (email + password)
-  - JWT sessions; no sessions table required
-  - Postgres (required) with tables: `users`, `subscriptions`, `audit_events`, `webhook_events`
-- Stripe (optional at first)
-  - Checkout and Billing Portal mocked in non-production
-  - Webhook route verifies signature in production only
-- Persistence (`lib/db/*`)
-  - Node Postgres pool; mandatory `DATABASE_URL`
-  - Repositories: subscriptions (inline in `lib/db/index.ts`), audit (`lib/db/auditRepo.ts`), webhook idempotency (`lib/db/webhookRepo.ts`)
-- Access Control (`lib/access/*`)
-  - `policy.ts` derives effective tier: visitor | free | premium
-  - `subscriptionState.ts` resolves a unified state per request
-- Logging & Audit
-  - JSON logging (`lib/logging/log.ts`)
-  - Audit append + recent via DB repo (`lib/logging/audit.ts`)
-- Tests (Vitest)
-  - Contract, integration, unit; unified config `vitest.config.ts`
+## Configuration
+- Required env vars (runtime):
+  - `NEXT_PUBLIC_SITE_URL`
+  - `DATABASE_URL`
+  - `NEXTAUTH_SECRET`
+- Stripe (only when enabling billing):
+  - `NEXT_PUBLIC_STRIPE_PUBLIC_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `PREMIUM_PLAN_PRICE_ID`, `BILLING_PORTAL_RETURN_URL`
+- Loading behavior:
+  - The app uses Next.js env loading (.env.local).
+  - The `db:schema` script reads envs outside Next with precedence: Shell > .env.local (non-empty) > .env (non-empty). Empty .env.local values don’t mask .env.
+- Source of truth: `.env.example` and loader `lib/config.ts`.
 
-## 2) Data model
+## Data model (summary)
+- `users`: id, email, password_hash
+- `subscriptions`: user_id, tier ('free'|'premium'), status ('active'|'canceled'|'none'), period/cancellation timestamps
+- `audit_events`: id, ts, actor?, type, payload?
+- `webhook_events`: id, type, processed_at, user_id?, duplicate
+Schema lives in `db/init.sql` (idempotent).
 
-- subscriptions
-  - user_id (PK, text)
-  - tier: 'free' | 'premium'
-  - status: 'active' | 'canceled' | 'none'
-  - current_period_end timestamptz
-  - cancellation_scheduled_at timestamptz
-  - canceled_at timestamptz
-  - updated_at timestamptz default now()
+## Auth and access
+- Register: `POST /api/auth/register` (email + password)
+- Sign-in/out via NextAuth credentials at `/api/auth/[...nextauth]`
+- Session resolution is JWT-based.
+- Access tiers via `lib/access/policy.ts`: visitor | free | premium
+- Request-level subscription state via `lib/access/subscriptionState.ts`.
 
-- audit_events
-  - id uuid PK default gen_random_uuid()
-  - ts timestamptz default now()
-  - actor text (nullable)
-  - type text not null
-  - payload jsonb (nullable)
+## Core API contracts
+- Health: `GET /api/health` → `{ ok: true, time }`
+- Auth status: `GET /api/auth/status` → envelope with user and tier
+- Premium example: `GET /api/feature/premium-example` → gated; returns envelope or `NOT_PREMIUM`
+- Subscriptions:
+  - `POST /api/subscriptions/checkout` → 400 `ALREADY_PREMIUM`, 503 `STRIPE_NOT_CONFIGURED`, or `{ id, url }`
+  - `POST /api/subscriptions/portal` → 403 `NOT_PREMIUM`, 503 `STRIPE_NOT_CONFIGURED`, or `{ id, url }`
+- Webhooks (Stripe): `POST /api/webhooks/stripe`
+  - Dev: JSON parsed, signature skip
+  - Prod: signature verified, idempotency via `webhook_events`
 
-- webhook_events
-  - id text PK
-  - type text not null
-  - processed_at timestamptz default now()
-  - user_id text (nullable)
-  - duplicate boolean default false
+## Stripe behavior
+- Dev/non-prod: `lib/stripe/*` return mock IDs/URLs (no external calls)
+- Prod: Uses Stripe SDK; return_url/read keys from config; webhook signature enforced
 
-Schema source: `db/init.sql`. Apply with `npm run db:schema` (reads `.env.local`) or via `psql` directly.
+## Persistence and repos
+- `lib/db/*` exposes query helpers and typed repos:
+  - Audit: `lib/db/auditRepo.ts`
+  - Webhook idempotency: `lib/db/webhookRepo.ts`
+  - Subscription store facade: `lib/subscriptions/store.ts`
 
-## 3) Environment config
+## Logging and audit
+- JSON logs via `lib/logging/log.ts`
+- Audit hooks via `lib/logging/audit.ts` with DB append/read
 
-Required at runtime:
-- NEXT_PUBLIC_SITE_URL
-- DATABASE_URL
-- NEXTAUTH_SECRET
+## Developer workflows
+- Apply schema: `npm run db:schema` (reads `.env.local`) or `psql "$DATABASE_URL" -f db/init.sql`
+- Seed dev user: `npm run db:seed` (configurable with `SEED_EMAIL`, `SEED_PASSWORD`)
+- Run: `npm run dev`
+- Tests: `npm test`, watch: `npm run test:watch`
+- Typecheck: `npm run typecheck`
 
-Stripe (optional until enabled):
-- NEXT_PUBLIC_STRIPE_PUBLIC_KEY
-- STRIPE_SECRET_KEY
-- STRIPE_WEBHOOK_SECRET
-- PREMIUM_PLAN_PRICE_ID
-- BILLING_PORTAL_RETURN_URL (validated only when Stripe is configured)
+## Testing approach
+- Vitest projects: Node + jsdom (`vitest.config.ts`)
+- In tests, `pg` is aliased to `tests/mocks/pg.ts`; most tests use `pg-mem` emulation
+- Test setup files under `tests/setup/` configure env, DB reset, and testing-library
 
-Loader: `lib/config.ts` (standard strict TS defaults).
+## Non-goals / boundaries
+- No auto-migrations — you run the schema script
+- Billing disabled by default — safe placeholders; enable with real keys
+- Formatting not enforced — use your editor’s default or add a formatter locally
 
-## 4) Auth + session resolution
+## Success criteria
+- Health checks and core routes work locally with a real Postgres
+- Auth register/sign-in flows succeed; tier gating behaves as expected
+- Stripe endpoints return explicit envelopes in placeholder mode; real billing works when configured
+- Tests, typecheck, and production build pass
 
-- Primary helper: `lib/auth/session.ts#getServerAuthSession(req)` returns `{ userId, email?, role? } | null` using NextAuth's `getServerSession`.
-- Resolution order:
-  1. Authorization: Bearer token
-    - Dev shortcut: `Bearer test:<userId>` in non-production (disabled in prod)
-  2. NextAuth session via `getServerSession`
-  - Logs `auth_session.*` for observability.
-
-## 5) Subscription state
-
-- `lib/access/subscriptionState.ts#deriveSubscriptionStateAsync(req)` returns:
-  - `{ authenticated, tier, rawSession, subscription? }`
-  - Honors mock headers for tests/dev: `x-user-id`, `x-user-premium: true|false`
-  - If no mock headers: uses `getServerAuthSession(req)` and DB-backed subscription via `lib/subscriptions/store.ts`
-  - `tier` derived via `getEffectiveTier(session)` from `lib/access/policy.ts`
-
-## 6) Subscriptions API
-
-- POST `/api/subscriptions/checkout`
-  - Requires auth
-  - If premium already: 400 error envelope `ALREADY_PREMIUM`
-  - If Stripe not configured: 503 error envelope `STRIPE_NOT_CONFIGURED`
-  - Else: returns ok envelope with `{ id, url }`
-  - Audit events: `subscription.checkout.denied` (reasons), `subscription.checkout.requested`
-
-- POST `/api/subscriptions/portal`
-  - If Stripe not configured: 503 error envelope
-  - Requires premium for access; otherwise 403 error envelope `NOT_PREMIUM`
-  - Else: returns ok envelope with `{ id, url }`
-  - Audit events: `subscription.portal.denied`, `subscription.portal.requested`
-
-## 7) Stripe integration
-
-- `lib/stripe/checkout.ts#createCheckoutSession(userId, priceId?)`
-  - Dev/non-prod: returns mock `{ id: cs_test_*, url: <site>/mock/checkout }`
-  - Prod: uses Stripe SDK with mode=subscription
-- `lib/stripe/portal.ts#createPortalSession(userId, customerId?)`
-  - Dev/non-prod: returns mock `{ id: bps_test_*, url: <site>/mock/portal }`
-  - Prod: uses Stripe SDK billing portal; `return_url` from config
-
-## 8) Webhooks
-
-- POST `/api/webhooks/stripe`
-  - Non-prod: parse JSON body without verifying signature
-  - Prod: verify with `STRIPE_WEBHOOK_SECRET`
-  - Idempotency: `webhook_events` table with `duplicate` behavior; duplicates return `{ ignored: true }`
-  - Handles events:
-    - `checkout.session.completed`: audit `checkout.completed`
-    - `customer.subscription.created/updated`: upgrade to premium
-    - `customer.subscription.deleted`: schedule + apply cancellation
-    - Unhandled types audited as `webhook.unhandled` and ignored
-
-## 9) Subscriptions store (DB-backed)
-
-- `lib/subscriptions/store.ts` uses `lib/db.getSubscriptionsRepo()` for operations:
-  - `upgradeToPremiumAsync(userId)`
-  - `scheduleCancellationAsync(userId, when)`
-  - `applyCancellationIfDueAsync(userId, now)`
-  - `getSubscriptionAsync(userId)`
-- Repo is implemented in `lib/db/index.ts` with a shared `pg` pool and a serialized query mode for tests.
-
-## 10) Audit logging
-
-- `lib/logging/audit.ts#recordAudit(type, details)`
-  - Appends to `audit_events` via repo; returns the event shape for in-process use
-  - `actor` optional; include when known
-- `lib/db/auditRepo.ts`
-  - `append` and `recent(limit)` with safe JSON parsing
-
-## 11) Logging
-
-- `lib/logging/log.ts` emits JSON lines with level, msg, time, and optional context
-- Child contexts supported via `.child()`
-- Tests assert schema via unit tests
-
-## 12) Testing
-
-- Vitest projects (node and jsdom) via `vitest.config.ts`
-- Contract tests verify response envelopes and error codes
-- Integration tests exercise flows (upgrade & webhook idempotency)
-- Unit tests cover logging and config behavior
-- Tests run green with DB emulation; in CI/local, you can run against a real Postgres by setting `DATABASE_URL`
-
-## 13) Environment and ops
-
-- `SERIALIZE_DB_QUERIES=1` can be set to serialize DB calls in tests for deterministic runs
-
-## 14) Defaults and simplicity
-
-- TypeScript uses standard strict defaults (no extra strict flags)
-- Billing is optional to start; routes return explicit `STRIPE_NOT_CONFIGURED` until keys are real
-- Dev-only bearer shortcut for tests/local (`Authorization: Bearer test:<userId>`) disabled in production
-- Single unified Vitest config and minimal ESLint setup
-
-## 15) Future work (optional ideas)
-
-- Map Stripe customer to internal user id for webhooks
-- Persist richer audit payloads and expose an admin feed
-- Add CI workflow for typecheck/lint/tests
-- Add feature flag scaffolding and quotas
-  
