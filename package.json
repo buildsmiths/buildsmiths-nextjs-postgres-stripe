@@ -43,12 +43,10 @@
     "dotenv": "^17.2.2",
     "eslint": "^9.11.0",
     "eslint-config-next": "^15.5.3",
-    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "jsdom": "^27.0.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "pg-mem": "^3.0.5",
-    "prettier": "^3.3.3",
     "tsx": "^4.20.5",
     "vitest": "^3.2.4"
   }

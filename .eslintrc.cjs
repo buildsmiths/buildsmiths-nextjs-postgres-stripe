@@ -6,8 +6,7 @@ module.exports = {
     plugins: ['@typescript-eslint', 'import'],
     extends: [
         'next/core-web-vitals',
-        'plugin:@typescript-eslint/recommended',
-        'prettier'
+        'plugin:@typescript-eslint/recommended'
     ],
     rules: {
         '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],

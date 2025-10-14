@@ -46,6 +46,11 @@ Option A — use your .env.local directly:
 npm run db:schema
 ```
 
+Note on env precedence for `db:schema`:
+- Shell environment > `.env.local` (non-empty values) > `.env` (non-empty values)
+- Empty assignments in `.env.local` do not mask values from `.env`.
+This ensures a default in `.env` still works if `.env.local` omits or leaves a variable empty.
+
 Option B — with psql and an exported DATABASE_URL:
 ```bash
 psql "$DATABASE_URL" -f db/init.sql
@@ -332,9 +337,10 @@ Vercel or any Node host works. Remember:
 ---
 
 ## FAQ
-- Why multiple Vitest configs? Consolidated: see `vitest.config.ts` at the repository root.
-- Do files need to live at the repo root? For V1, keep Next.js, Tailwind, PostCSS, and Vitest configs at the root unless you re‑wire scripts.
-- When are the DB tables created? When you run `psql "$DATABASE_URL" -f db/init.sql`. The script is idempotent; re-run it any time (e.g., after pointing at a fresh database).
+- Do I need dotenv? Not for Next.js runtime; Next reads `.env.local` directly. We include a small `dotenv` dependency only for Node scripts like `scripts/db-apply.ts` to load `.env.local` outside Next. If you don’t use those scripts, you can remove `dotenv`.
+- How do I format code? There’s no project-wide formatter configured. Use VS Code’s default formatter or add your preferred formatter locally.
+- Where do config files live? Keep Next.js, Tailwind, PostCSS, and Vitest configs at the repo root unless you re‑wire scripts.
+- When are the DB tables created? When you run `psql "$DATABASE_URL" -f db/init.sql`. The script is idempotent; re-run it any time (for a fresh database, or after changing DATABASE_URL).
 
 ---
 

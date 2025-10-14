@@ -2,7 +2,6 @@
 import js from '@eslint/js';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
-import prettier from 'eslint-config-prettier';
 import globals from 'globals';
 import nextPlugin from '@next/eslint-plugin-next';
 import { FlatCompat } from '@eslint/eslintrc';
@@ -72,9 +71,7 @@ export default [
             'react-hooks/exhaustive-deps': 'warn'
         }
     },
-    // Turn off formatting-related rule conflicts
-    prettier
-    ,
+    // Formatting handled by editor; no Prettier integration
     // Tests: relax rules and add Vitest globals
     {
         files: ['tests/**/*.{ts,tsx}'],
