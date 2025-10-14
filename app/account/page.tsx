@@ -62,6 +62,20 @@ export default async function AccountPage() {
                     <p className="text-xs text-gray-500">Upgrade to manage billing and access premium features.</p>
                 )}
             </section>
+            <section aria-label="Getting started" className="border rounded p-4 bg-white text-sm space-y-3">
+                <h3 className="font-semibold text-sm">Next steps</h3>
+                <ul className="list-disc pl-5 space-y-1 marker:text-gray-400">
+                    <li>
+                        Manage your plan on <a className="text-blue-600 hover:underline" href="/billing">Billing</a> {state.tier !== 'premium' ? '(upgrade to unlock premium)' : '(you are on Premium)'}.
+                    </li>
+                    <li>
+                        Try a gated endpoint: <a className="text-blue-600 hover:underline" href="/api/feature/premium-example">/api/feature/premium-example</a> {state.tier !== 'premium' ? '(returns "forbidden" on free)' : '(works on Premium)'}.
+                    </li>
+                    <li>
+                        Check service health at <a className="text-blue-600 hover:underline" href="/api/health">/api/health</a>.
+                    </li>
+                </ul>
+            </section>
         </main>
     );
 }
