@@ -43,6 +43,7 @@ export default defineConfig({
             'tests/setup/patch-pg.js',
             'tests/setup/env.ts',
             'tests/setup/testing-library.ts',
+            'tests/setup/jsdom-matchMedia.ts',
           ],
         },
       },

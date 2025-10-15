@@ -22,6 +22,7 @@
     "dotenv": "^17.2.2",
     "next": "^15.5.3",
     "next-auth": "^4.24.11",
+    "next-themes": "^0.4.6",
     "pg": "^8.12.0",
     "postcss": "^8.5.6",
     "react": "^19.1.1",
@@ -44,8 +45,8 @@
     "eslint": "^9.11.0",
     "eslint-config-next": "^15.5.3",
     "eslint-plugin-import": "^2.29.1",
-    "jsdom": "^27.0.0",
     "eslint-plugin-react-hooks": "^5.0.0",
+    "jsdom": "^27.0.0",
     "pg-mem": "^3.0.5",
     "tsx": "^4.20.5",
     "vitest": "^3.2.4"

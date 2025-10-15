@@ -4,6 +4,7 @@
  * Content scanning is automatic in v4; no 'content' array needed.
  */
 export default {
+    darkMode: 'class',
     // Opt-in future flags or customizations later.
     theme: {
         extend: {}
