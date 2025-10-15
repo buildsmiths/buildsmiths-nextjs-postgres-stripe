@@ -14,6 +14,15 @@ body {
     min-height: 100%;
 }
 
+/* Tell the browser which color scheme to use to style built-in UI (forms, scrollbars) */
+:root {
+    color-scheme: light;
+}
+
+.dark {
+    color-scheme: dark;
+}
+
 /* Accessibility tweaks */
 * {
     -webkit-font-smoothing: antialiased;

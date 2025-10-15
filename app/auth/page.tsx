@@ -10,7 +10,7 @@ export default function AuthPage() {
     return (
         <div className="max-w-md mx-auto p-6 space-y-4">
             <h1 className="text-lg font-semibold">Sign in</h1>
-            <p className="text-sm text-gray-600">Access the dashboard after authenticating.</p>
+            <p className="text-sm text-gray-600 dark:text-gray-300">Access the dashboard after authenticating.</p>
             <SignInPanel />
         </div>
     );

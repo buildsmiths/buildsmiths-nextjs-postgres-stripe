@@ -29,13 +29,13 @@ export default async function DashboardPage() {
             <main aria-label="Dashboard" className="max-w-5xl mx-auto px-4 py-10 space-y-8">
                 <header className="space-y-1">
                     <h1 className="text-2xl font-bold" aria-current="page">Dashboard</h1>
-                    <p className="flex items-center gap-2 text-sm text-gray-600">
+                    <p className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                         <span>Current tier:</span>
-                        <code className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 text-xs">{state.tier}</code>
+                        <code className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 text-xs dark:bg-gray-800 dark:text-gray-100">{state.tier}</code>
                     </p>
                     <DevStatusChips />
                     {state.rawSession?.userId && (
-                        <p className="text-xs text-gray-500">Signed in as <code>{state.rawSession.userId}</code></p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Signed in as <code>{state.rawSession.userId}</code></p>
                     )}
                 </header>
                 {/* Brief status indicator shown immediately after OAuth callback; auto-hides shortly. */}

@@ -18,7 +18,7 @@ export function renderSignedOutView(params: {
         <div className="space-y-3" data-auth-state="signed-out">
             {error && <div className="text-sm text-red-600">{error}</div>}
             <form onSubmit={onSubmit} className="space-y-2">
-                <label className="block text-sm text-gray-700">{mode === 'login' ? 'Sign in with email' : 'Create an account'}</label>
+                <label className="block text-sm text-gray-700 dark:text-gray-200">{mode === 'login' ? 'Sign in with email' : 'Create an account'}</label>
                 <div className="flex flex-col gap-2">
                     <input
                         type="email"
@@ -26,7 +26,7 @@ export function renderSignedOutView(params: {
                         placeholder="you@example.com"
                         value={email}
                         onChange={onChangeEmail}
-                        className="px-3 py-2 border rounded text-sm"
+                        className="px-3 py-2 border rounded text-sm bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
                     />
                     <input
                         type="password"
@@ -34,7 +34,7 @@ export function renderSignedOutView(params: {
                         placeholder="password"
                         value={password}
                         onChange={onChangePassword}
-                        className="px-3 py-2 border rounded text-sm"
+                        className="px-3 py-2 border rounded text-sm bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
                         minLength={8}
                     />
                     <button
@@ -44,7 +44,7 @@ export function renderSignedOutView(params: {
                     >
                         {loading ? 'Working…' : (mode === 'login' ? 'Sign in' : 'Create account')}
                     </button>
-                    <button type="button" className="text-xs text-gray-600 underline" onClick={onToggleMode}>
+                    <button type="button" className="text-xs text-gray-600 underline dark:text-gray-300" onClick={onToggleMode}>
                         {mode === 'login' ? 'Need an account? Register' : 'Have an account? Sign in'}
                     </button>
                 </div>
