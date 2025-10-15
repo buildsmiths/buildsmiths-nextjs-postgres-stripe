@@ -2,7 +2,6 @@ import './globals.css';
 import React from 'react';
 import Link from 'next/link';
 import { AuthButton } from '../components/AuthButton';
-import { UserBadge } from '../components/UserBadge';
 import NavLink from '../components/NavLink';
 import Providers from '../components/Providers';
 import ThemeToggle from '../components/ThemeToggle';
@@ -31,7 +30,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 <NavLink className="hover:text-gray-900" href="/billing">Billing</NavLink>
                                 {/* Metrics link removed for lean starter */}
                                 <ThemeToggle />
-                                <UserBadge />
                                 <AuthButton />
                             </nav>
                         </div>
