@@ -19,8 +19,12 @@ export interface AuditEventBase {
 export type AuditEvent = AuditEventBase & Record<string, any>;
 
 import { getAuditRepo } from '../db';
-
-const auditRepo = getAuditRepo();
+// Lazy-initialize the repo to avoid DB access at import time
+let __auditRepo: ReturnType<typeof getAuditRepo> | null = null;
+function repo() {
+    if (!__auditRepo) __auditRepo = getAuditRepo();
+    return __auditRepo;
+}
 const MAX_BUFFER = 500; // retained for interface parity (limit param enforced in repo slice)
 
 function makeId() { return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`; }
@@ -35,13 +39,13 @@ export async function recordAudit(action: string, details: { actor?: string; ok?
     };
     if (details.actor !== undefined) base.actor = details.actor;
     const evt: AuditEvent = base as AuditEvent;
-    await auditRepo.append({ type: action, ...(details.actor !== undefined ? { actor: details.actor } : {}), payload: evt });
+    await repo().append({ type: action, ...(details.actor !== undefined ? { actor: details.actor } : {}), payload: evt });
     return evt;
 }
 
 export async function getRecentAudit(filter?: { actionPrefix?: string; actor?: string }): Promise<AuditEvent[]> {
     // Fetch a larger window then filter client-side to preserve existing semantics
-    const raw = await auditRepo.recent(MAX_BUFFER);
+    const raw = await repo().recent(MAX_BUFFER);
     let list = raw.map(r => ({
         id: makeId(), // repository does not supply id; generate ephemeral
         ts: r.ts,

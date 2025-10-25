@@ -1,11 +1,9 @@
 // Database adapter entry
-// Mandatory DATABASE_URL; provides DB-backed repositories for subscriptions, audit, and webhooks.
+// Provides DB-backed repositories for subscriptions, audit, and webhooks.
+// Note: DATABASE_URL is required only when actually performing DB operations.
+// This allows the UI to boot without a database configured.
 
 export const persistenceFlagEnabled = () => !!process.env.DATABASE_URL;
-
-if (!process.env.DATABASE_URL) {
-    throw new Error('DATABASE_URL is required. Set it to your Postgres connection string (see README Database setup).');
-}
 
 export interface SubscriptionRecord {
     userId: string;
