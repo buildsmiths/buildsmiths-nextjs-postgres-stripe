@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { POST as webhook } from '../../app/api/webhooks/stripe/route';
+import { POST as webhook } from '@/app/api/webhooks/stripe/route';
 
 // H205 (partial): Envelope error test for webhook route
 

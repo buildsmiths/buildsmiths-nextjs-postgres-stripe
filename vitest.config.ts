@@ -1,16 +1,29 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig, mergeConfig } from 'vitest/config';
 import path from 'path';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import { fileURLToPath } from 'node:url';
+
+// Shared Vite config so aliases/plugins apply to each Vitest project
+const shared = defineConfig({
+  plugins: [
+    // Map TS path aliases (e.g., @/*) for Vitest/Vite
+    tsconfigPaths(),
+  ],
+  resolve: {
+    alias: [
+      // Mock pg module in tests
+      { find: 'pg', replacement: path.resolve(fileURLToPath(new URL('.', import.meta.url)), 'tests/mocks/pg.ts') },
+      // Robust alias for @/ -> repo root (handles subpaths like @/app/layout)
+      { find: /^@\/(.*)$/, replacement: `${fileURLToPath(new URL('.', import.meta.url))}/$1` },
+    ],
+  },
+});
 
 export default defineConfig({
-  resolve: {
-    alias: {
-      pg: path.resolve(__dirname, 'tests/mocks/pg.ts'),
-      '@': path.resolve(__dirname, '.'),
-    },
-  },
   test: {
     projects: [
-      {
+      mergeConfig(shared, {
+        extends: true,
         test: {
           name: 'core-node',
           environment: 'node',
@@ -29,8 +42,9 @@ export default defineConfig({
             'tests/setup/testing-library.ts',
           ],
         },
-      },
-      {
+      }),
+      mergeConfig(shared, {
+        extends: true,
         test: {
           name: 'core-ui',
           environment: 'jsdom',
@@ -47,7 +61,7 @@ export default defineConfig({
             'tests/setup/jsdom-matchMedia.ts',
           ],
         },
-      },
+      }),
     ],
   },
 });

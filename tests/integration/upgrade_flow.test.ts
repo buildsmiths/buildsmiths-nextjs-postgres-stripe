@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { POST as checkoutHandler } from '../../app/api/subscriptions/checkout/route';
-import { deriveSubscriptionStateAsync } from '../../lib/access/subscriptionState';
-import { upgradeToPremiumAsync, getSubscriptionAsync, clearAllSubscriptions } from '../../lib/subscriptions/store';
+import { POST as checkoutHandler } from '@/app/api/subscriptions/checkout/route';
+import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
+import { upgradeToPremiumAsync, getSubscriptionAsync, clearAllSubscriptions } from '@/lib/subscriptions/store';
 import { makeApiRequest } from '../utils/integration';
 import { resetAllState } from '../utils/reset';
 import { NextRequest } from 'next/server';
-import { clearConfigCache } from '../../lib/config';
+import { clearConfigCache } from '@/lib/config';
 
 // T021: Upgrade flow integration test
 // Scenario: Authenticated free user initiates upgrade -> checkout session created -> (simulate webhook event) -> becomes premium.

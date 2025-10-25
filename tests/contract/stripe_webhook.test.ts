@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { POST as webhookHandler } from '../../app/api/webhooks/stripe/route';
+import { POST as webhookHandler } from '@/app/api/webhooks/stripe/route';
 
 function makeRequest(event: any) {
     const body = JSON.stringify(event);

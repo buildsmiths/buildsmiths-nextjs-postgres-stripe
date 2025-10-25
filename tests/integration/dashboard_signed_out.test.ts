@@ -6,7 +6,7 @@ import ReactDOMServer from 'react-dom/server';
 vi.mock('next/headers', () => ({
     headers: () => ({ get: (_k: string) => null })
 }));
-import DashboardPage from '../../app/dashboard/page';
+import DashboardPage from '@/app/dashboard/page';
 
 // T104: Broaden registration/fallback tests — ensure signed-out users see the sign-in prompt on the dashboard
 

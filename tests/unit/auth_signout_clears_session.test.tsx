@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import { AuthButton } from '../../components/AuthButton';
+import { AuthButton } from '@/components/AuthButton';
 
 // Provide a stateful mock for useSession so we can flip to signed-out after signOut
 const hoisted = vi.hoisted(() => {

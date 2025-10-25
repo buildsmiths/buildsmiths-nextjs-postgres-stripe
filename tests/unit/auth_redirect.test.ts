@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildRedirectUrl } from '../../components/AuthButton';
+import { buildRedirectUrl } from '@/components/AuthButton';
 
 describe('buildRedirectUrl helper', () => {
     it('returns <base>/auth/callback using NEXT_PUBLIC_SITE_URL when window is undefined', () => {

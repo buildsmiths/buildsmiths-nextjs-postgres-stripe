@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { GET as premiumFeature } from '../../app/api/feature/premium-example/route';
+import { GET as premiumFeature } from '@/app/api/feature/premium-example/route';
 
 // C104: Ensure envelope mode returns standardized error + success for premium feature route.
 

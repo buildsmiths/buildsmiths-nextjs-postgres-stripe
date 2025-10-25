@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import Layout from '../../app/layout';
+import Layout from '@/app/layout';
 
 // Mock next-auth for server-side rendering snapshot
 vi.mock('next-auth/react', () => ({

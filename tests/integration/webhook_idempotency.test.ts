@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { POST as webhookHandler } from '../../app/api/webhooks/stripe/route';
+import { POST as webhookHandler } from '@/app/api/webhooks/stripe/route';
 import { resetAllState } from '../utils/reset';
 import { makeJsonRequest } from '../utils/integration';
 

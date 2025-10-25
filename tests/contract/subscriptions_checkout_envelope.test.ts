@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { POST as checkout } from '../../app/api/subscriptions/checkout/route';
+import { POST as checkout } from '@/app/api/subscriptions/checkout/route';
 
 // H205 (partial): Envelope tests for checkout route
 

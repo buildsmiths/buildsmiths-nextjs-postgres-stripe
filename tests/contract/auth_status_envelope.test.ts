@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { GET as authStatus } from '../../app/api/auth/status/route';
+import { GET as authStatus } from '@/app/api/auth/status/route';
 
 // Contract test (envelope mode) for auth status endpoint.
 // Envelope is always-on; no flag toggling required.

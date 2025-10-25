@@ -5,7 +5,7 @@ import ReactDOMServer from 'react-dom/server';
 vi.mock('next/headers', () => ({
     headers: () => ({ get: (k: string) => (k.toLowerCase() === 'authorization' ? 'Bearer test:user_42' : null) })
 }));
-import AccountPage from '../../app/account/page';
+import AccountPage from '@/app/account/page';
 
 describe('Account page (signed-in via dev bearer)', () => {
     it('renders user id when authenticated', async () => {
