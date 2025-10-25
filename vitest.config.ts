@@ -11,8 +11,6 @@ const shared = defineConfig({
   ],
   resolve: {
     alias: [
-      // Mock pg module in tests
-      { find: 'pg', replacement: path.resolve(fileURLToPath(new URL('.', import.meta.url)), 'tests/mocks/pg.ts') },
       // Robust alias for @/ -> repo root (handles subpaths like @/app/layout)
       { find: /^@\/(.*)$/, replacement: `${fileURLToPath(new URL('.', import.meta.url))}/$1` },
     ],
@@ -38,7 +36,6 @@ export default defineConfig({
           setupFiles: [
             'tests/setup/patch-pg.js',
             'tests/setup/env.ts',
-            'tests/setup/db-reset.ts',
             'tests/setup/testing-library.ts',
           ],
         },
