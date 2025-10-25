@@ -1,14 +1,9 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
 import path from 'path';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import { fileURLToPath } from 'node:url';
 
 // Shared Vite config so aliases/plugins apply to each Vitest project
 const shared = defineConfig({
-  plugins: [
-    // Map TS path aliases (e.g., @/*) for Vitest/Vite
-    tsconfigPaths(),
-  ],
   resolve: {
     alias: [
       // Robust alias for @/ -> repo root (handles subpaths like @/app/layout)
