@@ -72,8 +72,8 @@ Schema lives in `db/init.sql` (idempotent).
 
 ## Testing approach
 - Vitest projects: Node + jsdom (`vitest.config.ts`)
-- In tests, `pg` is aliased to `tests/mocks/pg.ts`; most tests use `pg-mem` emulation
-- Test setup files under `tests/setup/` configure env, DB reset, and testing-library
+- In tests, `pg` is patched at runtime via `tests/setup/patch-pg.js` to use an in-memory Postgres (`pg-mem`). No module alias needed.
+- Test setup files under `tests/setup/` configure env and testing-library
 
 ## Non-goals / boundaries
 - No auto-migrations — you run the schema script
