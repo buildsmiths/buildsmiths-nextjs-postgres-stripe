@@ -1,7 +1,7 @@
 import React from 'react';
 import { headers } from 'next/headers';
-import { deriveSubscriptionStateAsync } from '../../lib/access/subscriptionState';
-import SignedOutPrompt from '../../components/SignedOutPrompt';
+import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
+import SignedOutPrompt from '@/components/SignedOutPrompt';
 
 export default async function SettingsPage() {
     let reqLike: any;

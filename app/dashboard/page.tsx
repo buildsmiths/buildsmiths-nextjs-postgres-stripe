@@ -1,11 +1,11 @@
-import { deriveSubscriptionStateAsync } from '../../lib/access/subscriptionState';
-import DevStatusChips from '../../components/DevStatusChips';
+import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
+import DevStatusChips from '@/components/DevStatusChips';
 // perf metrics removed in lean profile
 import { headers } from 'next/headers';
 import React from 'react';
-import PostCallbackStatus from '../../components/PostCallbackStatus';
-import SignedOutPrompt from '../../components/SignedOutPrompt';
-import NextStepsCard from '../../components/NextStepsCard';
+import PostCallbackStatus from '@/components/PostCallbackStatus';
+import SignedOutPrompt from '@/components/SignedOutPrompt';
+import NextStepsCard from '@/components/NextStepsCard';
 
 // Dashboard (T049): simple authenticated shell using header-based mock session.
 // Uses NextAuth server session today; expand with real per-user DB queries as needed.

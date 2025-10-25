@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { deriveSubscriptionStateAsync } from '../../../../lib/access/subscriptionState';
-import { log } from '../../../../lib/logging/log';
-import { ok } from '../../../../lib/errors';
+import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
+import { log } from '@/lib/logging/log';
+import { ok } from '@/lib/errors';
 
 // T036: Auth status route (mock session integration for now).
 // Placeholder: derive session from header x-user-id and x-user-premium for tests.

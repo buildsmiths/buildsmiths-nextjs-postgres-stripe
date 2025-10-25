@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { enforceTier } from '../../../../lib/access/policy';
-import { recordAudit } from '../../../../lib/logging/audit';
-import { log } from '../../../../lib/logging/log';
-import { err, ok } from '../../../../lib/errors';
-import { deriveSubscriptionStateAsync } from '../../../../lib/access/subscriptionState';
+import { enforceTier } from '@/lib/access/policy';
+import { recordAudit } from '@/lib/logging/audit';
+import { log } from '@/lib/logging/log';
+import { err, ok } from '@/lib/errors';
+import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
 
 // Premium feature route; uses async state derivation (headers for tests, NextAuth-backed session otherwise).
 

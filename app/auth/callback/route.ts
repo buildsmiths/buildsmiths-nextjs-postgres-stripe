@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { log } from '../../../lib/logging/log';
+import { log } from '@/lib/logging/log';
 
 // Minimal auth callback endpoint: redirects to dashboard.
 export async function GET(req: NextRequest) {

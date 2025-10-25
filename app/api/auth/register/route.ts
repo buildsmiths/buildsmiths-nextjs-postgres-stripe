@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { hash } from 'bcryptjs';
-import { query } from '../../../../lib/db/simple';
+import { query } from '@/lib/db/simple';
 
 export async function POST(req: NextRequest) {
     const { email, password } = await req.json().catch(() => ({ email: undefined, password: undefined }));

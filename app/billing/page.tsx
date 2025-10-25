@@ -1,9 +1,9 @@
 import React from 'react';
-import { deriveSubscriptionStateAsync } from '../../lib/access/subscriptionState';
-import { isStripeConfigured } from '../../lib/config';
+import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
+import { isStripeConfigured } from '@/lib/config';
 import { headers } from 'next/headers';
-import SignedOutPrompt from '../../components/SignedOutPrompt';
-import NextStepsCard from '../../components/NextStepsCard';
+import SignedOutPrompt from '@/components/SignedOutPrompt';
+import NextStepsCard from '@/components/NextStepsCard';
 
 // Billing Page (T050)
 // Provides upgrade (checkout) and portal management entry points.

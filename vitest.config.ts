@@ -5,6 +5,7 @@ export default defineConfig({
   resolve: {
     alias: {
       pg: path.resolve(__dirname, 'tests/mocks/pg.ts'),
+      '@': path.resolve(__dirname, '.'),
     },
   },
   test: {

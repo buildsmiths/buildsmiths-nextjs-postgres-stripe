@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifySignatureAndParse, handleStripeWebhook } from '../../../../lib/stripe/webhook';
-import { log } from '../../../../lib/logging/log';
-import { ok, err } from '../../../../lib/errors';
+import { verifySignatureAndParse, handleStripeWebhook } from '@/lib/stripe/webhook';
+import { log } from '@/lib/logging/log';
+import { ok, err } from '@/lib/errors';
 
 // T039: Stripe webhook route.
 

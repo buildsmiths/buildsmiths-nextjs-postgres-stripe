@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tier } from '../lib/access/policy';
+import { Tier } from '@/lib/access/policy';
 
 // TierGuard (T046)
 // Server component friendly wrapper (kept simple here) gating children by tier.

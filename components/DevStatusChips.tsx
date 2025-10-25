@@ -1,6 +1,6 @@
 import React from 'react';
-import { isStripeConfigured } from '../lib/config';
-import { query } from '../lib/db/simple';
+import { isStripeConfigured } from '@/lib/config';
+import { query } from '@/lib/db/simple';
 
 async function schemaPresent(): Promise<boolean> {
     try {

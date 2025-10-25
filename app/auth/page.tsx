@@ -1,7 +1,7 @@
 import React from 'react';
-import { SignInPanel } from '../../components/SignInPanel';
+import { SignInPanel } from '@/components/SignInPanel';
 import { headers } from 'next/headers';
-import { deriveSubscriptionStateAsync } from '../../lib/access/subscriptionState';
+import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
 
 export const metadata = {
     title: 'Sign in',

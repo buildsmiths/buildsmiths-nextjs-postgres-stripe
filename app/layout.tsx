@@ -1,10 +1,10 @@
 import './globals.css';
 import React from 'react';
 import Link from 'next/link';
-import { AuthButton } from '../components/AuthButton';
-import NavLink from '../components/NavLink';
-import Providers from '../components/Providers';
-import ThemeToggle from '../components/ThemeToggle';
+import { AuthButton } from '@/components/AuthButton';
+import NavLink from '@/components/NavLink';
+import Providers from '@/components/Providers';
+import ThemeToggle from '@/components/ThemeToggle';
 
 export const metadata = {
     title: 'BuildSmiths StarterKit',

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getEffectiveTier } from '../../../../lib/access/policy';
-import { createCheckoutSession } from '../../../../lib/stripe/checkout';
-import { recordAudit } from '../../../../lib/logging/audit';
-import { log } from '../../../../lib/logging/log';
-import { err, ok } from '../../../../lib/errors';
-import { deriveSubscriptionStateAsync } from '../../../../lib/access/subscriptionState';
-import { isStripeConfigured } from '../../../../lib/config';
+import { getEffectiveTier } from '@/lib/access/policy';
+import { createCheckoutSession } from '@/lib/stripe/checkout';
+import { recordAudit } from '@/lib/logging/audit';
+import { log } from '@/lib/logging/log';
+import { err, ok } from '@/lib/errors';
+import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
+import { isStripeConfigured } from '@/lib/config';
 
 // T037: Subscriptions checkout route.
 
