@@ -43,11 +43,13 @@ export default async function AuthPage() {
         );
     }
 
+    const enableGoogle = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
+
     return (
         <div className="max-w-md mx-auto p-6 space-y-4" data-auth-state="signed-out">
             <h1 className="text-lg font-semibold">Sign in</h1>
             <p className="text-sm text-gray-600 dark:text-gray-300">Access the dashboard after authenticating.</p>
-            <SignInPanel />
+            <SignInPanel enableGoogle={enableGoogle} />
         </div>
     );
 }

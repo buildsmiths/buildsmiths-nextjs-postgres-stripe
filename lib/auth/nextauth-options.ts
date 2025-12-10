@@ -1,6 +1,37 @@
 import Credentials from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
 import { compare } from 'bcryptjs';
 import { query } from '../db/simple';
+
+const providers: any[] = [
+    Credentials({
+        name: 'Credentials',
+        credentials: {
+            email: { label: 'Email', type: 'text' },
+            password: { label: 'Password', type: 'password' }
+        },
+        async authorize(creds: Record<string, unknown> | undefined) {
+            const email = creds?.email as string | undefined;
+            const password = creds?.password as string | undefined;
+            if (!email || !password) return null;
+            const { rows } = await query<{ id: string; email: string; password_hash: string }>(
+                'select id, email, password_hash from users where lower(email)=lower($1) limit 1',
+                [email]
+            );
+            const user = rows[0];
+            if (!user) return null;
+            const ok = await compare(password, user.password_hash);
+            return ok ? { id: user.id, email: user.email } : null;
+        }
+    })
+];
+
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    providers.push(GoogleProvider({
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    }));
+}
 
 export const authOptions = {
     session: { strategy: 'jwt' as const },
@@ -8,28 +39,7 @@ export const authOptions = {
         signIn: '/auth',
         error: '/auth'
     },
-    providers: [
-        Credentials({
-            name: 'Credentials',
-            credentials: {
-                email: { label: 'Email', type: 'text' },
-                password: { label: 'Password', type: 'password' }
-            },
-            async authorize(creds: Record<string, unknown> | undefined) {
-                const email = creds?.email as string | undefined;
-                const password = creds?.password as string | undefined;
-                if (!email || !password) return null;
-                const { rows } = await query<{ id: string; email: string; password_hash: string }>(
-                    'select id, email, password_hash from users where lower(email)=lower($1) limit 1',
-                    [email]
-                );
-                const user = rows[0];
-                if (!user) return null;
-                const ok = await compare(password, user.password_hash);
-                return ok ? { id: user.id, email: user.email } : null;
-            }
-        })
-    ],
+    providers,
     callbacks: {
         async jwt({ token, user }: any) {
             if (user?.id) token.sub = user.id;

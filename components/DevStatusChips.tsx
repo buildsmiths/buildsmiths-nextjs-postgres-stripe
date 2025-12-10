@@ -28,6 +28,7 @@ export default async function DevStatusChips() {
     const hasAuthSecret = !!(process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim());
     const hasSiteUrl = !!(process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.trim());
     const stripeOk = isStripeConfigured();
+    const googleOk = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
     const webhookOk = !!(process.env.STRIPE_WEBHOOK_SECRET && process.env.STRIPE_WEBHOOK_SECRET.trim());
     const env = process.env.NODE_ENV || 'development';
 
@@ -43,6 +44,7 @@ export default async function DevStatusChips() {
             {chip(hasDbUrl, hasDbUrl ? 'DB URL set' : 'DB URL missing')}
             {chip(hasSchema, hasSchema ? 'Schema present' : 'Schema missing')}
             {chip(stripeOk, stripeOk ? 'Stripe configured' : 'Stripe placeholder', !stripeOk)}
+            {chip(googleOk, googleOk ? 'Google Auth configured' : 'Google Auth optional', !googleOk)}
             {chip(webhookOk, webhookOk ? 'Webhook secured' : 'Webhook missing')}
             {chip(hasAuthSecret, hasAuthSecret ? 'Auth secret set' : 'Auth secret missing')}
             {chip(hasSiteUrl, hasSiteUrl ? 'Site URL set' : 'Site URL missing')}
