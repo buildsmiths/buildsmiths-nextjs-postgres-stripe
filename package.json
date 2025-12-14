@@ -12,9 +12,6 @@
     "db:schema": "node scripts/db-apply.mjs db/init.sql",
     "db:seed": "node scripts/seed.mjs"
   },
-  "engines": {
-    "node": ">=22.12 <23"
-  },
   "dependencies": {
     "@stripe/stripe-js": "^8.5.3",
     "bcryptjs": "^3.0.3",
