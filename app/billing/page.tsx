@@ -15,9 +15,9 @@ export default async function BillingPage() {
             <div className="max-w-3xl mx-auto px-4 py-12 space-y-6">
                 <header className="space-y-2">
                     <h1 className="text-2xl font-bold">Billing</h1>
-                    <p className="text-sm text-gray-600">You are on the free tier. Billing is currently disabled until real Stripe keys are provided.</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">You are on the free tier. Billing is currently disabled until real Stripe keys are provided.</p>
                 </header>
-                <div className="rounded border p-4 bg-yellow-50 text-yellow-800 text-sm space-y-2">
+                <div className="rounded border p-4 bg-yellow-50 text-yellow-800 text-sm space-y-2 dark:bg-yellow-900/30 dark:text-yellow-200 dark:border-yellow-800">
                     <p>To enable upgrade and portal flows, add real Stripe env vars to <code>.env.local</code> and restart.</p>
                     <ul className="list-disc list-inside">
                         <li><code>NEXT_PUBLIC_STRIPE_PUBLIC_KEY</code></li>
@@ -45,7 +45,7 @@ export default async function BillingPage() {
         <div className="max-w-3xl mx-auto px-4 py-12 space-y-10">
             <header className="space-y-2">
                 <h1 className="text-2xl font-bold">Billing</h1>
-                <p className="text-sm text-gray-600">Manage your subscription and plan.</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Manage your subscription and plan.</p>
             </header>
             <section className="space-y-4">
                 {!premium && (
@@ -57,7 +57,7 @@ export default async function BillingPage() {
                     </div>
                 )}
                 {premium && (
-                    <div className="border rounded p-4 bg-green-50 text-green-800 space-y-2">
+                    <div className="border rounded p-4 bg-green-50 text-green-800 space-y-2 dark:bg-green-900/30 dark:text-green-200 dark:border-green-800">
                         <div className="text-sm font-medium">You are on the Premium plan.</div>
                         <form action="/api/subscriptions/portal" method="POST">
                             <button className="px-3 py-1 rounded bg-green-600 text-white text-xs hover:bg-green-500" type="submit">Open Customer Portal</button>

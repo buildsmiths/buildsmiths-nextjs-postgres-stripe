@@ -20,17 +20,17 @@ export default async function AccountPage() {
         <main aria-label="Account" className="max-w-2xl mx-auto px-4 py-10 space-y-6">
             <div className="flex items-center gap-3">
                 <h1 className="text-2xl font-bold">Account</h1>
-                <code className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 text-xs" aria-label={`Tier: ${state.tier}`}>{(state.tier as any) || 'free'}</code>
+                <code className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 text-xs dark:bg-gray-800 dark:text-gray-100" aria-label={`Tier: ${state.tier}`}>{(state.tier as any) || 'free'}</code>
             </div>
-            <section aria-label="Profile" className="text-sm text-gray-700 space-y-1">
+            <section aria-label="Profile" className="text-sm text-gray-700 dark:text-gray-200 space-y-1">
                 <div>
-                    <span className="text-gray-500">User ID:</span>{' '}
+                    <span className="text-gray-500 dark:text-gray-400">User ID:</span>{' '}
                     <code>{state.rawSession?.userId}</code>
                 </div>
                 {/* Email is available when a NextAuth session includes it (credentials flow stores email). */}
                 {('email' in (state.rawSession || {}) && (state as any).rawSession?.email) ? (
                     <div>
-                        <span className="text-gray-500">Email:</span>{' '}
+                        <span className="text-gray-500 dark:text-gray-400">Email:</span>{' '}
                         <code>{(state as any).rawSession.email}</code>
                     </div>
                 ) : null}
