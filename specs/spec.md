@@ -26,14 +26,14 @@ A concise spec for this starter so you can understand the moving parts and exten
 
 ## Data model (summary)
 - `users`: id, email, password_hash
-- `subscriptions`: user_id, tier ('free'|'premium'), status ('active'|'canceled'|'none'), period/cancellation timestamps
+- `subscriptions`: user_id (FK -> users.id), tier ('free'|'premium'), status ('active'|'canceled'|'none'), period/cancellation timestamps
 - `audit_events`: id, ts, actor?, type, payload?
 - `webhook_events`: id, type, processed_at, user_id?, duplicate
 Schema lives in `db/init.sql` (idempotent).
 
 ## Auth and access
-- Register: `POST /api/auth/register` (email + password)
-- Sign-in/out via NextAuth credentials at `/api/auth/[...nextauth]`
+- Register: `POST /api/auth/register` (email + password) - Rate limited (5 req/min)
+- Sign-in/out via NextAuth credentials at `/api/auth/[...nextauth]` - POST rate limited (10 req/min)
 - Session resolution is JWT-based.
 - Access tiers via `lib/access/policy.ts`: visitor | free | premium
 - Request-level subscription state via `lib/access/subscriptionState.ts`.

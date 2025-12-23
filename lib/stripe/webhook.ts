@@ -28,7 +28,7 @@ export function verifySignatureAndParse(rawBody: string, signature: string | und
 }
 
 // Idempotency via persistence repository (T085)
-const webhookRepo = getWebhookRepo();
+// const webhookRepo = getWebhookRepo(); // Moved inside handler for lazy init
 
 // Helper: attempt to infer user id (actor) from event payload (dev/test mock strategy)
 function extractUserId(event: Stripe.Event): string | undefined {
@@ -42,6 +42,7 @@ function extractUserId(event: Stripe.Event): string | undefined {
 }
 
 export async function handleStripeWebhook(event: Stripe.Event): Promise<WebhookProcessResult> {
+    const webhookRepo = getWebhookRepo();
     const userId = extractUserId(event);
     const already = await webhookRepo.isProcessed(event.id);
     if (already) {

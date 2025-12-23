@@ -1,14 +1,15 @@
 // Use runtime require to avoid ESM type frictions in bundler resolution
+import type { Pool as PoolType } from 'pg';
 const { Pool } = require('pg');
 
-let pool: any | null = null;
-function getPool() {
+let pool: PoolType | null = null;
+export function getPool(): PoolType {
     if (!pool) {
         const cn = process.env.DATABASE_URL;
         if (!cn) throw new Error('DATABASE_URL is required');
         pool = new Pool({ connectionString: cn });
     }
-    return pool;
+    return pool!;
 }
 
 export async function query<T = any>(sql: string, params: any[] = []) {

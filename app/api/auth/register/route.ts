@@ -1,8 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { hash } from 'bcryptjs';
 import { query } from '@/lib/db/simple';
+import { rateLimit } from '@/lib/rate-limit';
+
+const limiter = rateLimit({
+    interval: 60 * 1000, // 60 seconds
+    uniqueTokenPerInterval: 500,
+});
 
 export async function POST(req: NextRequest) {
+    const ip = req.headers.get('x-forwarded-for') ?? '127.0.0.1';
+    try {
+        await limiter.check(5, ip); // 5 requests per minute
+    } catch {
+        return NextResponse.json({ ok: false, code: 'RATE_LIMIT_EXCEEDED' }, { status: 429 });
+    }
+
     const { email, password } = await req.json().catch(() => ({ email: undefined, password: undefined }));
     if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
         return NextResponse.json({ ok: false, code: 'BAD_REQUEST' }, { status: 400 });

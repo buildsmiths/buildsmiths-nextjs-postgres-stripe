@@ -21,7 +21,7 @@ create unique index if not exists users_email_lower_idx on public.users (lower(e
 
 -- Subscriptions (single row per user)
 create table if not exists public.subscriptions (
-  user_id text primary key,
+  user_id uuid primary key references public.users(id) on delete cascade,
   tier text not null check (tier in ('free','premium')),
   status text not null check (status in ('active','canceled','none')),
   current_period_end timestamptz,

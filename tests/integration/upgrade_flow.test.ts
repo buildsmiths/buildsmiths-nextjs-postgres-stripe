@@ -6,6 +6,7 @@ import { makeApiRequest } from '../utils/integration';
 import { resetAllState } from '../utils/reset';
 import { NextRequest } from 'next/server';
 import { clearConfigCache } from '@/lib/config';
+import { getPool } from '@/lib/db/simple';
 
 // T021: Upgrade flow integration test
 // Scenario: Authenticated free user initiates upgrade -> checkout session created -> (simulate webhook event) -> becomes premium.
@@ -19,10 +20,12 @@ function makeReq(headers: Record<string, string>) {
 describe('Upgrade flow (integration)', () => {
     const userId = 'user_upgrade_1';
 
-    beforeEach(() => {
+    beforeEach(async () => {
         resetAllState();
         clearAllSubscriptions();
         clearConfigCache();
+        // Create user for FK constraint
+        await getPool().query("INSERT INTO users (id, email, password_hash) VALUES ($1, 'upgrade_test@example.com', 'hash') ON CONFLICT (id) DO NOTHING", [userId]);
     });
 
     it('upgrades free user to premium after simulated checkout + webhook', async () => {

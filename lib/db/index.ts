@@ -33,12 +33,12 @@ export interface WebhookRepo {
 
 import { createDbWebhookRepo } from './webhookRepo';
 import { createDbAuditRepo } from './auditRepo';
+import { getPool } from './simple';
 
 function time<T>(_name: string, fn: () => Promise<T>): Promise<T> {
     return fn();
 }
 
-let cachedDbPool: any = null;
 let cachedDbQuery: ((sql: string, params: any[]) => Promise<{ rows: any[] }>) | null = null;
 let dbQueryChain: Promise<any> = Promise.resolve();
 const shouldSerializeDbQueries = () =>
@@ -49,11 +49,10 @@ const shouldSerializeDbQueries = () =>
 function ensureDbQuery() {
     if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL not set for DB');
     if (!cachedDbQuery) {
-        const { Pool } = require('pg');
-        cachedDbPool = new Pool({ connectionString: process.env.DATABASE_URL });
+        const pool = getPool();
         cachedDbQuery = async (sql: string, params: any[]) => {
             const run = async () => {
-                const res = await cachedDbPool.query(sql, params);
+                const res = await pool.query(sql, params);
                 return { rows: res.rows };
             };
             if (shouldSerializeDbQueries()) {
