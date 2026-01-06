@@ -2,6 +2,7 @@ import React from 'react';
 import { SignInPanel } from '@/components/SignInPanel';
 import { headers } from 'next/headers';
 import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
+import { Button } from "@/components/ui/button"
 
 export const metadata = {
     title: 'Sign in',
@@ -24,20 +25,17 @@ export default async function AuthPage() {
         return (
             <main aria-label="Auth" className="max-w-md mx-auto p-6 space-y-4" data-auth-state="signed-in">
                 <h1 className="text-lg font-semibold">You’re already signed in</h1>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
+                <p className="text-sm text-muted-foreground">
                     {state.rawSession?.email ? (
-                        <>Signed in as <span className="font-medium">{state.rawSession.email}</span>.</>
+                        <>Signed in as <span className="font-medium text-foreground">{state.rawSession.email}</span>.</>
                     ) : (
                         <>You’re signed in and don’t need to authenticate again.</>
                     )}
                 </p>
                 <div>
-                    <a
-                        className="inline-block px-3 py-2 rounded bg-gray-800 text-white text-sm hover:bg-gray-700 focus-ring"
-                        href="/dashboard"
-                    >
-                        Go to dashboard
-                    </a>
+                    <Button asChild>
+                        <a href="/dashboard">Go to dashboard</a>
+                    </Button>
                 </div>
             </main>
         );
@@ -48,7 +46,7 @@ export default async function AuthPage() {
     return (
         <div className="max-w-md mx-auto p-6 space-y-4" data-auth-state="signed-out">
             <h1 className="text-lg font-semibold">Sign in</h1>
-            <p className="text-sm text-gray-600 dark:text-gray-300">Access the dashboard after authenticating.</p>
+            <p className="text-sm text-muted-foreground">Access the dashboard after authenticating.</p>
             <SignInPanel enableGoogle={enableGoogle} />
         </div>
     );

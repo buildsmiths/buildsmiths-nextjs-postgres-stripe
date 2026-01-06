@@ -4,6 +4,9 @@ import { isStripeConfigured } from '@/lib/config';
 import { headers } from 'next/headers';
 import SignedOutPrompt from '@/components/SignedOutPrompt';
 import NextStepsCard from '@/components/NextStepsCard';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { AlertCircle, CheckCircle2 } from "lucide-react"
 
 // Billing Page (T050)
 // Provides upgrade (checkout) and portal management entry points.
@@ -15,19 +18,23 @@ export default async function BillingPage() {
             <div className="max-w-3xl mx-auto px-4 py-12 space-y-6">
                 <header className="space-y-2">
                     <h1 className="text-2xl font-bold">Billing</h1>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">You are on the free tier. Billing is currently disabled until real Stripe keys are provided.</p>
+                    <p className="text-sm text-muted-foreground">You are on the free tier. Billing is currently disabled until real Stripe keys are provided.</p>
                 </header>
-                <div className="rounded border p-4 bg-yellow-50 text-yellow-800 text-sm space-y-2 dark:bg-yellow-900/30 dark:text-yellow-200 dark:border-yellow-800">
-                    <p>To enable upgrade and portal flows, add real Stripe env vars to <code>.env.local</code> and restart.</p>
-                    <ul className="list-disc list-inside">
-                        <li><code>NEXT_PUBLIC_STRIPE_PUBLIC_KEY</code></li>
-                        <li><code>STRIPE_SECRET_KEY</code></li>
-                        <li><code>STRIPE_WEBHOOK_SECRET</code> (for webhooks)</li>
-                        <li><code>PREMIUM_PLAN_PRICE_ID</code></li>
-                        <li><code>BILLING_PORTAL_RETURN_URL</code></li>
-                    </ul>
-                    <p className="pt-1">Until then, API routes return a structured <code>stripe_not_configured</code> and UI upgrade controls remain disabled.</p>
-                </div>
+                <Alert variant="destructive" className="bg-yellow-50 text-yellow-900 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-200 dark:border-yellow-800 [&>svg]:text-yellow-600 dark:[&>svg]:text-yellow-400">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertTitle>Configuration Required</AlertTitle>
+                    <AlertDescription className="space-y-2 mt-2">
+                        <p>To enable upgrade and portal flows, add real Stripe env vars to <code>.env.local</code> and restart.</p>
+                        <ul className="list-disc list-inside text-xs font-mono">
+                            <li>NEXT_PUBLIC_STRIPE_PUBLIC_KEY</li>
+                            <li>STRIPE_SECRET_KEY</li>
+                            <li>STRIPE_WEBHOOK_SECRET</li>
+                            <li>PREMIUM_PLAN_PRICE_ID</li>
+                            <li>BILLING_PORTAL_RETURN_URL</li>
+                        </ul>
+                        <p className="pt-1">Until then, API routes return a structured <code>stripe_not_configured</code> and UI upgrade controls remain disabled.</p>
+                    </AlertDescription>
+                </Alert>
             </div>
         );
     }
@@ -45,31 +52,37 @@ export default async function BillingPage() {
         <div className="max-w-3xl mx-auto px-4 py-12 space-y-10">
             <header className="space-y-2">
                 <h1 className="text-2xl font-bold">Billing</h1>
-                <p className="text-sm text-gray-600 dark:text-gray-300">Manage your subscription and plan.</p>
+                <p className="text-sm text-muted-foreground">Manage your subscription and plan.</p>
             </header>
             <section className="space-y-4">
                 {!premium && (
                     <div className="space-y-2">
                         <h2 className="font-semibold text-sm">Upgrade to Premium</h2>
                         <form action="/api/subscriptions/checkout" method="POST">
-                            <button className="px-3 py-1 rounded bg-blue-600 text-white text-xs hover:bg-blue-500" type="submit">Start Upgrade</button>
+                            <Button type="submit">Start Upgrade</Button>
                         </form>
                     </div>
                 )}
                 {premium && (
-                    <div className="border rounded p-4 bg-green-50 text-green-800 space-y-2 dark:bg-green-900/30 dark:text-green-200 dark:border-green-800">
-                        <div className="text-sm font-medium">You are on the Premium plan.</div>
-                        <form action="/api/subscriptions/portal" method="POST">
-                            <button className="px-3 py-1 rounded bg-green-600 text-white text-xs hover:bg-green-500" type="submit">Open Customer Portal</button>
-                        </form>
-                    </div>
+                    <Alert className="bg-green-50 text-green-900 border-green-200 dark:bg-green-900/20 dark:text-green-200 dark:border-green-800 [&>svg]:text-green-600 dark:[&>svg]:text-green-400">
+                        <CheckCircle2 className="h-4 w-4" />
+                        <AlertTitle>Premium Active</AlertTitle>
+                        <AlertDescription className="mt-2">
+                            <div className="text-sm font-medium mb-2">You are on the Premium plan.</div>
+                            <form action="/api/subscriptions/portal" method="POST">
+                                <Button variant="outline" size="sm" className="bg-transparent border-green-600 text-green-700 hover:bg-green-100 hover:text-green-800 dark:border-green-400 dark:text-green-300 dark:hover:bg-green-900/50" type="submit">
+                                    Open Customer Portal
+                                </Button>
+                            </form>
+                        </AlertDescription>
+                    </Alert>
                 )}
             </section>
             <NextStepsCard
                 items={[
                     <span>In non-production, endpoints return mock checkout/portal identifiers until real Stripe keys are set.</span>,
-                    <span>Review your <a className="text-blue-600 hover:underline" href="/account">Account</a> and confirm your tier.</span>,
-                    <span>Try the gated API: <a className="text-blue-600 hover:underline" href="/api/feature/premium-example">/api/feature/premium-example</a> {premium ? '(unlocked on Premium)' : '(403 on free)'}.</span>,
+                    <span>Review your <a className="text-primary hover:underline" href="/account">Account</a> and confirm your tier.</span>,
+                    <span>Try the gated API: <a className="text-primary hover:underline" href="/api/feature/premium-example">/api/feature/premium-example</a> {premium ? '(unlocked on Premium)' : '(403 on free)'}.</span>,
                     <span>Need help? See the quickstart in the README for setup steps.</span>,
                 ]}
             />

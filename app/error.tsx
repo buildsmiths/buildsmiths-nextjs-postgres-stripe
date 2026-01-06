@@ -1,17 +1,25 @@
 "use client";
 import React from 'react';
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function GlobalError({ error, reset }: { error: Error & { digest?: string }, reset: () => void }) {
     return (
-        <main aria-label="Error" className="max-w-lg mx-auto mt-24 p-6 border rounded bg-white space-y-4 text-center">
-            <h1 className="text-xl font-semibold">Something went wrong</h1>
-            <p className="text-sm text-gray-600">An unexpected error occurred. Please try again.</p>
-            <div>
-                <button onClick={() => reset()} className="px-3 py-1 rounded bg-blue-600 text-white text-sm hover:bg-blue-700 focus-ring">Try again</button>
-            </div>
-            {process.env.NODE_ENV !== 'production' && (
-                <pre className="text-xs text-left whitespace-pre-wrap bg-gray-50 border rounded p-3 overflow-auto">{String(error?.message || '')}</pre>
-            )}
-        </main>
+        <div className="flex items-center justify-center min-h-[50vh] p-4">
+            <Card className="w-full max-w-md text-center">
+                <CardHeader>
+                    <CardTitle>Something went wrong</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <p className="text-sm text-muted-foreground">An unexpected error occurred. Please try again.</p>
+                    {process.env.NODE_ENV !== 'production' && (
+                        <pre className="text-xs text-left whitespace-pre-wrap bg-muted border rounded p-3 overflow-auto max-h-48 font-mono">{String(error?.message || '')}</pre>
+                    )}
+                </CardContent>
+                <CardFooter className="justify-center">
+                    <Button onClick={() => reset()}>Try again</Button>
+                </CardFooter>
+            </Card>
+        </div>
     );
 }

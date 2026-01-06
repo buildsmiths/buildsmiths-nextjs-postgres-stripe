@@ -6,6 +6,7 @@ import React from 'react';
 import PostCallbackStatus from '@/components/PostCallbackStatus';
 import SignedOutPrompt from '@/components/SignedOutPrompt';
 import NextStepsCard from '@/components/NextStepsCard';
+import { Badge } from "@/components/ui/badge"
 
 // Dashboard (T049): simple authenticated shell using header-based mock session.
 // Uses NextAuth server session today; expand with real per-user DB queries as needed.
@@ -29,13 +30,15 @@ export default async function DashboardPage() {
             <main aria-label="Dashboard" className="max-w-5xl mx-auto px-4 py-10 space-y-8">
                 <header className="space-y-1">
                     <h1 className="text-2xl font-bold" aria-current="page">Dashboard</h1>
-                    <p className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                    <p className="flex items-center gap-2 text-sm text-muted-foreground">
                         <span>Current tier:</span>
-                        <code className="px-1.5 py-0.5 rounded bg-gray-100 text-gray-700 text-xs dark:bg-gray-800 dark:text-gray-100">{state.tier}</code>
+                        <Badge variant="secondary" className="font-mono text-xs">
+                            {state.tier}
+                        </Badge>
                     </p>
                     <DevStatusChips />
                     {state.rawSession?.userId && (
-                        <p className="text-xs text-gray-500 dark:text-gray-400">Signed in as <code>{state.rawSession.userId}</code></p>
+                        <p className="text-xs text-muted-foreground">Signed in as <code>{state.rawSession.userId}</code></p>
                     )}
                 </header>
                 {/* Brief status indicator shown immediately after OAuth callback; auto-hides shortly. */}
@@ -43,9 +46,9 @@ export default async function DashboardPage() {
                 <section className="grid md:grid-cols-2 gap-6">
                     <NextStepsCard
                         items={[
-                            <span>Review your profile on <a className="text-blue-600 hover:underline" href="/account">Account</a>.</span>,
-                            <span>Manage your plan on <a className="text-blue-600 hover:underline" href="/billing">Billing</a> {state.tier !== 'premium' ? '(upgrade to unlock premium)' : '(you are on Premium)'}.</span>,
-                            <span>Check service health at <a className="text-blue-600 hover:underline" href="/api/health">/api/health</a>.</span>,
+                            <span>Review your profile on <a className="text-primary hover:underline" href="/account">Account</a>.</span>,
+                            <span>Manage your plan on <a className="text-primary hover:underline" href="/billing">Billing</a> {state.tier !== 'premium' ? '(upgrade to unlock premium)' : '(you are on Premium)'}.</span>,
+                            <span>Check service health at <a className="text-primary hover:underline" href="/api/health">/api/health</a>.</span>,
                         ]}
                     />
                     <NextStepsCard

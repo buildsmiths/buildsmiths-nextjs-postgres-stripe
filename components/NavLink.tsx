@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 interface NavLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
     href: string;
@@ -10,9 +11,18 @@ export default function NavLink({ href, className = '', children, ...rest }: Nav
     const pathname = usePathname() || '/';
     const isActive = pathname === href;
     const ariaCurrent = isActive ? 'page' : undefined;
-    const cls = `${className} focus-ring`;
+
     return (
-        <a href={href} aria-current={ariaCurrent as any} className={cls} {...rest}>
+        <a
+            href={href}
+            aria-current={ariaCurrent as any}
+            className={cn(
+                "text-sm font-medium transition-colors hover:text-primary",
+                isActive ? "text-foreground" : "text-muted-foreground",
+                className
+            )}
+            {...rest}
+        >
             {children}
         </a>
     );

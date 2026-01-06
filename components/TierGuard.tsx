@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tier } from '@/lib/access/policy';
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 // TierGuard (T046)
 // Server component friendly wrapper (kept simple here) gating children by tier.
@@ -17,8 +18,10 @@ export function TierGuard({ required, current, children, fallback }: TierGuardPr
     const allowed = hierarchy.indexOf(current) >= hierarchy.indexOf(required);
     if (allowed) return <>{children}</>;
     return (
-        <div className="border rounded p-4 space-y-2 text-sm bg-gray-50">
-            {fallback || <div>Requires {required} tier (current: {current}).</div>}
-        </div>
+        <Alert className="bg-muted/50">
+            <AlertDescription>
+                {fallback || <div>Requires {required} tier (current: {current}).</div>}
+            </AlertDescription>
+        </Alert>
     );
 }

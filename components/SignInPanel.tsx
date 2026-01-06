@@ -1,6 +1,10 @@
 'use client';
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function renderSignedOutView(params: {
     loading: boolean;
@@ -16,60 +20,70 @@ export function renderSignedOutView(params: {
 }) {
     const { loading, error, email, password, mode, onSubmit, onChangeEmail, onChangePassword, onToggleMode, enableGoogle } = params;
     return (
-        <div className="space-y-3" data-auth-state="signed-out">
-            {error && <div className="text-sm text-red-600">{error}</div>}
-            <form onSubmit={onSubmit} className="space-y-2">
-                <label className="block text-sm text-gray-700 dark:text-gray-200">{mode === 'login' ? 'Sign in with email' : 'Create an account'}</label>
-                <div className="flex flex-col gap-2">
-                    <input
-                        type="email"
-                        required
-                        placeholder="you@example.com"
-                        value={email}
-                        onChange={onChangeEmail}
-                        className="px-3 py-2 border rounded text-sm bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
-                    />
-                    <input
-                        type="password"
-                        required
-                        placeholder="password"
-                        value={password}
-                        onChange={onChangePassword}
-                        className="px-3 py-2 border rounded text-sm bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
-                        minLength={8}
-                    />
-                    <button
-                        type="submit"
-                        className="px-3 py-2 rounded bg-gray-800 text-white text-sm hover:bg-gray-700 focus-ring"
-                        disabled={loading || !email || !password}
-                    >
-                        {loading ? 'Working…' : (mode === 'login' ? 'Sign in' : 'Create account')}
-                    </button>
-                    <button type="button" className="text-xs text-gray-600 underline dark:text-gray-300" onClick={onToggleMode}>
-                        {mode === 'login' ? 'Need an account? Register' : 'Have an account? Sign in'}
-                    </button>
-                </div>
-            </form>
-            {enableGoogle && (
-                <>
-                    <div className="relative my-4">
-                        <div className="absolute inset-0 flex items-center">
-                            <span className="w-full border-t border-gray-300 dark:border-gray-600" />
-                        </div>
-                        <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-white dark:bg-black px-2 text-gray-500">Or continue with</span>
-                        </div>
+        <Card className="w-full max-w-md mx-auto" data-auth-state="signed-out">
+            <CardHeader>
+                <CardTitle>{mode === 'login' ? 'Sign In' : 'Create Account'}</CardTitle>
+                <CardDescription>
+                    {mode === 'login' ? 'Enter your email below to sign in to your account' : 'Enter your email below to create your account'}
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <form onSubmit={onSubmit} className="space-y-4">
+                    {error && <div className="text-sm text-destructive font-medium">{error}</div>}
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                            id="email"
+                            type="email"
+                            required
+                            placeholder="m@example.com"
+                            value={email}
+                            onChange={onChangeEmail}
+                        />
                     </div>
-                    <button
-                        type="button"
-                        onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
-                        className="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
-                    >
-                        Sign in with Google
-                    </button>
-                </>
-            )}
-        </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="password">Password</Label>
+                        <Input
+                            id="password"
+                            type="password"
+                            required
+                            value={password}
+                            onChange={onChangePassword}
+                            minLength={8}
+                        />
+                    </div>
+                    <Button type="submit" className="w-full" disabled={loading || !email || !password}>
+                        {loading ? 'Working…' : (mode === 'login' ? 'Sign in' : 'Create account')}
+                    </Button>
+                </form>
+
+                {enableGoogle && (
+                    <div className="mt-4">
+                        <div className="relative">
+                            <div className="absolute inset-0 flex items-center">
+                                <span className="w-full border-t" />
+                            </div>
+                            <div className="relative flex justify-center text-xs uppercase">
+                                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                            </div>
+                        </div>
+                        <Button
+                            variant="outline"
+                            type="button"
+                            onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+                            className="w-full mt-4"
+                        >
+                            Sign in with Google
+                        </Button>
+                    </div>
+                )}
+            </CardContent>
+            <CardFooter className="flex justify-center">
+                <Button variant="link" onClick={onToggleMode} className="text-sm text-muted-foreground">
+                    {mode === 'login' ? 'Need an account? Register' : 'Have an account? Sign in'}
+                </Button>
+            </CardFooter>
+        </Card>
     );
 }
 

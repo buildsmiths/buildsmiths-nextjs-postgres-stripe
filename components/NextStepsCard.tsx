@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 type NextStepsCardProps = {
     title?: string;
@@ -9,13 +10,17 @@ type NextStepsCardProps = {
 
 export default function NextStepsCard({ title = 'Next steps', items, ariaLabel = 'Getting started', className }: NextStepsCardProps) {
     return (
-        <section aria-label={ariaLabel} className={["border rounded p-4 bg-white text-sm space-y-3 dark:bg-gray-900 dark:border-gray-800", className].filter(Boolean).join(' ')}>
-            <h3 className="font-semibold text-sm">{title}</h3>
-            <ul className="list-disc pl-5 space-y-1 marker:text-gray-400 dark:marker:text-gray-500">
-                {items.map((node, i) => (
-                    <li key={i}>{node}</li>
-                ))}
-            </ul>
-        </section>
+        <Card aria-label={ariaLabel} className={className}>
+            <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-semibold">{title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <ul className="list-disc pl-5 space-y-1 marker:text-muted-foreground text-sm">
+                    {items.map((node, i) => (
+                        <li key={i}>{node}</li>
+                    ))}
+                </ul>
+            </CardContent>
+        </Card>
     );
 }

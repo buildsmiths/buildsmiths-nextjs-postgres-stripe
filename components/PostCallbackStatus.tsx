@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 /**
  * PostCallbackStatus
@@ -18,14 +19,16 @@ export function PostCallbackStatus({ durationMs = 800 }: { durationMs?: number }
     if (!visible) return null;
 
     return (
-        <div
+        <Alert
             role="status"
             aria-live="polite"
             data-testid="post-callback-status"
-            className="rounded-md bg-blue-50 text-blue-700 border border-blue-200 px-3 py-2 text-sm"
+            className="bg-primary/10 text-primary border-primary/20"
         >
-            Signing you in...
-        </div>
+            <AlertDescription>
+                Signing you in...
+            </AlertDescription>
+        </Alert>
     );
 }
 
