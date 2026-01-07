@@ -1,6 +1,7 @@
 import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
 import DevStatusChips from '@/components/dev-tools/DevStatusChips';
 import BlueprintStatus from '@/components/dev-tools/BlueprintStatus';
+import { SystemActivityChart, ResourceUsageChart } from '@/components/admin/DashboardCharts';
 // perf metrics removed in lean profile
 import { headers } from 'next/headers';
 import React from 'react';
@@ -10,8 +11,7 @@ import NextStepsCard from '@/components/NextStepsCard';
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button";
 
-// Dashboard (T049): simple authenticated shell using header-based mock session.
-// Uses NextAuth server session today; expand with real per-user DB queries as needed.
+// Admin Dashboard: Central hub for the developer to see system status and next steps.
 
 export default async function DashboardPage() {
     return (async () => {
@@ -24,52 +24,71 @@ export default async function DashboardPage() {
             reqLike = { headers: { get: (_key: string) => null } } as any;
         }
         const state = await deriveSubscriptionStateAsync(reqLike);
-        // if (!state.authenticated) return <SignedOutPrompt ariaLabel="Dashboard" />;
-
-        // Usage quotas removed in Phase 1; keep dashboard minimal.
 
         return (
-            <main aria-label="Dashboard" className="max-w-5xl mx-auto px-4 py-10 space-y-8">
+            <main aria-label="Admin Dashboard" className="max-w-5xl mx-auto px-4 py-10 space-y-8">
                 {!state.authenticated && (
                     <div className="bg-muted/50 border border-muted-foreground/20 rounded-lg p-4 mb-6 text-sm flex items-center justify-between">
-                        <p>👀 <strong>Public Demo Mode</strong>: You are viewing this dashboard as a Visitor.</p>
+                        <p>👀 <strong>Public Demo Mode</strong>: You are viewing this admin panel as a Visitor.</p>
                         <Button variant="secondary" size="sm" asChild>
                             <a href="/quickstart">Get the Code</a>
                         </Button>
                     </div>
                 )}
-                <header className="space-y-1">
-                    <h1 className="text-2xl font-bold" aria-current="page">Dashboard</h1>
-                    <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <span>Current tier:</span>
-                        <Badge variant="secondary" className="font-mono text-xs">
-                            {state.tier}
-                        </Badge>
-                    </p>
-                    <DevStatusChips />
-                    {state.rawSession?.userId && (
-                        <p className="text-xs text-muted-foreground">Signed in as <code>{state.rawSession.userId}</code></p>
-                    )}
+                <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-3xl font-bold tracking-tight" aria-current="page">Admin Dashboard</h1>
+                            <Badge variant="outline" className="ml-2">Dev Environment</Badge>
+                        </div>
+                        <p className="text-muted-foreground">
+                            System status, recent activity, and developer tasks.
+                        </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        {state.authenticated ? (
+                            <div className="text-right">
+                                <p className="text-xs text-muted-foreground">Logged in as</p>
+                                <p className="text-sm font-medium">{state.rawSession?.email || 'User'}</p>
+                            </div>
+                        ) : (
+                            <Button size="sm" asChild>
+                                <a href="/auth">Sign In to Admin</a>
+                            </Button>
+                        )}
+                    </div>
                 </header>
+
+                <DevStatusChips />
+
                 {/* Brief status indicator shown immediately after OAuth callback; auto-hides shortly. */}
                 <PostCallbackStatus />
+
+                {/* Charts Row */}
+                <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <SystemActivityChart />
+                    <ResourceUsageChart />
+                </section>
+
                 <section className="grid md:grid-cols-2 gap-6">
                     <NextStepsCard
+                        title="Action Items"
                         items={[
-                            <span>Review your profile on <a className="text-primary hover:underline" href="/account">Account</a>.</span>,
-                            <span>Manage your plan on <a className="text-primary hover:underline" href="/billing">Billing</a> {state.tier !== 'premium' ? '(upgrade to unlock premium)' : '(you are on Premium)'}.</span>,
-                            <span>Check service health at <a className="text-primary hover:underline" href="/api/health">/api/health</a>.</span>,
+                            <span><strong>Config Audit</strong>: Review <code>.env.local</code> and ensure <code>STRIPE_SECRET_KEY</code> is set for billing.</span>,
+                            <span><strong>Database</strong>: Check <code>npm run db:status</code> (simulated) or inspect via psql.</span>,
+                            <span><strong>Users</strong>: You have {state.authenticated ? '1 (Self)' : '0 (Guest)'} active session.</span>,
                         ]}
                     />
                     <NextStepsCard
-                        title="Tips"
+                        title="Developer Resources"
                         items={[
-                            <span>Use the free tier to build; enable Stripe later with real keys.</span>,
-                            <span>Protect premium features with the included guard utilities.</span>,
-                            <span>See README for quickstart, envs, and deployment notes.</span>,
+                            <span><a className="text-primary hover:underline" href="/quickstart">Quickstart Guide</a>: Re-visit installation steps.</span>,
+                            <span><a className="text-primary hover:underline" href="/?scroll=blueprints">Blueprints</a>: See available AI-native specs.</span>,
+                            <span><a className="text-primary hover:underline" href="/api/health" target="_blank">Health Check API</a>: View raw JSON status.</span>,
                         ]}
                     />
                 </section>
+
                 <BlueprintStatus />
             </main>
         );
