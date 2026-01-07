@@ -28,37 +28,6 @@ export default function Landing() {
                 </div>
             </section>
 
-            {/* Features Grid */}
-            <section className="grid md:grid-cols-3 gap-8">
-                <div className="space-y-3">
-                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                        <Terminal className="h-5 w-5" />
-                    </div>
-                    <h3 className="font-semibold text-lg">Prompt-Driven Dev</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                        Don't fight boilerplate. Use our verified <strong>Blueprints</strong> to let Copilot implement complex features like Async Jobs and Stripe correctly.
-                    </p>
-                </div>
-                <div className="space-y-3">
-                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                        <Zap className="h-5 w-5" />
-                    </div>
-                    <h3 className="font-semibold text-lg">Next.js 15 Core</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                        Built on the bleeding edge. Server Actions for mutations, Turbopack for speed, and React 19 patterns by default.
-                    </p>
-                </div>
-                <div className="space-y-3">
-                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                        <BookOpen className="h-5 w-5" />
-                    </div>
-                    <h3 className="font-semibold text-lg">Self-Documenting</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                        The dashboard isn't just a UI; it's a live status board that checks your database and env, guiding you through setup.
-                    </p>
-                </div>
-            </section>
-
             {/* Quickstart Content (Replaces Old Section) */}
             <section id="quickstart" aria-labelledby="quickstart-title" className="space-y-8">
                 <div className="text-center mb-8">
