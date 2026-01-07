@@ -1,36 +1,66 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from "@/components/ui/badge"
+import { Check, Terminal, Zap, BookOpen } from "lucide-react"
 
 export default function Landing() {
     return (
-        <div className="mx-auto max-w-5xl px-4 py-16 space-y-16">
+        <div className="mx-auto max-w-5xl px-4 py-16 space-y-24">
             {/* Hero */}
-            <section className="space-y-5 text-center">
-                <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-                    BuildSmiths StarterKit
+            <section className="space-y-6 text-center pt-8">
+                <Badge variant="secondary" className="mb-4">v2.0 Now Available</Badge>
+                <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground/90">
+                    The <span className="text-primary">AI-Native</span> SaaS Starter
                 </h1>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
-                    Subscription‑ready SaaS starter: Next.js 15 (App Router) · Postgres · Auth.js (credentials) · optional Stripe · Tailwind v4 · Vitest · JSON logs + audit hooks.
-                    Minimal by design. Start with billing disabled, enable Stripe when ready. Postgres is required.
+                <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
+                    A minimalist Foundation for 2026. Next.js 15, Server Actions, and a unique <strong>Blueprint Architecture</strong> designed for AI code generation.
                 </p>
-                <div className="flex flex-wrap items-center justify-center gap-3">
-                    <Button asChild size="lg">
-                        <a href="/auth">Sign in</a>
+                <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
+                    <Button asChild size="lg" className="h-12 px-8 text-base">
+                        <a href="/dashboard">View Demo Dashboard</a>
                     </Button>
-                    <Button asChild variant="outline" size="lg">
-                        <a href="#quickstart">Quickstart</a>
-                    </Button>
-                    <Button asChild variant="outline" size="lg">
+                    <Button asChild variant="outline" size="lg" className="h-12 px-8">
                         <a href="https://github.com/buildsmiths/buildsmiths-nextjs-postgres-stripe" target="_blank" rel="noreferrer">
-                            View on GitHub
+                            GitHub
                         </a>
                     </Button>
                 </div>
             </section>
 
+            {/* Features Grid */}
+            <section className="grid md:grid-cols-3 gap-8">
+                <div className="space-y-3">
+                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <Terminal className="h-5 w-5" />
+                    </div>
+                    <h3 className="font-semibold text-lg">Prompt-Driven Dev</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                        Don't fight boilerplate. Use our verified <strong>Blueprints</strong> to let Copilot implement complex features like Async Jobs and Stripe correctly.
+                    </p>
+                </div>
+                <div className="space-y-3">
+                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <Zap className="h-5 w-5" />
+                    </div>
+                    <h3 className="font-semibold text-lg">Next.js 15 Core</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                        Built on the bleeding edge. Server Actions for mutations, Turbopack for speed, and React 19 patterns by default.
+                    </p>
+                </div>
+                <div className="space-y-3">
+                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <BookOpen className="h-5 w-5" />
+                    </div>
+                    <h3 className="font-semibold text-lg">Self-Documenting</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                        The dashboard isn't just a UI; it's a live status board that checks your database and env, guiding you through setup.
+                    </p>
+                </div>
+            </section>
+
             {/* Quickstart */}
-            <section id="quickstart" aria-labelledby="quickstart-title">
+            <section id="quickstart" aria-labelledby="quickstart-title" className="max-w-3xl mx-auto w-full">
                 <Card>
                     <CardHeader>
                         <CardTitle id="quickstart-title">Quickstart (5 minutes)</CardTitle>

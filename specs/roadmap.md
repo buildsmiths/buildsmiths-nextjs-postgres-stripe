@@ -128,11 +128,11 @@ We will pioneer a lightweight, "AI-First" extension strategy. Instead of shippin
 
 ### Phase 4: Developer Experience (Showcase)
 *Focus: The "Kitchen Sink" Dashboard and Guidance.*
-- [ ] **Refactor Dev Tools**: Move `DevStatusChips`, `TierGuard`, and debug components into `components/dev-tools/`.
-- [ ] **Context Cards**: Create the "Copy Prompts" UI component for the Billing and Auth pages.
-- [ ] **Dashboard Showcase**:
-    - [ ] Create `app/dashboard/page.tsx` (or edit existing) to act as the central hub.
-    - [ ] Add "Job Trigger" widget (visualize queue state).
-    - [ ] Add "AI Quick Check" widget (verify OpenRouter).
-    - [ ] Add conditional logic to show "Apply Blueprint" if features are missing.
+- [x] **Refactor Dev Tools**: Move `DevStatusChips`, `TierGuard`, and debug components into `components/dev-tools/`.
+- [x] **Context Cards**: Create the "Copy Prompts" UI component for the Billing and Auth pages.
+- [x] **Dashboard Showcase**:
+    - [x] Create `app/dashboard/page.tsx` (or edit existing) to act as the central hub.
+    - [x] Add "Job Trigger" widget (visualize queue state).
+    - [x] Add "AI Quick Check" widget (verify OpenRouter).
+    - [x] Add conditional logic to show "Apply Blueprint" if features are missing.
 
