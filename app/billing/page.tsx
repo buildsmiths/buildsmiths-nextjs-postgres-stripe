@@ -7,11 +7,15 @@ import NextStepsCard from '@/components/NextStepsCard';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { AlertCircle, CheckCircle2 } from "lucide-react"
+import { upgradeSubscription, manageSubscription } from './actions';
+
+import { ContextCard } from '@/components/dev-tools/ContextCard';
 
 // Billing Page (T050)
 // Provides upgrade (checkout) and portal management entry points.
 
 export default async function BillingPage() {
+    const isDev = process.env.NODE_ENV === 'development';
     const configured = isStripeConfigured();
     if (!configured) {
         return (
@@ -58,7 +62,7 @@ export default async function BillingPage() {
                 {!premium && (
                     <div className="space-y-2">
                         <h2 className="font-semibold text-sm">Upgrade to Premium</h2>
-                        <form action="/api/subscriptions/checkout" method="POST">
+                        <form action={upgradeSubscription}>
                             <Button type="submit">Start Upgrade</Button>
                         </form>
                     </div>
@@ -69,7 +73,7 @@ export default async function BillingPage() {
                         <AlertTitle>Premium Active</AlertTitle>
                         <AlertDescription className="mt-2">
                             <div className="text-sm font-medium mb-2">You are on the Premium plan.</div>
-                            <form action="/api/subscriptions/portal" method="POST">
+                            <form action={manageSubscription}>
                                 <Button variant="outline" size="sm" className="bg-transparent border-green-600 text-green-700 hover:bg-green-100 hover:text-green-800 dark:border-green-400 dark:text-green-300 dark:hover:bg-green-900/50" type="submit">
                                     Open Customer Portal
                                 </Button>
@@ -86,6 +90,14 @@ export default async function BillingPage() {
                     <span>Need help? See the quickstart in the README for setup steps.</span>,
                 ]}
             />
+            {isDev && (
+                <ContextCard
+                    title="Stripe & Billing Context"
+                    description="This page interacts with lib/stripe/checkout.ts and lib/stripe/portal.ts. The logic is handled by server actions in app/billing/actions.ts."
+                    prompt="Here is the schema for the `subscriptions` table and the `checkout.ts` logic. Help me add a 'trial period' feature..."
+                    fileLocation="lib/stripe/"
+                />
+            )}
         </div>
     );
 }

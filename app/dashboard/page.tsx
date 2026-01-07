@@ -1,5 +1,6 @@
 import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
-import DevStatusChips from '@/components/DevStatusChips';
+import DevStatusChips from '@/components/dev-tools/DevStatusChips';
+import BlueprintStatus from '@/components/dev-tools/BlueprintStatus';
 // perf metrics removed in lean profile
 import { headers } from 'next/headers';
 import React from 'react';
@@ -60,6 +61,7 @@ export default async function DashboardPage() {
                         ]}
                     />
                 </section>
+                <BlueprintStatus />
             </main>
         );
     })();

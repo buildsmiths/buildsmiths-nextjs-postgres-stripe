@@ -40,49 +40,31 @@ We will stick to the standard `pg` driver to ensure the template works with **an
     *   **Serverless Compat**: Add comments/docs explaining that for Vercel/Serverless deployments, the user should simply use their provider's "Transaction Pooler" connection string (port 6543) with the standard driver.
     *   **No Vendor Lock-in**: We will **not** default to `@neondatabase/serverless` to keep the template provider-agnostic.
 
-## 4. AI Core & Vercel AI SDK Integration
+## 4. Standardized Patterns (Managed via Blueprints)
 
-We will adopt the **Vercel AI SDK** (`ai`, `@ai-sdk/openai`) as the standard abstraction layer. This is superior to a manual `lib/ai/client.ts` because it standardizes streaming, tool calling, and provider switching.
+To keep the core template lightweight, complex features will be defined as **Blueprints** (see Section 6) rather than hardcoded boilerplate.
 
-*   **Universal Provider (via OpenRouter)**:
-    *   **Implementation**: Configure the `createOpenAI` provider to point to `https://openrouter.ai/api/v1` using `OPENROUTER_API_KEY`.
-    *   **Benefit**: This one configuration allows developers to switch between OpenAI, Anthropic, Gemini, Mistral, and Llama models just by changing a model string (e.g., `google/gemini-2.0-flash-exp`) without changing code.
-*   **Ready-to-Use Hooks**:
-    *   **UI Integration**: Use `useChat` for instant streaming chat interfaces in the showcase.
-    *   **Why**: Drastically reduces boilerplate code for handling stream chunks, loading states, and error parsing.
-*   **Demo Flow**:
-    *   **UI**: A simple "Ask AI" playground at `/app/ai-demo/page.tsx` utilizing `useChat`.
-    *   **Components**: Minimal generic `ChatInput` and `MarkdownResponse` components.
+*   **AI Core (Vercel AI SDK)**:
+    *   **Goal**: Standardized `useChat` hooks and OpenRouter configuration.
+    *   **Delivery**: Provided as a `blueprints/features/ai-sdk.md` spec.
+*   **Async Job Queue**:
+    *   **Goal**: Zero-dependency Postgres-backed job system (`jobs` table).
+    *   **Delivery**: Provided as a `blueprints/features/async-jobs.md` spec.
 
-## 6. Simple Postgres Job Queue (Async Framework)
-
-To handle long-running AI tasks without timeouts, we introduce a minimal, native-Postgres queue system.
-
-*   **Schema**: Add a `jobs` table (id, type, status, payload, result, created_at, processed_at).
-*   **Workflow**:
-    1.  UI calls Server Action -> Insert row into `jobs` (Status: 'pending').
-    2.  Async Worker (triggered via recursive fetch or Cron) picks up 'pending' job.
-    3.  Job completes -> Update `jobs` with result (Status: 'completed').
-    4.  UI polls job ID for completion.
-*   **Philosophy**: Start with Postgres (zero deps). Allow swapping for Upstash/Redis later if scale demands it.
-
-
-## 7. The "Dev Showcase" Landing Page
+## 5. The "Dev Showcase" Landing Page
 
 Instead of a generic "Welcome" page, the dashboard (`/dashboard`) will serve as a live "Kitchen Sink" to demonstrate the template's capabilities immediately after spinning up.
 
-*   **Integration**: Utilize the existing `DevStatusChips` and `TierGuard` components to create a unified view.
-*   **Interactive Modules**:
-    *   **Async Job Trigger**: A card with a "Start Background Task" button.
-        *   **Visuals**: Progress steps showing `Queued` → `Processing` → `Completed`, proving the Postgres queue is active.
-    *   **AI Quick-Check**: A mini chat input to verify the OpenRouter connection without leaving the dashboard.
+*   **Component Strategy**:
+    *   Interactive widgets (like "Job Trigger") will check if the feature is implemented.
+    *   If missing, they will display a helpful "Apply Blueprint to Enable" state, pointing the developer to the specific prompt file.
 *   **System Status Board**:
     *   Live indicators for:
         *   **Database**: Connection latency check.
         *   **Billing**: Current mode (Mock vs Real).
         *   **Auth**: Current session strength (Visitor vs User).
 
-## 8. Context-Aware Developer Guidance (AI Bridge)
+## 6. Context-Aware Developer Guidance (AI Bridge)
 
 To help developers learn the stack and leverage AI assistants, we will embed "Context Cards" on key pages.
 
@@ -96,16 +78,61 @@ To help developers learn the stack and leverage AI assistants, we will embed "Co
     *   **Strategy**: All "Demo", "Showcase", and "Guidance" components must live in a dedicated folder (e.g., `components/dev-tools/`).
     *   **Zero-Cost**: These components should be easy to delete or disable via a single flag/environment variable so they don't pollute the production app.
 
+## 7. The "Spec Blueprints" Architecture (Prompt-Driven Development)
+
+We will pioneer a lightweight, "AI-First" extension strategy. Instead of shipping stale boilerplate code in hidden folders, we will ship **Architectural Prompts** (Specfiles) that guide the developer's AI to build features correctly.
+
+*   **The Problem**: Static boilerplate rots. APIs change (Stripe v15 -> v16). Developers spend time refactoring boilerplate to match their style.
+*   **The Solution**: Ship High-Fidelity Specs (`.md`) in `blueprints/`.
+    *   **Structure**:
+        *   `blueprints/features/billing-stripe.md`
+        *   `blueprints/features/ai-sdk.md`
+        *   `blueprints/features/async-jobs.md`
+    *   **Content**: Each file contains:
+        *   **Objective**: "Build a checkout session..."
+        *   **Requirements**: "Handle `checkout.session.completed` webhook..."
+        *   **Constraints**: "Use Zod for validation. Wrap in `try/catch`."
+        *   **Security**: "Verify webhook signature using `STRIPE_WEBHOOK_SECRET`."
+*   **Workflow**:
+    1.  Dev opens `blueprints/features/billing-stripe.md`.
+    2.  Dev hits "Add to Chat" (Cursor/Copilot).
+    3.  Dev types: *"Implement this blueprint using strict TypeScript."*
+    4.  AI generates fresh, context-aware code that fits the project perfectly.
+*   **Future Scope**:
+    *   Ability to fetch updated specs dynamically from a "Spec Stack" API, ensuring the prompts themselves are always up-to-date with library changes.
+
 ---
 
-## Implementation Plan
+## Development Phases
 
-1.  [ ] **Install `tsx`** and migrate existing scripts.
-2.  [ ] **Create `scripts/doctor.ts`** to validate the environment.
-3.  [ ] **Refactor `lib/config.ts`** into `lib/env.ts` with instant validation.
-4.  [ ] **Add Server Action Example**: Re-implement "Update Profile" or "Sign Out" using a server action to demonstrate the pattern.
-5.  [ ] **Implement `lib/ai/client.ts`** targeting OpenRouter.
-6.  [ ] **Create `jobs` schema** and basic queue processing logic.
-7.  [ ] **Refactor `DevStatusChips`** into a `components/dev-tools` directory.
-8.  [ ] **Build `app/dashboard` Showcase** with Job Trigger, AI widgets, and Context Cards.
+### Phase 1: Foundation & Hygiene
+*Focus: Tooling, Safety, and Configuration.*
+- [x] **Install `tsx`**: Add to devDependencies.
+- [x] **Migrate Scripts**: Convert `db:schema` and `db:seed` to TypeScript.
+- [x] **Runtime Validation**: Create `lib/env.ts` (replacing `lib/config.ts`) that validates environment variables on startup.
+- [x] **CLI Doctor**: Create `scripts/doctor.ts` to check DB connection, Stripe keys, and Auth secret health.
+- [x] **Strict Types**: Enable `noUncheckedIndexedAccess` in `tsconfig.json`.
+
+### Phase 2: Architecture Modernization
+*Focus: Upgrading Core Patterns.*
+- [x] **DB Resilience**: Update `db/index.ts` to configure `pg.Pool` with robust timeouts and limits.
+- [x] **Server Actions**: Implement a pilot Server Action (e.g., "Upgrade to Premium") to establish the pattern in `app/billing/actions.ts`.
+- [ ] **Refactor API Routes**: Audit `app/api/` and document which should remain API routes vs. move to Actions.
+
+### Phase 3: The "Spec Blueprints" Engine
+*Focus: Creating the prompt-driven extension system.*
+- [x] **Scaffold**: Create `blueprints/features/` directory.
+- [x] **Author Spec: AI SDK**: Write `blueprints/features/ai-sdk.md` defining the Vercel AI SDK + OpenRouter setup.
+- [x] **Author Spec: Async Jobs**: Write `blueprints/features/async-jobs.md` defining the Postgres queue schema and worker.
+- [x] **Author Spec: Billing**: Write `blueprints/features/billing-stripe.md` defining the advanced subscription flow.
+
+### Phase 4: Developer Experience (Showcase)
+*Focus: The "Kitchen Sink" Dashboard and Guidance.*
+- [ ] **Refactor Dev Tools**: Move `DevStatusChips`, `TierGuard`, and debug components into `components/dev-tools/`.
+- [ ] **Context Cards**: Create the "Copy Prompts" UI component for the Billing and Auth pages.
+- [ ] **Dashboard Showcase**:
+    - [ ] Create `app/dashboard/page.tsx` (or edit existing) to act as the central hub.
+    - [ ] Add "Job Trigger" widget (visualize queue state).
+    - [ ] Add "AI Quick Check" widget (verify OpenRouter).
+    - [ ] Add conditional logic to show "Apply Blueprint" if features are missing.
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { SignInPanel } from '@/components/SignInPanel';
+import { ContextCard } from '@/components/dev-tools/ContextCard';
 import { headers } from 'next/headers';
 import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
 import { Button } from "@/components/ui/button"
@@ -42,12 +43,23 @@ export default async function AuthPage() {
     }
 
     const enableGoogle = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
+    const isDev = process.env.NODE_ENV === 'development';
 
     return (
         <div className="max-w-md mx-auto p-6 space-y-4" data-auth-state="signed-out">
             <h1 className="text-lg font-semibold">Sign in</h1>
             <p className="text-sm text-muted-foreground">Access the dashboard after authenticating.</p>
             <SignInPanel enableGoogle={enableGoogle} />
+            {isDev && (
+                <div className="pt-8 border-t mt-8">
+                    <ContextCard
+                        title="Auth Configuration Context"
+                        description="Authentication uses NextAuth.js (Auth.js) Credentials provider. Database sessions strategy."
+                        prompt="Analyze `lib/auth/nextauth-options.ts` and `app/api/auth/[...nextauth]/route.ts`. Explain how to add a Google Provider."
+                        fileLocation="lib/auth/"
+                    />
+                </div>
+            )}
         </div>
     );
 }

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { registerAction } from '@/app/auth/actions';
 
 export function renderSignedOutView(params: {
     loading: boolean;
@@ -100,9 +101,12 @@ export const SignInPanel: React.FC<{ enableGoogle?: boolean }> = ({ enableGoogle
         setError(null);
         try {
             if (mode === 'register') {
-                const res = await fetch('/api/auth/register', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email, password }) });
-                const data = await res.json();
-                if (!res.ok || !data?.ok) throw new Error(data?.code || 'REGISTER_FAILED');
+                const formData = new FormData();
+                formData.append('email', email);
+                formData.append('password', password);
+
+                const data = await registerAction(null, formData);
+                if (!data?.ok) throw new Error(data?.message || data?.code || 'REGISTER_FAILED');
             }
             const result = await signIn('credentials', { email, password, redirect: false, callbackUrl: '/dashboard' });
             if ((result as any)?.error) throw new Error((result as any).error);
