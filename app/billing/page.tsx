@@ -19,7 +19,7 @@ export default async function BillingPage() {
     const configured = isStripeConfigured();
     if (!configured) {
         return (
-            <div className="max-w-3xl mx-auto px-4 py-12 space-y-6">
+            <div className="max-w-5xl mx-auto px-4 py-10 space-y-6">
                 <header className="space-y-2">
                     <h1 className="text-2xl font-bold">Billing</h1>
                     <p className="text-sm text-muted-foreground">You are on the free tier. Billing is currently disabled until real Stripe keys are provided.</p>
@@ -53,7 +53,7 @@ export default async function BillingPage() {
     if (!state.authenticated) return <SignedOutPrompt ariaLabel="Billing" />;
     const premium = state.tier === 'premium';
     return (
-        <div className="max-w-3xl mx-auto px-4 py-12 space-y-10">
+        <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
             <header className="space-y-2">
                 <h1 className="text-2xl font-bold">Billing</h1>
                 <p className="text-sm text-muted-foreground">Manage your subscription and plan.</p>

@@ -34,7 +34,7 @@ export default async function DashboardPage() {
                     <div className="bg-muted/50 border border-muted-foreground/20 rounded-lg p-4 mb-6 text-sm flex items-center justify-between">
                         <p>👀 <strong>Public Demo Mode</strong>: You are viewing this dashboard as a Visitor.</p>
                         <Button variant="secondary" size="sm" asChild>
-                            <a href="/auth">Sign In to Test Real Auth</a>
+                            <a href="/quickstart">Get the Code</a>
                         </Button>
                     </div>
                 )}

@@ -17,12 +17,12 @@ export default async function AccountPage() {
     const state = await deriveSubscriptionStateAsync(reqLike);
 
     return (
-        <main aria-label="Account" className="max-w-2xl mx-auto px-4 py-10 space-y-6">
+        <main aria-label="Account" className="max-w-5xl mx-auto px-4 py-10 space-y-6">
             {!state.authenticated && (
                 <div className="bg-muted/50 border border-muted-foreground/20 rounded-lg p-4 mb-6 text-sm flex items-center justify-between">
                     <p>👀 <strong>Public Demo Mode</strong>: You are viewing this page as a Visitor.</p>
                     <Button variant="secondary" size="sm" asChild>
-                        <a href="/auth">Sign In to Test Real Auth</a>
+                        <a href="/quickstart">Get the Code</a>
                     </Button>
                 </div>
             )}
