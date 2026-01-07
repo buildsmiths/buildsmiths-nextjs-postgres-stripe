@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from "@/components/ui/badge"
 import { Check, Terminal, Github, ExternalLink, Code2, Layers, Box } from "lucide-react"
+import { CopyContextButton } from '@/components/dev-tools/CopyContextButton';
 
 export const metadata = {
     title: 'Quickstart',
@@ -26,10 +27,13 @@ export default function QuickstartPage() {
             {/* Installation - Full Width */}
             <Card className="w-full border-2">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-2xl">
-                        <Terminal className="h-6 w-6 text-primary" />
-                        <span>Installation</span>
-                    </CardTitle>
+                    <div className="flex items-center justify-between">
+                        <CardTitle className="flex items-center gap-2 text-2xl">
+                            <Terminal className="h-6 w-6 text-primary" />
+                            <span>Installation</span>
+                        </CardTitle>
+                        <CopyContextButton />
+                    </div>
                     <CardDescription className="text-base">
                         Prerequisites: Node.js 18+ and a Postgres database (local or cloud).
                     </CardDescription>
