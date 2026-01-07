@@ -51,7 +51,7 @@ Please assist me with adding features to this codebase.`;
             ) : (
                 <>
                     <Sparkles className="h-3.5 w-3.5 text-indigo-500" />
-                    <span>Copy Context for AI</span>
+                    <span>copy for AI</span>
                 </>
             )}
         </Button>
