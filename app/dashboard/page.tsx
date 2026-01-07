@@ -8,6 +8,7 @@ import PostCallbackStatus from '@/components/PostCallbackStatus';
 import SignedOutPrompt from '@/components/SignedOutPrompt';
 import NextStepsCard from '@/components/NextStepsCard';
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button";
 
 // Dashboard (T049): simple authenticated shell using header-based mock session.
 // Uses NextAuth server session today; expand with real per-user DB queries as needed.
@@ -23,12 +24,20 @@ export default async function DashboardPage() {
             reqLike = { headers: { get: (_key: string) => null } } as any;
         }
         const state = await deriveSubscriptionStateAsync(reqLike);
-        if (!state.authenticated) return <SignedOutPrompt ariaLabel="Dashboard" />;
+        // if (!state.authenticated) return <SignedOutPrompt ariaLabel="Dashboard" />;
 
         // Usage quotas removed in Phase 1; keep dashboard minimal.
 
         return (
             <main aria-label="Dashboard" className="max-w-5xl mx-auto px-4 py-10 space-y-8">
+                {!state.authenticated && (
+                    <div className="bg-muted/50 border border-muted-foreground/20 rounded-lg p-4 mb-6 text-sm flex items-center justify-between">
+                        <p>👀 <strong>Public Demo Mode</strong>: You are viewing this dashboard as a Visitor.</p>
+                        <Button variant="secondary" size="sm" asChild>
+                            <a href="/auth">Sign In to Test Real Auth</a>
+                        </Button>
+                    </div>
+                )}
                 <header className="space-y-1">
                     <h1 className="text-2xl font-bold" aria-current="page">Dashboard</h1>
                     <p className="flex items-center gap-2 text-sm text-muted-foreground">

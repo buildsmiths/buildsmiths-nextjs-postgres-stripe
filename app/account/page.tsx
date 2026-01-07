@@ -16,10 +16,16 @@ export default async function AccountPage() {
     }
     const state = await deriveSubscriptionStateAsync(reqLike);
 
-    if (!state.authenticated) return <SignedOutPrompt ariaLabel="Account" />;
-
     return (
         <main aria-label="Account" className="max-w-2xl mx-auto px-4 py-10 space-y-6">
+            {!state.authenticated && (
+                <div className="bg-muted/50 border border-muted-foreground/20 rounded-lg p-4 mb-6 text-sm flex items-center justify-between">
+                    <p>👀 <strong>Public Demo Mode</strong>: You are viewing this page as a Visitor.</p>
+                    <Button variant="secondary" size="sm" asChild>
+                        <a href="/auth">Sign In to Test Real Auth</a>
+                    </Button>
+                </div>
+            )}
             <div className="flex items-center gap-3">
                 <h1 className="text-2xl font-bold">Account</h1>
                 <Badge variant="secondary" className="font-mono text-xs" aria-label={`Tier: ${state.tier}`}>
@@ -29,10 +35,10 @@ export default async function AccountPage() {
             <section aria-label="Profile" className="text-sm text-foreground space-y-1">
                 <div>
                     <span className="text-muted-foreground">User ID:</span>{' '}
-                    <code>{state.rawSession?.userId}</code>
+                    <code>{state.rawSession?.userId || 'guest_user'}</code>
                 </div>
                 {/* Email is available when a NextAuth session includes it (credentials flow stores email). */}
-                {('email' in (state.rawSession || {}) && (state as any).rawSession?.email) ? (
+                {state.authenticated && ('email' in (state.rawSession || {}) && (state as any).rawSession?.email) ? (
                     <div>
                         <span className="text-muted-foreground">Email:</span>{' '}
                         <code>{(state as any).rawSession.email}</code>
