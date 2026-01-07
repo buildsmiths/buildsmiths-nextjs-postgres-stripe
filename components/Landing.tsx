@@ -59,47 +59,6 @@ export default function Landing() {
                 </div>
             </section>
 
-            {/* Blueprint Showcase */}
-            <section className="space-y-12">
-                <div className="text-center space-y-4">
-                    <h2 className="text-3xl font-bold tracking-tight">The "Blueprint" Architecture</h2>
-                    <p className="text-muted-foreground max-w-2xl mx-auto">
-                        We don't just give you code; we give you the <strong>instructions</strong> to build it with AI.
-                        Found in <code>blueprints/features/</code>, these markdown specs are designed to be fed into Copilot or Cursor.
-                    </p>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-8">
-                    {/* Card 1: AI Integration */}
-                    <div className="border rounded-xl p-6 bg-muted/30 hover:bg-muted/50 transition-colors">
-                        <div className="flex items-center gap-2 mb-4">
-                            <Badge variant="outline">blueprints/features/ai-sdk.md</Badge>
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2">Omni-Model AI Chat</h3>
-                        <p className="text-sm text-muted-foreground mb-4">
-                            Standardized Vercel AI SDK setup using OpenRouter. Switch between Claude 3.5 and GPT-4o via env vars without touching code.
-                        </p>
-                        <div className="bg-background border rounded p-3 text-xs font-mono text-muted-foreground">
-                            &gt; "Implement the AI SDK Blueprint. Install `ai` and `@ai-sdk/openai`..."
-                        </div>
-                    </div>
-
-                    {/* Card 2: Async Jobs */}
-                    <div className="border rounded-xl p-6 bg-muted/30 hover:bg-muted/50 transition-colors">
-                        <div className="flex items-center gap-2 mb-4">
-                            <Badge variant="outline">blueprints/features/async-jobs.md</Badge>
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2">Zero-Dependency Queue</h3>
-                        <p className="text-sm text-muted-foreground mb-4">
-                            A reliable Postgres-backed job queue for background tasks (emails, data processing) without adding Redis complexity.
-                        </p>
-                        <div className="bg-background border rounded p-3 text-xs font-mono text-muted-foreground">
-                            &gt; "Implement the Async Jobs Blueprint. Create a migration SQL file..."
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             {/* Quickstart */}
             <section id="quickstart" aria-labelledby="quickstart-title" className="max-w-4xl mx-auto w-full">
                 <div className="text-center mb-8">
@@ -188,6 +147,47 @@ npm run db:schema`}
                             </div>
                         </CardContent>
                     </Card>
+                </div>
+            </section>
+
+            {/* Blueprint Showcase */}
+            <section className="space-y-12">
+                <div className="text-center space-y-4">
+                    <h2 className="text-3xl font-bold tracking-tight">The "Blueprint" Architecture</h2>
+                    <p className="text-muted-foreground max-w-2xl mx-auto">
+                        We don't just give you code; we give you the <strong>instructions</strong> to build it with AI.
+                        Found in <code>blueprints/features/</code>, these markdown specs are designed to be fed into Copilot or Cursor.
+                    </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8">
+                    {/* Card 1: AI Integration */}
+                    <div className="border rounded-xl p-6 bg-muted/30 hover:bg-muted/50 transition-colors">
+                        <div className="flex items-center gap-2 mb-4">
+                            <Badge variant="outline">blueprints/features/ai-sdk.md</Badge>
+                        </div>
+                        <h3 className="text-xl font-semibold mb-2">Omni-Model AI Chat</h3>
+                        <p className="text-sm text-muted-foreground mb-4">
+                            Standardized Vercel AI SDK setup using OpenRouter. Switch between Claude 3.5 and GPT-4o via env vars without touching code.
+                        </p>
+                        <div className="bg-background border rounded p-3 text-xs font-mono text-muted-foreground">
+                            &gt; "Implement the AI SDK Blueprint. Install `ai` and `@ai-sdk/openai`..."
+                        </div>
+                    </div>
+
+                    {/* Card 2: Async Jobs */}
+                    <div className="border rounded-xl p-6 bg-muted/30 hover:bg-muted/50 transition-colors">
+                        <div className="flex items-center gap-2 mb-4">
+                            <Badge variant="outline">blueprints/features/async-jobs.md</Badge>
+                        </div>
+                        <h3 className="text-xl font-semibold mb-2">Zero-Dependency Queue</h3>
+                        <p className="text-sm text-muted-foreground mb-4">
+                            A reliable Postgres-backed job queue for background tasks (emails, data processing) without adding Redis complexity.
+                        </p>
+                        <div className="bg-background border rounded p-3 text-xs font-mono text-muted-foreground">
+                            &gt; "Implement the Async Jobs Blueprint. Create a migration SQL file..."
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
