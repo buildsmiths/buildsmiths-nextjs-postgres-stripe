@@ -17,12 +17,14 @@ async function healthMs(): Promise<number | null> {
         const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
         // Ensure absolute URL for server-side fetch
         const url = new URL('/api/health', baseUrl).toString();
+        // console.log('[DevStatusChips] fetching', url); 
         const t0 = Date.now();
         const res = await fetch(url, { cache: 'no-store' });
         if (!res.ok) return null;
         await res.json();
         return Date.now() - t0;
-    } catch {
+    } catch (err: any) {
+        console.error('[DevStatusChips] Health check failed:', err.message, 'URL used:', process.env.NEXT_PUBLIC_SITE_URL ? '<env>' : 'localhost');
         return null;
     }
 }
