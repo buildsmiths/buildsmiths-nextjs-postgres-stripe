@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Check, Sparkles } from 'lucide-react';
+import { Check, Copy } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function CopyContextButton() {
@@ -50,8 +50,8 @@ Please assist me with adding features to this codebase.`;
                 </>
             ) : (
                 <>
-                    <Sparkles className="h-3.5 w-3.5 text-indigo-500" />
-                    <span>copy for AI</span>
+                    <Copy className="h-3.5 w-3.5 mb-0.5 text-muted-foreground" />
+                    <span>Copy Context for AI</span>
                 </>
             )}
         </Button>
