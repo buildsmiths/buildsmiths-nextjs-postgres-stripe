@@ -29,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                 <NavLink className="hover:text-foreground" href="/account">Account</NavLink>
                                 <NavLink className="hover:text-foreground" href="/billing">Billing</NavLink>
                                 <NavLink className="hover:text-foreground" href="/settings">Settings</NavLink>
+                                <NavLink className="hover:text-foreground" href="/quickstart">Quickstart</NavLink>
                                 {/* Metrics link removed for lean starter */}
                                 <ThemeToggle />
                                 <AuthButton />
