@@ -27,7 +27,7 @@ export async function upgradeSubscription() {
         // In a real app we might show a toast, but for this template check
         // we'll just throw or return an error state. 
         // Since this is a form action, raising an error is visible if handled, 
-        // but lets just redirect to billing with an error param or similar.
+        // but lets just redirect to account with an error param or similar.
         // For simplicity:
         throw new Error('Stripe is not configured');
     }
@@ -35,7 +35,7 @@ export async function upgradeSubscription() {
     const tier = getEffectiveTier(session);
     if (tier === 'premium') {
         // Already premium
-        redirect('/billing');
+        redirect('/account');
     }
 
     const checkout = await createCheckoutSession(session.userId);
@@ -60,7 +60,7 @@ export async function manageSubscription() {
     const tier = getEffectiveTier(session);
     if (tier !== 'premium') {
         // Not premium, can't manage
-        redirect('/billing');
+        redirect('/account');
     }
 
     const portal = await createPortalSession(session.userId);

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { upgradeSubscription } from '@/app/billing/actions';
+import { upgradeSubscription } from '@/app/account/actions';
 import { upgradeToPremiumAsync, getSubscriptionAsync, clearAllSubscriptions } from '@/lib/subscriptions/store';
 import { resetAllState } from '../utils/reset';
 import { clearConfigCache } from '@/lib/config';

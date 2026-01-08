@@ -22,7 +22,7 @@ export async function createCheckoutSession(userId: string, priceId?: string): P
         mode: 'subscription',
         line_items: [{ price, quantity: 1 }],
         success_url: `${cfg.siteUrl}/dashboard?upgrade=success`,
-        cancel_url: `${cfg.siteUrl}/billing?upgrade=cancel`,
+        cancel_url: `${cfg.siteUrl}/account?upgrade=cancel`,
         metadata: { userId }
     });
     log.info('created_checkout_session', { sessionId: session.id });

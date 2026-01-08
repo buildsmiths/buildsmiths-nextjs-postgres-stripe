@@ -27,7 +27,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <nav className="flex items-center gap-4 text-xs text-muted-foreground">
                                 <NavLink className="hover:text-foreground" href="/dashboard">Dashboard</NavLink>
                                 <NavLink className="hover:text-foreground" href="/account">Account</NavLink>
-                                <NavLink className="hover:text-foreground" href="/billing">Billing</NavLink>
                                 <NavLink className="hover:text-foreground" href="/settings">Settings</NavLink>
                                 <NavLink className="hover:text-foreground" href="/quickstart">Quickstart</NavLink>
                                 {/* Metrics link removed for lean starter */}

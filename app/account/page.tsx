@@ -11,7 +11,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { InfoIcon, Shield } from "lucide-react"
+import { InfoIcon, Shield, AlertCircle, CheckCircle2 } from "lucide-react"
+import { isStripeConfigured } from '@/lib/config';
+import { upgradeSubscription, manageSubscription } from './actions';
 
 export default async function AccountPage() {
     let reqLike: any;
@@ -26,6 +28,7 @@ export default async function AccountPage() {
     // Fetch current subscription/auth state
     const state = await deriveSubscriptionStateAsync(reqLike);
     const isDemo = !state.authenticated;
+    const stripeConfigured = isStripeConfigured();
 
     // Define display user - real if auth, mock if demo
     const displayUser = isDemo ? {
@@ -150,6 +153,15 @@ export default async function AccountPage() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
+                            {!stripeConfigured && (
+                                <Alert variant="destructive">
+                                    <AlertCircle className="h-4 w-4" />
+                                    <AlertTitle>Stripe Not Configured</AlertTitle>
+                                    <AlertDescription className="text-xs mt-1">
+                                        Add Stripe keys to .env.local to enable billing features.
+                                    </AlertDescription>
+                                </Alert>
+                            )}
                             <div className="flex items-center justify-between text-sm">
                                 <span className="text-muted-foreground">Current Plan</span>
                                 <span className="font-medium capitalize">{currentTier} Tier</span>
@@ -168,14 +180,24 @@ export default async function AccountPage() {
                             </div>
                         </CardContent>
                         <CardFooter className="border-t px-6 py-4">
-                            {isPremium ? (
-                                <Button variant="outline" className="w-full" asChild>
-                                    <a href="/billing">Manage Billing</a>
+                            {!stripeConfigured ? (
+                                <Button className="w-full" disabled>Billing Disabled</Button>
+                            ) : isDemo ? (
+                                <Button className="w-full" asChild variant="outline">
+                                    <a href="/api/auth/signin">Sign in to Upgrade</a>
                                 </Button>
+                            ) : isPremium ? (
+                                <form action={manageSubscription} className="w-full">
+                                    <Button variant="outline" className="w-full" type="submit">
+                                        Manage Billing
+                                    </Button>
+                                </form>
                             ) : (
-                                <Button className="w-full" asChild>
-                                    <a href="/billing">Upgrade to Premium</a>
-                                </Button>
+                                <form action={upgradeSubscription} className="w-full">
+                                    <Button className="w-full" type="submit">
+                                        Upgrade to Premium
+                                    </Button>
+                                </form>
                             )}
                         </CardFooter>
                     </Card>
