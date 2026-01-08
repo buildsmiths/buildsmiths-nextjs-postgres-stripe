@@ -2,6 +2,7 @@ import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
 import BlueprintStatus from '@/components/dev-tools/BlueprintStatus';
 import { SystemActivityChart, ResourceUsageChart } from '@/components/admin/DashboardCharts';
 import { SetupChecklist } from '@/components/admin/SetupChecklist';
+import { StripeChecklist } from '@/components/admin/StripeChecklist';
 import { RecentActivity } from '@/components/admin/RecentActivity';
 // perf metrics removed in lean profile
 import { headers } from 'next/headers';
@@ -64,7 +65,10 @@ export default async function DashboardPage() {
 
                 {/* Top Row: Checklist & Action Items */}
                 <section className="grid md:grid-cols-2 gap-6">
-                    <SetupChecklist />
+                    <div className="space-y-6">
+                        <SetupChecklist />
+                        <StripeChecklist />
+                    </div>
                     <div className="space-y-6">
                         <NextStepsCard
                             title="Action Items"
