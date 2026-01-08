@@ -46,7 +46,7 @@ export async function StripeChecklist() {
     const allConfigured = exists(pk) && exists(sk) && exists(wh) && exists(priceId);
 
     return (
-        <Card className="h-full border-indigo-100 dark:border-indigo-900/50">
+        <Card className="border-indigo-100 dark:border-indigo-900/50">
             <CardHeader className="pb-3 bg-indigo-50/50 dark:bg-indigo-950/20">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">

@@ -56,7 +56,7 @@ export async function SetupChecklist() {
     }
 
     return (
-        <Card className="h-full">
+        <Card>
             <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">Config Checklist</CardTitle>
