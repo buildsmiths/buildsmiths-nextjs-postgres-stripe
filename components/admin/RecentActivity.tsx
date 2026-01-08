@@ -26,6 +26,17 @@ export async function RecentActivity() {
         console.error("Failed to fetch audit events", e);
     }
 
+    // Fallback to mock data if no events found (for demo purposes)
+    if (events.length === 0) {
+        events = [
+            { id: 'mock-1', ts: new Date(), actor: 'user_demo', type: 'auth.signin', payload: { method: 'credentials', ip: '192.168.1.1' } },
+            { id: 'mock-2', ts: new Date(Date.now() - 1000 * 60 * 15), actor: 'system', type: 'worker.job_completed', payload: { job: 'cleanup_sessions', duration: '120ms' } },
+            { id: 'mock-3', ts: new Date(Date.now() - 1000 * 60 * 45), actor: 'user_test', type: 'subscription.created', payload: { plan: 'premium', status: 'active' } },
+            { id: 'mock-4', ts: new Date(Date.now() - 1000 * 60 * 60 * 2), actor: 'stripe_webhook', type: 'invoice.paid', payload: { amount: 2900, currency: 'usd' } },
+            { id: 'mock-5', ts: new Date(Date.now() - 1000 * 60 * 60 * 5), actor: 'system', type: 'db.migration', payload: { version: '20240101_init' } },
+        ];
+    }
+
     if (events.length === 0) {
         return (
             <Card className="col-span-1 md:col-span-2">
@@ -47,7 +58,9 @@ export async function RecentActivity() {
         <Card className="col-span-1 md:col-span-2">
             <CardHeader>
                 <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>Real-time audit logs from your database.</CardDescription>
+                <CardDescription>
+                    Real-time audit logs. <span className="text-xs text-muted-foreground">(Showing mock data if DB empty)</span>
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <Table>
