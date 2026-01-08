@@ -1,12 +1,12 @@
 import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
-import DevStatusChips from '@/components/dev-tools/DevStatusChips';
 import BlueprintStatus from '@/components/dev-tools/BlueprintStatus';
 import { SystemActivityChart, ResourceUsageChart } from '@/components/admin/DashboardCharts';
+import { SetupChecklist } from '@/components/admin/SetupChecklist';
+import { RecentActivity } from '@/components/admin/RecentActivity';
 // perf metrics removed in lean profile
 import { headers } from 'next/headers';
 import React from 'react';
 import PostCallbackStatus from '@/components/PostCallbackStatus';
-import SignedOutPrompt from '@/components/SignedOutPrompt';
 import NextStepsCard from '@/components/NextStepsCard';
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ export default async function DashboardPage() {
         const state = await deriveSubscriptionStateAsync(reqLike);
 
         return (
-            <main aria-label="Admin Dashboard" className="max-w-5xl mx-auto px-4 py-10 space-y-8">
+            <main aria-label="Admin Dashboard" className="max-w-6xl mx-auto px-4 py-10 space-y-8">
                 {!state.authenticated && (
                     <div className="bg-muted/50 border border-muted-foreground/20 rounded-lg p-4 mb-6 text-sm flex items-center justify-between">
                         <p>👀 <strong>Public Demo Mode</strong>: You are viewing this admin panel as a Visitor.</p>
@@ -59,37 +59,42 @@ export default async function DashboardPage() {
                     </div>
                 </header>
 
-                <DevStatusChips />
-
                 {/* Brief status indicator shown immediately after OAuth callback; auto-hides shortly. */}
                 <PostCallbackStatus />
 
-                {/* Charts Row */}
-                <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <SystemActivityChart />
+                {/* Top Row: Checklist & Action Items */}
+                <section className="grid md:grid-cols-2 gap-6">
+                    <SetupChecklist />
+                    <div className="space-y-6">
+                        <NextStepsCard
+                            title="Action Items"
+                            items={[
+                                <span><strong>Config Audit</strong>: Review <code>.env.local</code> and ensure <code>STRIPE_SECRET_KEY</code> is set for billing.</span>,
+                                <span><strong>Database</strong>: Run <code>npm run db:seed</code> if tables are empty.</span>,
+                                <span><strong>Users</strong>: You have {state.authenticated ? '1 (Self)' : '0 (Guest)'} active session.</span>,
+                            ]}
+                        />
+                        <NextStepsCard
+                            title="Developer Resources"
+                            items={[
+                                <span><a className="text-primary hover:underline" href="/quickstart">Quickstart Guide</a>: Re-visit installation steps.</span>,
+                                <span><a className="text-primary hover:underline" href="/?scroll=blueprints">Blueprints</a>: See available AI-native specs.</span>,
+                                <span><a className="text-primary hover:underline" href="/api/health" target="_blank">Health Check API</a>: View raw JSON status.</span>,
+                            ]}
+                        />
+                    </div>
+                </section>
+
+                {/* Data Row: Real Logs & Mock Charts */}
+                <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <RecentActivity />
                     <ResourceUsageChart />
                 </section>
 
-                <section className="grid md:grid-cols-2 gap-6">
-                    <NextStepsCard
-                        title="Action Items"
-                        items={[
-                            <span><strong>Config Audit</strong>: Review <code>.env.local</code> and ensure <code>STRIPE_SECRET_KEY</code> is set for billing.</span>,
-                            <span><strong>Database</strong>: Check <code>npm run db:status</code> (simulated) or inspect via psql.</span>,
-                            <span><strong>Users</strong>: You have {state.authenticated ? '1 (Self)' : '0 (Guest)'} active session.</span>,
-                        ]}
-                    />
-                    <NextStepsCard
-                        title="Developer Resources"
-                        items={[
-                            <span><a className="text-primary hover:underline" href="/quickstart">Quickstart Guide</a>: Re-visit installation steps.</span>,
-                            <span><a className="text-primary hover:underline" href="/?scroll=blueprints">Blueprints</a>: See available AI-native specs.</span>,
-                            <span><a className="text-primary hover:underline" href="/api/health" target="_blank">Health Check API</a>: View raw JSON status.</span>,
-                        ]}
-                    />
+                <section className="">
+                    <SystemActivityChart />
                 </section>
 
-                <BlueprintStatus />
             </main>
         );
     })();
