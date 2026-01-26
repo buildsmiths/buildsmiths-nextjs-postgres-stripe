@@ -27,7 +27,7 @@ export default async function DashboardPage() {
         const state = await deriveSubscriptionStateAsync(reqLike);
 
         return (
-            <main aria-label="Admin Dashboard" className="max-w-6xl mx-auto px-4 py-10 space-y-8">
+            <main aria-label="Admin Dashboard" className="max-w-5xl mx-auto px-4 py-10 space-y-8">
                 {!state.authenticated && (
                     <div className="bg-muted/50 border border-muted-foreground/20 rounded-lg p-4 mb-6 text-sm flex items-center justify-between">
                         <p>👀 <strong>Public Demo Mode</strong>: You are viewing this admin panel as a Visitor.</p>
@@ -63,6 +63,10 @@ export default async function DashboardPage() {
                 {/* Brief status indicator shown immediately after OAuth callback; auto-hides shortly. */}
                 <PostCallbackStatus />
 
+                <section className="">
+                    <SystemActivityChart />
+                </section>
+
                 {/* Top Row: Checklist & Action Items */}
                 <section className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-6">
@@ -78,14 +82,6 @@ export default async function DashboardPage() {
                                 <span><strong>Users</strong>: You have {state.authenticated ? '1 (Self)' : '0 (Guest)'} active session.</span>,
                             ]}
                         />
-                        <NextStepsCard
-                            title="Developer Resources"
-                            items={[
-                                <span><a className="text-primary hover:underline" href="/quickstart">Quickstart Guide</a>: Re-visit installation steps.</span>,
-                                <span><a className="text-primary hover:underline" href="/?scroll=blueprints">Blueprints</a>: See available AI-native specs.</span>,
-                                <span><a className="text-primary hover:underline" href="/api/health" target="_blank">Health Check API</a>: View raw JSON status.</span>,
-                            ]}
-                        />
                     </div>
                 </section>
 
@@ -93,10 +89,6 @@ export default async function DashboardPage() {
                 <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <RecentActivity />
                     <ResourceUsageChart />
-                </section>
-
-                <section className="">
-                    <SystemActivityChart />
                 </section>
 
             </main>

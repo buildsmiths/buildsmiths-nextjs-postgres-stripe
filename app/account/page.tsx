@@ -110,8 +110,11 @@ export default async function AccountPage() {
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="flex items-center gap-4">
-                                <Avatar className="h-16 w-16">
-                                    <AvatarImage src="" />
+                                <Avatar className="h-16 w-16 border-2 border-border shadow-sm">
+                                    <AvatarImage
+                                        src={`https://api.dicebear.com/9.x/notionists/svg?seed=${displayUser.email}&backgroundColor=e5e7eb`}
+                                        alt={displayUser.name}
+                                    />
                                     <AvatarFallback className="text-lg bg-primary/10 text-primary">
                                         {displayUser.initials}
                                     </AvatarFallback>

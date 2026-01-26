@@ -11,7 +11,7 @@ export const metadata = {
 
 export default function QuickstartPage() {
     return (
-        <main className="max-w-4xl mx-auto px-4 py-10 space-y-8">
+        <main className="max-w-5xl mx-auto px-4 py-10 space-y-8">
             <Card className="w-full border-2 shadow-sm">
                 <CardHeader className="border-b bg-muted/20 pb-6">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
