@@ -111,11 +111,7 @@ export default async function AccountPage() {
                         <CardContent className="space-y-6">
                             <div className="flex items-center gap-4">
                                 <Avatar className="h-16 w-16 border-2 border-border shadow-sm">
-                                    <AvatarImage
-                                        src={`https://api.dicebear.com/9.x/notionists/svg?seed=${displayUser.email}&backgroundColor=e5e7eb`}
-                                        alt={displayUser.name}
-                                    />
-                                    <AvatarFallback className="text-lg bg-primary/10 text-primary">
+                                    <AvatarFallback className="text-lg bg-primary/10 text-primary font-bold">
                                         {displayUser.initials}
                                     </AvatarFallback>
                                 </Avatar>
@@ -246,23 +242,6 @@ export default async function AccountPage() {
                                 <p className="text-xs text-muted-foreground">Settings are disabled in demo mode.</p>
                             </CardFooter>
                         )}
-                    </Card>
-
-                    {/* Developer/API Card (Only for devs) */}
-                    <Card>
-                        <div className="p-6 pb-2">
-                            <h3 className="font-semibold flex items-center gap-2">
-                                <Shield className="h-4 w-4 text-primary" />
-                                Developer Access
-                            </h3>
-                        </div>
-                        <NextStepsCard
-                            items={[
-                                <span>Access the <a className="text-primary hover:underline font-medium" href="/api/feature/premium-example">Premium API Endpoint</a> used for testing tiered access.</span>,
-                                <span>Detailed service health is available at <a className="text-primary hover:underline font-medium" href="/api/health">/api/health</a>.</span>,
-                                <span>Check your session claims in <a className="text-primary hover:underline font-medium" href="/api/auth/session">/api/auth/session</a>.</span>,
-                            ]}
-                        />
                     </Card>
 
                 </div>

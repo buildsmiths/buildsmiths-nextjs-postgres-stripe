@@ -25,10 +25,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
                             <Link href="/" className="font-semibold text-sm">BuildSmiths StarterKit</Link>
                             <nav className="flex items-center gap-4 text-xs text-muted-foreground">
-                                <NavLink className="hover:text-foreground" href="/dashboard">Dashboard</NavLink>
-                                <NavLink className="hover:text-foreground" href="/account">Account</NavLink>
-                                <NavLink className="hover:text-foreground" href="/blueprints">Blueprints</NavLink>
+                                <NavLink className="hover:text-foreground" href="/">Home</NavLink>
                                 <NavLink className="hover:text-foreground" href="/quickstart">Quickstart</NavLink>
+                                <NavLink className="hover:text-foreground" href="/dashboard">Dashboard</NavLink>
+                                <NavLink className="hover:text-foreground" href="/blueprints">Blueprints</NavLink>
+                                <NavLink className="hover:text-foreground" href="/account">Account</NavLink>
                                 {/* Metrics link removed for lean starter */}
                                 <ThemeToggle />
                                 <AuthButton />
