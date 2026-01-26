@@ -53,17 +53,6 @@ const blueprints = [
             "Persist jobs across restarts",
             "Simple retry logic"
         ]
-    },
-    {
-        title: "Stripe Billing",
-        file: "blueprints/billing-stripe.md",
-        icon: CreditCard,
-        description: "Robust recurring subscription system using Stripe Checkout and Customer Portal.",
-        objectives: [
-            "Free to Premium upgrades",
-            "Stripe Customer Portal",
-            "Webhook synchronization"
-        ]
     }
 ];
 
