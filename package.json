@@ -10,7 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "doctor": "tsx scripts/doctor.ts",
-    "db:schema": "tsx scripts/db-apply.ts db/init.sql",
+    "db:schema": "tsx scripts/db-apply.ts db/schema.sql",
     "db:seed": "tsx scripts/seed.ts"
   },
   "dependencies": {

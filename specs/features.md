@@ -45,7 +45,7 @@ This document provides a comprehensive list of all verified features in the appl
     *   `subscriptions`: Tracks plan status and periods.
     *   `audit_events`: Append-only log of system actions.
     *   `webhook_events`: Tracks processed hooks for idempotency.
-*   **Migration Strategy**: Idempotent SQL scripts (`init.sql`, `apply.sql`) for safe schema application.
+*   **Migration Strategy**: Idempotent SQL scripts (`init.sql`) for safe schema application.
 *   **Seeding**: Scripts to populate development data (`npm run db:seed`).
 
 ## 6. Operations & Observability

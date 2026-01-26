@@ -1,38 +1,33 @@
 # Blueprint: Billing & Subscriptions (Stripe)
 
-**Goal**: A robust, secure, and flexible subscription system using Stripe Checkout and Customer Portal.
+**Goal**: Activate the pre-configured subscription system (Stripe Checkout & Customer Portal) for production.
 
-## 1. Objectives
-- Support upgrading from Free to Premium.
-- Support managing/cancelling subscriptions via Stripe Portal.
-- Handle webhook events to sync state to the local database.
+## 1. Context
+The codebase includes a fully typed Stripe integration in `lib/stripe/*` and `app/api/webhooks/stripe`.
+- **Development**: Runs in "Mock Mode" by default. No API keys required.
+- **Production**: Needs configuration and activation.
 
-## 2. Dependencies
-- `stripe` (Node SDK)
-- `@stripe/stripe-js` (Client SDK - minimal usage)
+## 2. Pre-requisites
+- A Stripe Account (Test mode is fine).
+- One "Product" created in Stripe Dashboard (e.g. "Premium Plan").
+- `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` env vars.
 
 ## 3. Architecture
-- **Schema**: `subscriptions` table (user_id, stripe_customer_id, stripe_subscription_id, status, tier, current_period_end).
-- **Actions**: `app/billing/actions.ts` (Already migrated).
-- **Webhooks**: `app/api/webhooks/stripe/route.ts` - The critical sync engine.
+- **Schema**: `subscriptions` table (Updated to include `stripe_customer_id`, `stripe_subscription_id`).
+- **Actions**: `app/account/actions.ts` handles redirects to Checkout/Portal.
+- **Webhooks**: `app/api/webhooks/stripe/route.ts` handles syncing.
 
-## 4. Requirements
-- **Checkout Flow**: 
-  - Create Checkout Session with `mode: 'subscription'`.
-  - Pass `client_reference_id` as the `userId`.
-  - Success URL points to `/billing?success=true`.
-- **Portal Flow**:
-  - Create Portal Session returning to `/billing`.
-- **Webhook Handling**:
-  - `checkout.session.completed`: Link `customer_id` and `subscription_id` to the user.
-  - `customer.subscription.updated`: Update status, cancel_at_period_end, and current_period_end.
-  - `customer.subscription.deleted`: Downgrade user to 'free'.
-- **Local Dev**:
-  - Use `stripe listen` CLI pattern or the existing logic which simulates webhooks if needed (but prefer real Stripe CLI for robust testing).
+## 4. Activation Prompt
+> "I want to activate the Billing Blueprint.
+> 1. Review `lib/subscriptions/store.ts` and update the `SubscriptionRecord` interface to match the new schema (add `stripeCustomerId`).
+> 2. Update `lib/db/simple.ts` (or the relevant repo) to save `stripe_customer_id` when a subscription is created/updated.
+> 3. Update `lib/stripe/portal.ts` to fetch the real `stripeCustomerId` from the DB using the `userId` before creating the Portal Session.
+> 4. Verify that `lib/stripe/webhook.ts` maps `stripe_customer_id` from the webhook payload back to the core `userId`."
 
 ## 5. Security & Safety
-- **Signature Verification**: ALWAYS verify webhook signature in Prod.
-- **Idempotency**: Record `webhook_events` (id) to prevent processing the same event twice.
+- **Signature Verification**: The existing code in `lib/stripe/webhook.ts` already handles verfication in production.
+- **Idempotency**: `webhook_events` table prevents duplicate processing.
 
-## 6. Implementation Prompt
-> "Implement the Billing Blueprint. Review `lib/stripe/webhook.ts` and ensure it handles `customer.subscription.updated` correctly to sync `current_period_end` to the `subscriptions` table. Ensure `app/billing/actions.ts` is fully wired up. Verify that the table schema supports `stripe_customer_id`."
+## 6. Constraints
+- Do not remove the "Mock Mode" logic in `checkout.ts` and `portal.ts`; it is essential for local dev.
+
