@@ -8,25 +8,35 @@ import { toast } from 'sonner';
 export function CopyContextButton() {
     const [copied, setCopied] = React.useState(false);
 
-    const text = `I am acting as a developer using the BuildSmiths StarterKit. 
-    
-Stack: Next.js 15, Postgres (pg), Tailwind v4, Shadcn UI, NextAuth v5.
+    const text = `I am acting as a developer using the BuildSmiths StarterKit.
+
+Stack: Next.js 16, Postgres (pg - raw SQL, no ORM), Tailwind v4, Shadcn UI, NextAuth v4.
 
 Installation Checkpoints I've completed:
-1. git clone https://github.com/buildsmiths/buildsmiths-nextjs-postgres-stripe.git
-2. npm install
-3. cp .env.example .env.local (Configured DATABASE_URL)
-4. npm run db:schema
-5. npm run dev
 
+git clone ...
+npm install
+Configured .env.local and Dockerized Postgres
+npm run db:schema
+npm run dev
 Codebase structure:
-- app/: Next.js routes
-- blueprints/: Feature specifications (Markdown)
-- components/: React components
-- db/: SQL migrations and init
-- lib/: Core utilities (access, auth, db, stripe)
 
-Please assist me with adding features to this codebase.`;
+app: Next.js App Router
+blueprints: Feature specs (Markdown)
+components: React components (actions in lib)
+db: SQL migrations (init.sql)
+lib: Core logic (auth, db, stripe)
+scripts: DB management scripts
+tests: Vitest integration/unit tests
+Please assist me with adding features...
+
+What features shall we add?
+I found three feature blueprints in your blueprints folder. Which one would you like to implement first?
+
+Stripe Billing (billing-stripe.md) - Subscription tiers and webhooks.
+AI SDK (ai-sdk.md) - Integration for LLM features.
+Async Jobs (async-jobs.md) - Background processing.
+Or we can build something completely custom!`;
 
     const handleCopy = () => {
         navigator.clipboard.writeText(text);
