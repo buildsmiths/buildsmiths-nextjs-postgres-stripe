@@ -24,6 +24,16 @@ export function getPool(): pg.Pool {
             ...POOL_CONFIG
         });
 
+        // Validation: Check for common placeholder values in DATABASE_URL
+        try {
+            const url = new URL(connectionString);
+            if (url.hostname === 'base' || url.hostname === 'db' || url.hostname === 'postgres') {
+                console.warn(`[WARNING] DATABASE_URL hostname is "${url.hostname}". This may be a placeholder or Docker service name that is not resolvable in this environment (e.g. Vercel).`);
+            }
+        } catch (e) {
+            // ignore parsing errors, pg will handle it
+        }
+
         // Error handler for idle clients to avoid "uncaughtException"
         pool.on('error', (err) => {
             console.error('Unexpected error on idle client', err);

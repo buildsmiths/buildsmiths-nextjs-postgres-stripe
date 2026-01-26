@@ -23,13 +23,25 @@ async function healthMs(): Promise<number | null> {
         const url = new URL('/api/health', baseUrl).toString();
         // console.log('[DevStatusChips] fetching', url); 
         const t0 = Date.now();
-        const res = await fetch(url, { cache: 'no-store' });
-        if (!res.ok) return null;
-        await res.json();
-        return Date.now() - t0;
+        // Set a short timeout to avoid hanging
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 2000);
+
+        try {
+            const res = await fetch(url, {
+                cache: 'no-store',
+                signal: controller.signal
+            });
+            clearTimeout(timeout);
+            if (!res.ok) return null;
+            await res.json();
+            return Date.now() - t0;
+        } catch (e) {
+            clearTimeout(timeout);
+            throw e;
+        }
     } catch (err: any) {
-        // Silent fail in dev if network is flaky
-        // console.error('[DevStatusChips] Health check failed:', err.message);
+        // Silent fail to avoid crashing the dashboard if health check fails
         return null;
     }
 }
