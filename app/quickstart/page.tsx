@@ -34,7 +34,7 @@ export default function QuickstartPage() {
                             AI Context Header
                         </h3>
                         <div className="bg-muted/50 border rounded-lg p-4 text-sm font-mono text-muted-foreground whitespace-pre-wrap">
-                            {AI_CONTEXT_PROMPT.split('Stack:')[0].trim()}
+                            {(AI_CONTEXT_PROMPT.split('Stack:')[0] ?? '').trim()}
                         </div>
                     </div>
 

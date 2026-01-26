@@ -31,10 +31,5 @@ tests: Vitest integration/unit tests
 
 Please assist me with adding features.
 
-What features shall we add?
-I found three feature blueprints in your blueprints folder. Which one would you like to implement first?
-
-Stripe Billing (billing-stripe.md) - Subscription tiers and webhooks.
-AI SDK (ai-sdk.md) - Integration for LLM features.
-Async Jobs (async-jobs.md) - Background processing.
-Or we can build something completely custom!`;
+I have a 'blueprints' folder with architectural specifications (Markdown).
+Please review the available blueprints and suggest an implementation plan, or we can build a custom feature.`;
