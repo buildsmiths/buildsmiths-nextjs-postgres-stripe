@@ -12,22 +12,11 @@ export const metadata = {
 export default function QuickstartPage() {
     return (
         <main className="max-w-4xl mx-auto px-4 py-10 space-y-8">
-            <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                    <Badge variant="secondary">Developer Guide</Badge>
-                </div>
-                <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">Quickstart Guide</h1>
-                <p className="text-xl text-muted-foreground max-w-2xl leading-relaxed">
-                    A unified view of your project's stack, setup steps, and structure.
-                    matches the context provided to your AI assistant.
-                </p>
-            </div>
-
             <Card className="w-full border-2 shadow-sm">
                 <CardHeader className="border-b bg-muted/20 pb-6">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="space-y-1">
-                            <CardTitle className="text-2xl">Project Context</CardTitle>
+                            <CardTitle className="text-2xl">Quickstart Guide</CardTitle>
                             <CardDescription>
                                 Defines the environment for both you and your AI agent.
                             </CardDescription>

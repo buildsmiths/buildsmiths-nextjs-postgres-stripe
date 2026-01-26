@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { CopyContextButton } from '@/components/dev-tools/CopyContextButton';
 import { Badge } from "@/components/ui/badge"
-import { Check, Terminal, Zap, BookOpen, Layers, Code2, Box, Github, ExternalLink } from "lucide-react"
+import { Check, Terminal, Zap, BookOpen, Layers, Code2, Box, Github, ExternalLink, FolderTree } from "lucide-react"
 
 export default function Landing() {
     return (
@@ -15,7 +15,7 @@ export default function Landing() {
                     The <span className="text-primary">AI-Native</span> SaaS Starter
                 </h1>
                 <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
-                    A minimalist Foundation for 2026. Next.js 15, Server Actions, and a unique <strong>Blueprint Architecture</strong> designed for AI code generation.
+                    A minimalist Foundation for 2026. Next.js 16, Server Actions, and a unique <strong>Blueprint Architecture</strong> designed for AI code generation.
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
                     <Button asChild size="lg" className="h-12 px-8 text-base">
