@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { CopyContextButton } from '@/components/dev-tools/CopyContextButton';
 import { Badge } from "@/components/ui/badge"
-import { Check, Terminal, Zap, BookOpen, Layers, Code2, Box, Github, ExternalLink, FolderTree } from "lucide-react"
+import { Check, Terminal, Zap, BookOpen, Layers, Code2, Box, Github, ExternalLink, FolderTree, MessageSquare } from "lucide-react"
+import { AI_CONTEXT_PROMPT } from '@/lib/aiContext';
 
 export default function Landing() {
     return (
@@ -50,6 +51,17 @@ export default function Landing() {
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-10 pt-8">
+
+                        {/* Section 0: Context Header */}
+                        <div className="space-y-4">
+                            <h3 className="flex items-center gap-2 font-semibold text-lg text-foreground">
+                                <MessageSquare className="h-5 w-5 text-primary" />
+                                AI Context Header
+                            </h3>
+                            <div className="bg-muted/50 border rounded-lg p-4 text-sm font-mono text-muted-foreground whitespace-pre-wrap">
+                                {AI_CONTEXT_PROMPT.split('Stack:')[0].trim()}
+                            </div>
+                        </div>
 
                         {/* Section 1: Stack */}
                         <div className="space-y-4">

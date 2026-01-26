@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from "@/components/ui/badge"
-import { Terminal, Layers, FolderTree } from "lucide-react"
+import { Terminal, Layers, FolderTree, MessageSquare } from "lucide-react"
 import { CopyContextButton } from '@/components/dev-tools/CopyContextButton';
+import { AI_CONTEXT_PROMPT } from '@/lib/aiContext';
 
 export const metadata = {
     title: 'Quickstart',
@@ -25,6 +26,17 @@ export default function QuickstartPage() {
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-10 pt-8">
+
+                    {/* Section 0: Context Header */}
+                    <div className="space-y-4">
+                        <h3 className="flex items-center gap-2 font-semibold text-lg text-foreground">
+                            <MessageSquare className="h-5 w-5 text-primary" />
+                            AI Context Header
+                        </h3>
+                        <div className="bg-muted/50 border rounded-lg p-4 text-sm font-mono text-muted-foreground whitespace-pre-wrap">
+                            {AI_CONTEXT_PROMPT.split('Stack:')[0].trim()}
+                        </div>
+                    </div>
 
                     {/* Section 1: Stack */}
                     <div className="space-y-4">
