@@ -41,7 +41,7 @@ export default function Landing() {
                     <CardHeader className="border-b bg-muted/20 pb-6">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="space-y-1">
-                                <CardTitle className="text-2xl">Project Context</CardTitle>
+                                <CardTitle className="text-2xl">Quickstart Guide</CardTitle>
                                 <CardDescription>
                                     Defines the environment for both you and your AI agent.
                                 </CardDescription>
