@@ -10,7 +10,14 @@ The codebase includes a fully typed Stripe integration in `lib/stripe/*` and `ap
 ## 2. Pre-requisites
 - A Stripe Account (Test mode is fine).
 - One "Product" created in Stripe Dashboard (e.g. "Premium Plan").
-- `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` env vars.
+- **Environment Variables** (Add these to `.env.local`):
+  ```bash
+  NEXT_PUBLIC_STRIPE_PUBLIC_KEY=pk_test_...
+  STRIPE_SECRET_KEY=sk_test_...
+  STRIPE_WEBHOOK_SECRET=whsec_...
+  PREMIUM_PLAN_PRICE_ID=price_...
+  BILLING_PORTAL_RETURN_URL=http://localhost:3000/account
+  ```
 
 ## 3. Architecture
 - **Schema**: `subscriptions` table (Updated to include `stripe_customer_id`, `stripe_subscription_id`).

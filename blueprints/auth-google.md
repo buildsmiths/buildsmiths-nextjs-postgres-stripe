@@ -11,6 +11,11 @@ The codebase is pre-configured with **NextAuth.js v4** in `lib/auth/nextauth-opt
 ## 2. Pre-requisites
 - A Google Cloud Platform (GCP) Project.
 - OAuth 2.0 Credentials (Client ID & Client Secret) configured in GCP.
+- **Environment Variables** (Add these to `.env.local`):
+  ```bash
+  GOOGLE_CLIENT_ID=...
+  GOOGLE_CLIENT_SECRET=...
+  ```
 
 ## 3. Architecture
 - **Config**: `lib/auth/nextauth-options.ts` adds `GoogleProvider` if keys exist.
