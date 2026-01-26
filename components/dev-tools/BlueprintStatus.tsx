@@ -52,7 +52,7 @@ export default async function BlueprintStatus() {
                     <ContextCard
                         title="Async Jobs"
                         description="Zero-dependency job queue backed by Postgres. Needed for background tasks."
-                        fileLocation="blueprints/features/async-jobs.md"
+                        fileLocation="blueprints/async-jobs.md"
                         prompt="Implement the Async Jobs Blueprint. Create a migration SQL file `db/migrations/001_jobs.sql`. Create `lib/jobs/client.ts` with an `enqueueJob(type, payload)` function. Create a `worker` script `scripts/worker.ts` that loops infinitely (with sleep) polling for pending jobs using `SKIP LOCKED`. Implement a sample job handler 'SEND_WELCOME_EMAIL'."
                     />
                 )}
@@ -75,7 +75,7 @@ export default async function BlueprintStatus() {
                     <ContextCard
                         title="AI Integration"
                         description="Standardized chat interface using Vercel AI SDK and OpenRouter."
-                        fileLocation="blueprints/features/ai-sdk.md"
+                        fileLocation="blueprints/ai-sdk.md"
                         prompt={`Implement the AI SDK Blueprint. Install \`ai\` and \`@ai-sdk/openai\`. Update \`lib/env.ts\` to require \`OPENROUTER_API_KEY\`. Create \`lib/ai/provider.ts\` to export a configured \`openrouter\` provider object using the base URL \`https://openrouter.ai/api/v1\`. Create \`app/api/chat/route.ts\` that uses \`streamText\` with the model \`deepseek/deepseek-chat\` (as a default example). Add a simple rate limit check.`}
                     />
                 )}

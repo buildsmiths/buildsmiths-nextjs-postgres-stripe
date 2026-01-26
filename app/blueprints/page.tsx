@@ -12,7 +12,7 @@ export const metadata = {
 const blueprints = [
     {
         title: "AI SDK Integration",
-        file: "blueprints/features/ai-sdk.md",
+        file: "blueprints/ai-sdk.md",
         icon: Sparkles,
         description: "Standardized pattern for AI chat/completion integration using Vercel AI SDK and OpenRouter.",
         objectives: [
@@ -23,7 +23,7 @@ const blueprints = [
     },
     {
         title: "Async Jobs Queue",
-        file: "blueprints/features/async-jobs.md",
+        file: "blueprints/async-jobs.md",
         icon: Server,
         description: "Reliable, zero-dependency asynchronous job queue using the existing Postgres database.",
         objectives: [
@@ -34,7 +34,7 @@ const blueprints = [
     },
     {
         title: "Stripe Billing",
-        file: "blueprints/features/billing-stripe.md",
+        file: "blueprints/billing-stripe.md",
         icon: CreditCard,
         description: "Robust recurring subscription system using Stripe Checkout and Customer Portal.",
         objectives: [
@@ -107,7 +107,7 @@ export default function BlueprintsPage() {
                     </p>
                     <div className="bg-background border rounded-lg p-4 font-mono text-sm text-foreground/80">
                         <span className="text-green-600"># Example Prompt</span><br />
-                        "Read <span className="text-blue-600">blueprints/features/async-jobs.md</span> and implement the job queue system.
+                        "Read <span className="text-blue-600">blueprints/async-jobs.md</span> and implement the job queue system.
                         Use the existing db/schema.sql patterns."
                     </div>
                 </CardContent>
