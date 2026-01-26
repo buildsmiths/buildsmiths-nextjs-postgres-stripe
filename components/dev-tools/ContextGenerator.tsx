@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Check, Copy, Sparkles, CreditCard, Activity, Layers, Square, CheckSquare } from 'lucide-react';
+import { Check, Copy, Sparkles, CreditCard, Activity, Layers, Square, CheckSquare, Shield } from 'lucide-react';
 import { toast } from 'sonner';
 import { AI_CONTEXT_PROMPT } from '@/lib/aiContext';
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +16,13 @@ const BLUEPRINTS = [
         path: 'blueprints/billing-stripe.md',
         icon: CreditCard,
         description: 'Subscription tiers and webhooks.'
+    },
+    {
+        id: 'auth-google',
+        name: 'Google Auth',
+        path: 'blueprints/auth-google.md',
+        icon: Shield,
+        description: 'Production OAuth configuration.'
     },
     {
         id: 'ai',
@@ -111,7 +118,7 @@ export function ContextGenerator() {
                     <Sparkles className="h-5 w-5 text-primary" />
                     Feature Blueprints (Optional)
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {BLUEPRINTS.map((bp) => {
                         const isSelected = selectedBlueprints.includes(bp.id);
                         return (

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ScrollText, Terminal, CreditCard, Sparkles, Server } from "lucide-react"
+import { ScrollText, Terminal, CreditCard, Sparkles, Server, Shield } from "lucide-react"
 
 export const metadata = {
     title: 'Blueprints',
@@ -10,6 +10,28 @@ export const metadata = {
 };
 
 const blueprints = [
+    {
+        title: "Stripe Billing",
+        file: "blueprints/billing-stripe.md",
+        icon: CreditCard,
+        description: "Hybrid mock/real subscription system. Toggle keys to go from dev to prod.",
+        objectives: [
+            "Subscription table schema",
+            "Checkout & Portal actions",
+            "Webhook synchronization"
+        ]
+    },
+    {
+        title: "Google Authentication",
+        file: "blueprints/auth-google.md",
+        icon: Shield,
+        description: "Activation pattern for production-ready OAuth with Google and NextAuth.js.",
+        objectives: [
+            "Environment configuration",
+            "GCP Console setup",
+            "Redirect URI mapping"
+        ]
+    },
     {
         title: "AI SDK Integration",
         file: "blueprints/ai-sdk.md",
