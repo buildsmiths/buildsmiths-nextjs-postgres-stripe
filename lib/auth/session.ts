@@ -19,7 +19,7 @@ export async function getServerAuthSession(req: RequestLike): Promise<AuthSessio
     try {
         log.debug('auth_session.enter');
         // In dev, help NextAuth find its URL to avoid warnings when NEXTAUTH_URL isn't set.
-        if (!process.env.NEXTAUTH_URL && process.env.NEXT_PUBLIC_SITE_URL) {
+        if (!process.env.NEXTAUTH_URL && process.env.NEXT_PUBLIC_SITE_URL && process.env.NEXT_PUBLIC_SITE_URL.startsWith('http')) {
             try {
                 // Use origin only; NextAuth derives path itself
                 const u = new URL(process.env.NEXT_PUBLIC_SITE_URL);

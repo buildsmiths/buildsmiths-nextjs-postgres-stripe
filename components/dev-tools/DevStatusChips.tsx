@@ -14,7 +14,11 @@ async function schemaPresent(): Promise<boolean> {
 
 async function healthMs(): Promise<number | null> {
     try {
-        const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+        let baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+        if (!baseUrl || !baseUrl.startsWith('http')) {
+            baseUrl = 'http://localhost:3000';
+        }
+
         // Ensure absolute URL for server-side fetch
         const url = new URL('/api/health', baseUrl).toString();
         // console.log('[DevStatusChips] fetching', url); 
@@ -24,7 +28,8 @@ async function healthMs(): Promise<number | null> {
         await res.json();
         return Date.now() - t0;
     } catch (err: any) {
-        console.error('[DevStatusChips] Health check failed:', err.message, 'URL used:', process.env.NEXT_PUBLIC_SITE_URL ? '<env>' : 'localhost');
+        // Silent fail in dev if network is flaky
+        // console.error('[DevStatusChips] Health check failed:', err.message);
         return null;
     }
 }

@@ -67,9 +67,15 @@ export const AuthButton: React.FC<AuthButtonProps> = ({ initialUserId = null, on
 
 // Helper exported for testability and reuse
 export function buildRedirectUrl(): string | undefined {
-    const base =
+    let base =
         (typeof window === 'undefined'
             ? process.env.NEXT_PUBLIC_SITE_URL
             : window.location.origin) || undefined;
+
+    // Fix: If 'base' is accidentally set to the string "base" or similar invalid URL in .env, fallback to null
+    if (base && !base.startsWith('http')) {
+        base = undefined;
+    }
+
     return base ? `${base}/auth/callback` : undefined;
 }
