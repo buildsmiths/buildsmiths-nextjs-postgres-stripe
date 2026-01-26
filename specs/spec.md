@@ -29,7 +29,7 @@ A concise spec for this starter so you can understand the moving parts and exten
 - `subscriptions`: user_id (FK -> users.id), tier ('free'|'premium'), status ('active'|'canceled'|'none'), period/cancellation timestamps
 - `audit_events`: id, ts, actor?, type, payload?
 - `webhook_events`: id, type, processed_at, user_id?, duplicate
-Schema lives in `db/init.sql` (idempotent).
+Schema lives in `db/schema.sql` (idempotent).
 
 ## Auth and access
 - Register: `POST /api/auth/register` (email + password) - Rate limited (5 req/min)
@@ -64,7 +64,7 @@ Schema lives in `db/init.sql` (idempotent).
 - Audit hooks via `lib/logging/audit.ts` with DB append/read
 
 ## Developer workflows
-- Apply schema: `npm run db:schema` (reads `.env.local`) or `psql "$DATABASE_URL" -f db/init.sql`
+- Apply schema: `npm run db:schema` (reads `.env.local`) or `psql "$DATABASE_URL" -f db/schema.sql`
 - Seed dev user: `npm run db:seed` (configurable with `SEED_EMAIL`, `SEED_PASSWORD`)
 - Run: `npm run dev`
 - Tests: `npm test`, watch: `npm run test:watch`

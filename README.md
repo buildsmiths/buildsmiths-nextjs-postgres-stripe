@@ -48,7 +48,7 @@ npm run db:schema
 Reads `DATABASE_URL` from `.env.local` (shell values override).
 
 Option B — copy/paste in your DB dashboard:
-Open your database console, paste `db/init.sql`, and run it. If your/provider blocks the `pgcrypto` extension, just remove the first line.
+Open your database console, paste `db/schema.sql`, and run it. If your/provider blocks the `pgcrypto` extension, just remove the first line.
 
 4) Run the app
 
@@ -118,26 +118,26 @@ npm run db:schema
 This starter does not auto-migrate. Tables are created when you run the bootstrap script above. It’s idempotent and safe to run again.
 
 Alternatives:
-- Provider console: paste `db/init.sql` in your dashboard and run it.
-- Raw psql: `psql "$DATABASE_URL" -f db/init.sql` (set `DATABASE_URL` in your shell).
+- Provider console: paste `db/schema.sql` in your dashboard and run it.
+- Raw psql: `psql "$DATABASE_URL" -f db/schema.sql` (set `DATABASE_URL` in your shell).
 
 Tip: `psql` reads the shell environment, not `.env.local`. The `db:schema` script reads `.env.local` for you.
 
 - macOS/Linux (bash):
 ```bash
 export DATABASE_URL="postgresql://user:pass@host:5432/db?sslmode=require"
-psql "$DATABASE_URL" -f db/init.sql
+psql "$DATABASE_URL" -f db/schema.sql
 ```
 
 - Windows PowerShell:
 ```powershell
 $env:DATABASE_URL = "postgresql://user:pass@host:5432/db?sslmode=require"
-psql $env:DATABASE_URL -f db/init.sql
+psql $env:DATABASE_URL -f db/schema.sql
 ```
 
 - Pass URL directly (any platform):
 ```bash
-psql "postgresql://user:pass@host:5432/db?sslmode=require" -f db/init.sql
+psql "postgresql://user:pass@host:5432/db?sslmode=require" -f db/schema.sql
 ```
 
 Verify tables:
@@ -180,7 +180,7 @@ npm run build
    - Optional: Stripe keys when going beyond placeholder mode
 - Apply the schema to your production database (one-time, idempotent):
 ```bash
-psql "$DATABASE_URL" -f db/init.sql
+psql "$DATABASE_URL" -f db/schema.sql
 ```
 - Build and run the app in your environment:
 ```bash
@@ -198,7 +198,7 @@ npm start
 - build / start: production build and run
 - typecheck: TypeScript check
 - test / test:watch: run tests (single run or watch)
-- db:schema: apply `db/init.sql` using `.env.local`'s DATABASE_URL (Node-only; no psql required)
+- db:schema: apply `db/schema.sql` using `.env.local`'s DATABASE_URL (Node-only; no psql required)
 - db:seed: seed a dev user (optional)
 
 ---
@@ -261,13 +261,13 @@ Option A: Hosted Postgres (recommended to get started)
 2) Copy the connection string and set `DATABASE_URL` in `.env.local`
 3) Apply schema:
 ```bash
-psql "$DATABASE_URL" -f db/init.sql
+psql "$DATABASE_URL" -f db/schema.sql
 ```
 
 Option B: Local Postgres
 1) Start your local Postgres (via Docker or local install), then set DATABASE_URL and apply schema:
 ```bash
-psql "$DATABASE_URL" -f db/init.sql
+psql "$DATABASE_URL" -f db/schema.sql
 ```
 Creates tables: `users`, `subscriptions`, `audit_events`, `webhook_events`.
 
@@ -306,7 +306,7 @@ You can seed a local user (and ensure a free subscription row) using:
 
 ```bash
 export DATABASE_URL=postgresql://postgres:postgres@localhost:5432/quickstart
-psql "$DATABASE_URL" -f db/init.sql
+psql "$DATABASE_URL" -f db/schema.sql
 npm run db:seed               # optional: set SEED_EMAIL/SEED_PASSWORD envs
 ```
 

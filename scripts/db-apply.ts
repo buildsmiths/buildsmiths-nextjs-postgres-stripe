@@ -18,7 +18,7 @@ async function run() {
     // Import env dynamically so dotenv has time to load
     const { env } = await import('@/lib/env');
 
-    const sqlFile = process.argv[2] || 'db/init.sql';
+    const sqlFile = process.argv[2] || 'db/schema.sql';
     const sqlPath = path.resolve(process.cwd(), sqlFile);
 
     if (!fs.existsSync(sqlPath)) {

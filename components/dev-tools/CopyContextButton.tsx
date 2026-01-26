@@ -24,7 +24,7 @@ Codebase structure:
 app: Next.js App Router
 blueprints: Feature specs (Markdown)
 components: React components (actions in lib)
-db: SQL migrations (init.sql)
+db: SQL migrations (schema.sql)
 lib: Core logic (auth, db, stripe)
 scripts: DB management scripts
 tests: Vitest integration/unit tests

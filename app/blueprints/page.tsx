@@ -108,7 +108,7 @@ export default function BlueprintsPage() {
                     <div className="bg-background border rounded-lg p-4 font-mono text-sm text-foreground/80">
                         <span className="text-green-600"># Example Prompt</span><br />
                         "Read <span className="text-blue-600">blueprints/features/async-jobs.md</span> and implement the job queue system.
-                        Use the existing db/init.sql patterns."
+                        Use the existing db/schema.sql patterns."
                     </div>
                 </CardContent>
             </Card>

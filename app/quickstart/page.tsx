@@ -101,7 +101,7 @@ npm run dev`}
                             </div>
                             <div className="grid grid-cols-[120px_1fr] p-3 gap-2 hover:bg-muted/30 transition-colors">
                                 <span className="font-mono text-muted-foreground">db/</span>
-                                <span className="text-foreground">SQL migrations (init.sql)</span>
+                                <span className="text-foreground">SQL migrations (schema.sql)</span>
                             </div>
                             <div className="grid grid-cols-[120px_1fr] p-3 gap-2 hover:bg-muted/30 transition-colors">
                                 <span className="font-mono text-muted-foreground">lib/</span>
