@@ -1,10 +1,9 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { CopyContextButton } from '@/components/dev-tools/CopyContextButton';
 import { Badge } from "@/components/ui/badge"
-import { Check, Terminal, Zap, BookOpen, Layers, Code2, Box, Github, ExternalLink, FolderTree, MessageSquare } from "lucide-react"
-import { AI_CONTEXT_PROMPT } from '@/lib/aiContext';
+import { Check, Terminal, Zap, BookOpen, Layers, Code2, Box, Github, ExternalLink, FolderTree } from "lucide-react"
+import { ContextGenerator } from '@/components/dev-tools/ContextGenerator';
 
 export default function Landing() {
     return (
@@ -40,53 +39,16 @@ export default function Landing() {
                 {/* Project Context - Full Width */}
                 <Card className="w-full border-2 shadow-sm">
                     <CardHeader className="border-b bg-muted/20 pb-6">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                            <div className="space-y-1">
-                                <CardTitle className="text-2xl">Quickstart Guide</CardTitle>
-                                <CardDescription>
-                                    Defines the environment for both you and your AI agent.
-                                </CardDescription>
-                            </div>
-                            <CopyContextButton />
+                        <div className="space-y-1">
+                            <CardTitle className="text-2xl">Quickstart Guide</CardTitle>
+                            <CardDescription>
+                                Defines the environment for both you and your AI agent.
+                            </CardDescription>
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-10 pt-8">
 
-                        {/* Section 0: Context Header */}
-                        <div className="space-y-4">
-                            <h3 className="flex items-center gap-2 font-semibold text-lg text-foreground">
-                                <MessageSquare className="h-5 w-5 text-primary" />
-                                AI Context Header
-                            </h3>
-                            <div className="bg-muted/50 border rounded-lg p-4 text-sm font-mono text-muted-foreground whitespace-pre-wrap">
-                                {(AI_CONTEXT_PROMPT.split('Stack:')[0] ?? '').trim()}
-                            </div>
-                        </div>
-
-                        {/* Section 1: Stack */}
-                        <div className="space-y-4">
-                            <h3 className="flex items-center gap-2 font-semibold text-lg text-foreground">
-                                <Layers className="h-5 w-5 text-primary" />
-                                Stack
-                            </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                <div className="bg-muted/50 border rounded px-3 py-2 text-sm font-medium">
-                                    Next.js 16
-                                </div>
-                                <div className="bg-muted/50 border rounded px-3 py-2 text-sm font-medium">
-                                    Postgres (pg - raw SQL, no ORM)
-                                </div>
-                                <div className="bg-muted/50 border rounded px-3 py-2 text-sm font-medium">
-                                    Tailwind v4
-                                </div>
-                                <div className="bg-muted/50 border rounded px-3 py-2 text-sm font-medium">
-                                    Shadcn UI
-                                </div>
-                                <div className="bg-muted/50 border rounded px-3 py-2 text-sm font-medium">
-                                    NextAuth v4
-                                </div>
-                            </div>
-                        </div>
+                        <ContextGenerator />
 
                         {/* Section 2: Installation Checkpoints */}
                         <div className="space-y-4">
