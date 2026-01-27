@@ -2,7 +2,8 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { ScrollText, Terminal, CreditCard, Sparkles, Server, Shield } from "lucide-react"
+import Link from 'next/link';
+import { ScrollText, Terminal, CreditCard, Sparkles, Server, Shield, ArrowRight } from "lucide-react"
 
 export const metadata = {
     title: 'Blueprints',
@@ -12,6 +13,7 @@ export const metadata = {
 const blueprints = [
     {
         title: "Stripe Billing",
+        id: "billing-stripe",
         file: "blueprints/billing-stripe.md",
         icon: CreditCard,
         description: "Hybrid mock/real subscription system. Toggle keys to go from dev to prod.",
@@ -23,6 +25,7 @@ const blueprints = [
     },
     {
         title: "Google Authentication",
+        id: "auth-google",
         file: "blueprints/auth-google.md",
         icon: Shield,
         description: "Activation pattern for production-ready OAuth with Google and NextAuth.js.",
@@ -34,6 +37,7 @@ const blueprints = [
     },
     {
         title: "AI SDK Integration",
+        id: "ai-sdk",
         file: "blueprints/ai-sdk.md",
         icon: Sparkles,
         description: "Standardized pattern for AI chat/completion integration using Vercel AI SDK and OpenRouter.",
@@ -45,6 +49,7 @@ const blueprints = [
     },
     {
         title: "Async Jobs Queue",
+        id: "async-jobs",
         file: "blueprints/async-jobs.md",
         icon: Server,
         description: "Reliable, zero-dependency asynchronous job queue using the existing Postgres database.",
@@ -72,35 +77,40 @@ export default function BlueprintsPage() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {blueprints.map((bp) => (
-                    <Card key={bp.file} className="flex flex-col h-full hover:shadow-md transition-shadow">
-                        <CardHeader>
-                            <div className="flex items-center justify-between mb-2">
-                                <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                                    <bp.icon className="h-6 w-6" />
+                    <Link href={`/blueprints/${bp.id}`} key={bp.id} className="block h-full group">
+                        <Card className="flex flex-col h-full hover:shadow-md hover:border-primary/50 transition-all cursor-pointer group-hover:bg-muted/5">
+                            <CardHeader>
+                                <div className="flex items-center justify-between mb-2">
+                                    <div className="p-2 bg-primary/10 rounded-lg text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                                        <bp.icon className="h-6 w-6" />
+                                    </div>
+                                    <Badge variant="outline" className="font-mono text-xs group-hover:border-primary/50">
+                                        .md
+                                    </Badge>
                                 </div>
-                                <Badge variant="outline" className="font-mono text-xs">
-                                    .md
-                                </Badge>
-                            </div>
-                            <CardTitle className="text-xl">{bp.title}</CardTitle>
-                            <CardDescription className="line-clamp-2">
-                                {bp.description}
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex-grow space-y-4">
-                            <div className="bg-muted/50 p-2 rounded text-xs font-mono text-muted-foreground break-all">
-                                {bp.file}
-                            </div>
-                            <ul className="space-y-2">
-                                {bp.objectives.map((obj, i) => (
-                                    <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                                        <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
-                                        {obj}
-                                    </li>
-                                ))}
-                            </ul>
-                        </CardContent>
-                    </Card>
+                                <CardTitle className="text-xl group-hover:text-primary transition-colors flex items-center gap-2">
+                                    {bp.title}
+                                    <ArrowRight className="h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                                </CardTitle>
+                                <CardDescription className="line-clamp-2">
+                                    {bp.description}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="flex-grow space-y-4">
+                                <div className="bg-muted/50 p-2 rounded text-xs font-mono text-muted-foreground break-all group-hover:bg-background transition-colors border group-hover:border-input">
+                                    {bp.file}
+                                </div>
+                                <ul className="space-y-2">
+                                    {bp.objectives.map((obj, i) => (
+                                        <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                                            <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                                            {obj}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </CardContent>
+                        </Card>
+                    </Link>
                 ))}
             </div>
 
