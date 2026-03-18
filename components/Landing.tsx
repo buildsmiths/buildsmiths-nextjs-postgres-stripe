@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from "@/components/ui/badge"
 import { Check, Terminal, Zap, BookOpen, Layers, Code2, Box, Github, ExternalLink, FolderTree } from "lucide-react"
-import { ContextGenerator } from '@/components/dev-tools/ContextGenerator';
+
 
 export default function Landing() {
     return (
@@ -48,7 +48,6 @@ export default function Landing() {
                     </CardHeader>
                     <CardContent className="space-y-10 pt-8">
 
-                        <ContextGenerator />
 
                         {/* Section 2: Installation Checkpoints */}
                         <div className="space-y-4">

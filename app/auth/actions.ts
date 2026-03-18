@@ -1,25 +1,17 @@
 'use server';
 
 import { hash } from 'bcryptjs';
-import { query } from '@/lib/db/simple';
-import { rateLimit } from '@/lib/rate-limit';
+import { query } from '@/lib/db';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-
-const limiter = rateLimit({
-    interval: 60 * 1000, // 60 seconds
-    uniqueTokenPerInterval: 500,
-});
 
 export async function registerAction(prevState: any, formData: FormData) {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
-    const ip = (await headers()).get('x-forwarded-for') ?? '127.0.0.1';
-
+    
     try {
-        await limiter.check(5, ip); // 5 requests per minute
-    } catch {
+            } catch {
         return { ok: false, code: 'RATE_LIMIT_EXCEEDED', message: 'Too many requests. Please try again later.' };
     }
 

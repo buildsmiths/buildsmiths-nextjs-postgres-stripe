@@ -1,15 +1,15 @@
-import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { SystemActivityChart, ResourceUsageChart } from '@/components/admin/DashboardCharts';
 import { RecentActivity } from '@/components/admin/RecentActivity';
 import { headers } from 'next/headers';
 import React from 'react';
-import PostCallbackStatus from '@/components/PostCallbackStatus';
+import { PostCallbackStatus } from '@/components/PostCallbackStatus';
 import { Badge } from "@/components/ui/badge";
 
 export default async function DashboardPage() {
-    const hdrs = await headers();
-    const reqLike = { headers: hdrs } as any;
-    const state = await deriveSubscriptionStateAsync(reqLike);
+
+    const session = await getServerSession(authOptions);
 
     return (
         <main aria-label="Admin Dashboard" className="max-w-5xl mx-auto px-4 py-10 space-y-8">
@@ -26,7 +26,7 @@ export default async function DashboardPage() {
                 <div className="flex items-center gap-2">
                     <div className="text-right">
                         <p className="text-xs text-muted-foreground">Logged in as</p>
-                        <p className="text-sm font-medium">{state.rawSession?.email || 'User'}</p>
+                        <p className="text-sm font-medium">{(session as any)?.user?.email || 'User'}</p>
                     </div>
                 </div>
             </header>

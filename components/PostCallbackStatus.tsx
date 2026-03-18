@@ -32,4 +32,4 @@ export function PostCallbackStatus({ durationMs = 800 }: { durationMs?: number }
     );
 }
 
-export default PostCallbackStatus;
+

@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { log } from '@/lib/logging/log';
 
 // Minimal auth callback endpoint: redirects to dashboard.
 export async function GET(req: NextRequest) {
-    log.info('route.auth.callback.enter');
+    console.info('route.auth.callback.enter');
     // Prefer the incoming request origin to construct redirect URL (Codespaces/proxy safe).
     // In tests, req.url may be undefined or invalid; fall back to NEXT_PUBLIC_SITE_URL or localhost.
     const base = (() => {

@@ -160,7 +160,7 @@ export async function handleStripeWebhook(event: Stripe.Event): Promise<WebhookP
 import { NextRequest, NextResponse } from 'next/server';
 import { verifySignatureAndParse, handleStripeWebhook } from '@/lib/stripe/webhook';
 import { log } from '@/lib/logging/log';
-import { ok, err } from '@/lib/errors';
+
 
 export const runtime = 'nodejs';
 
@@ -174,10 +174,10 @@ export async function POST(req: NextRequest) {
         const result = await handleStripeWebhook(event as any);
         log.info('route.webhooks.stripe.result', { type: result.type, ignored: result.ignored, ms: Date.now() - started });
         const body = { ok: result.ok, type: result.type, ignored: result.ignored };
-        return NextResponse.json(ok(body));
+        return NextResponse.json({ ...body, ok: true });
     } catch (error: any) {
         log.error('route.webhooks.stripe.error', { error: error.message || String(error), ms: Date.now() - started });
-        return NextResponse.json(err('WEBHOOK_ERROR', 'Webhook processing failed', { detail: error.message || String(error) }), { status: 400 });
+        return NextResponse.json({ error: 'Webhook processing failed', detail: error.message || String(error) }, { status: 400 });
     }
 }
 ```

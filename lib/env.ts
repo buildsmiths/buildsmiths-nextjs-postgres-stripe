@@ -26,10 +26,3 @@ if (!parsed.success) {
 }
 
 export const env = parsed.success ? parsed.data : processEnv as z.infer<typeof envSchema>;
-
-/**
- * Accessor for AppConfig compatibility (Migration layer)
- */
-export const config = {
-    siteUrl: env.NEXT_PUBLIC_SITE_URL,
-};

@@ -1,21 +1,17 @@
 <div align="center">
 
-# BuildSmiths StarterKit (v1)
-
-
+# BuildSmiths NextJS Base Starter
 
 <br />
-<img src="public/screenshot.png" alt="App homepage screenshot" width="800" />
 
 </div>
 
 ## What you get
-- Auth-first flow with Auth.js Credentials (email + password) and a built-in register endpoint
-- Tier gating: free vs premium with a simple guard component and server helpers
-- Billing optionality: runs with placeholder Stripe keys; real checkout/portal only when configured
-- DB-backed webhook lifecycle and idempotency seam
-- Structured logs and audit events for key actions
-- Database persistence is required. A one-shot bootstrap SQL is included.
+- Auth-first flow with Auth.js Credentials (email + password) and a built-in server action for registration.
+- Route gating and session strictness via Next.js Middleware (`proxy.ts`).
+- Fully typed data interaction strictly backed by raw PostgreSQL connections natively.
+- No UI component lock-in — Just pure Tailwind CSS V4 and React 19.
+- No unused heavy utility packages.
 
 ---
 
@@ -23,8 +19,8 @@
 1) Install and set env
 
 ```bash
-git clone https://github.com/buildsmiths/buildsmiths-nextjs-postgres-stripe.git
-cd buildsmiths-nextjs-postgres-stripe
+git clone https://github.com/buildsmiths/buildsmiths-nextjs-postgres-base.git
+cd buildsmiths-nextjs-postgres-base
 npm install
 cp .env.example .env.local
 ```
@@ -34,18 +30,12 @@ cp .env.example .env.local
 - DATABASE_URL (Postgres connection string)
 - NEXTAUTH_SECRET (any strong random string)
 
-Stripe keys in the example are safe placeholders; billing stays disabled until you add real keys.
-
 3) Apply the database schema (idempotent; safe to re-run)
 
-Option A — one command (works in Codespaces):
 ```bash
 npm run db:schema
 ```
-Reads `DATABASE_URL` from `.env.local` (shell values override).
-
-Option B — copy/paste in your DB dashboard:
-Open your database console, paste `db/schema.sql`, and run it. If your/provider blocks the `pgcrypto` extension, just remove the first line.
+Reads `DATABASE_URL` from `.env.local`.
 
 4) Run the app
 
@@ -53,39 +43,21 @@ Open your database console, paste `db/schema.sql`, and run it. If your/provider 
 npm run dev
 ```
 
-Visit http://localhost:3000, click Sign In, and either:
-- Register a new account (email + password), then sign in
-- Or sign in if you already registered
-
-
-```bash
-```
+Visit http://localhost:3000, click Sign In, and register an account.
 
 ---
 
-## Setup guide (step-by-step)
-
-This is a complete path from a fresh clone to a deployed app.
+## Setup guide
 
 1) Prerequisites
 - Node 22+ and npm
 - A Postgres database (hosted or local)
 - A strong secret for Auth.js sessions
 
-Note: If you use nvm, you can pin a version with the provided `.nvmrc`.
-
-2) Create a database (pick one)
-- Hosted Postgres: Use any managed Postgres provider; create a database and copy the connection string.
-- Local Postgres: Start a local instance and create a database.
-
-3) Configure environment
+2) Configure environment
 ```bash
 cp .env.example .env.local
 ```
-Fill the required variables:
-- NEXT_PUBLIC_SITE_URL (e.g., http://localhost:3000 for local)
-- DATABASE_URL (your Postgres connection string)
-- NEXTAUTH_SECRET (use a strong random string)
 
 Generate a strong NEXTAUTH_SECRET (either works):
 ```bash
@@ -96,239 +68,44 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 openssl rand -base64 32
 ```
 
-Production-only recommendations:
-- ENFORCE_HTTPS=true
-- Do not set ALLOW_DEV_BEARER_SHORTCUT in production.
-
-Optional but recommended:
-- Set NEXTAUTH_URL to the same value as NEXT_PUBLIC_SITE_URL if you see Auth.js warnings locally or in CI. At runtime the app infers NEXTAUTH_URL from NEXT_PUBLIC_SITE_URL, so leaving it unset is fine.
-
-4) Apply the database schema
-
-Default (recommended, no psql required):
+3) Apply the database schema
 ```bash
 npm run db:schema
 ```
 This starter does not auto-migrate. Tables are created when you run the bootstrap script above. It’s idempotent and safe to run again.
 
-Alternatives:
-- Provider console: paste `db/schema.sql` in your dashboard and run it.
-- Raw psql: `psql "$DATABASE_URL" -f db/schema.sql` (set `DATABASE_URL` in your shell).
-
-Tip: `psql` reads the shell environment, not `.env.local`. The `db:schema` script reads `.env.local` for you.
-
-- macOS/Linux (bash):
-```bash
-export DATABASE_URL="postgresql://user:pass@host:5432/db?sslmode=require"
-psql "$DATABASE_URL" -f db/schema.sql
-```
-
-- Windows PowerShell:
-```powershell
-$env:DATABASE_URL = "postgresql://user:pass@host:5432/db?sslmode=require"
-psql $env:DATABASE_URL -f db/schema.sql
-```
-
-- Pass URL directly (any platform):
-```bash
-psql "postgresql://user:pass@host:5432/db?sslmode=require" -f db/schema.sql
-```
-
-Verify tables:
-```bash
-psql "$DATABASE_URL" -c "\dt"
-```
-
-5) Install dependencies and run locally
+4) Install dependencies and run locally
 ```bash
 npm install
 npm run dev
 ```
 
-6) Seed a dev user (optional)
+5) Seed a dev user (optional)
 ```bash
 # Optionally customize email/password
-SEED_EMAIL=dev@example.com SEED_PASSWORD='Password123!' npm run db:seed
+npm run db:seed
 ```
 
-7) Verify locally
-- GET /api/health returns { ok: true, time }
-- Register and sign in at /auth, then check /account and /dashboard
-- With placeholder Stripe keys, billing endpoints respond with stripe_not_configured
-
-8) Tests and build
+6) Build
 ```bash
 npm run typecheck
 npm run build
 ```
 
-9) Deploy
-- Provision a Node 22+ environment on your platform of choice (any Node host, container platform, or PaaS).
-- Set these environment variables in your runtime:
-   - NEXT_PUBLIC_SITE_URL (your production URL)
-   - NEXTAUTH_SECRET (new strong value for prod)
-   - DATABASE_URL (production Postgres connection string)
-   - ENFORCE_HTTPS=true
-   - NEXTAUTH_URL (optional — set equal to NEXT_PUBLIC_SITE_URL)
-   - Optional: Stripe keys when going beyond placeholder mode
-- Apply the schema to your production database (one-time, idempotent):
-```bash
-psql "$DATABASE_URL" -f db/schema.sql
+## Blueprints (Features & Integrations)
+
+This starter is intentionally lightweight. Instead of forcing UI libraries or bloated API integrations on you, it includes **Blueprints** which can be found in `blueprints/`. 
+You can provide any generated Blueprint markdown directly to modern AI coding agents (such as GitHub Copilot, Cursor, or Aider) to quickly install well-tested features into this app context.
+
+Example blueprints available:
+- `billing-stripe.md` - Integrates Stripe Checkout, Webhooks, and Portal Sessions back into the app using a strict schema addition.
+- `auth-google.md` - Injects Google OAuth correctly bridging with Auth.js.
+
+## Structure
 ```
-- Build and run the app in your environment:
-```bash
-npm run build
-npm start
+app/               # App Router pages, Server Actions
+blueprints/        # AI spec documentation to instantly enable extensions securely
+components/        # Lean UI layout wrappers (Tailwind only)
+lib/               # Core configuration, auth handling, and minimal raw postgres wrappers
+scripts/           # Native Node scripts for db application and seeding without dotenv overhead
 ```
-- Verify `/api/health`, auth flows, and gated pages on your deployed URL.
-
-
-## Scripts
-- dev: start Next.js dev server
-- build / start: production build and run
-- typecheck: TypeScript check
-- db:schema: apply `db/schema.sql` using `.env.local`'s DATABASE_URL (Node-only; no psql required)
-- db:seed: seed a dev user (optional)
-
----
-
-## Project structure
-```
-app/               # App Router pages, API routes (includes /api/auth for Auth.js)
-components/        # UI components (AuthButton, SignInPanel, etc.)
-lib/               # Config, auth helpers, access policy, persistence, stripe, logging, audit
-lib/access/        # Tier policy + subscription state derivation
-lib/subscriptions/ # Subscription store facade (upgrade/cancel lifecycle)
-db/                # Bootstrap SQL (tables for users/subscriptions/audit/webhooks)
-specs/             # Specs & docs used to drive implementation
-```
-
----
-
-## Environment variables
-Authoritative source: `.env.example` and loader `lib/config.ts`.
-
-Required:
-- NEXT_PUBLIC_SITE_URL
-- DATABASE_URL
-- NEXTAUTH_SECRET
-
-Notes:
-- You don’t need any Stripe keys to run locally; billing stays safely disabled.
-- DATABASE_URL is required everywhere; the app errors clearly if missing.
-
----
-
-## Auth setup (Auth.js Credentials)
-No OAuth required. Built-in endpoints:
-- POST /api/auth/register — create a user (email + password)
-- GET/POST /api/auth/[...nextauth] — Auth.js routes for credentials sign in
-
-Make sure `NEXTAUTH_SECRET` is set. In development you can generate one with, for example, Node’s crypto module.
-
----
-
-## Stripe setup (optional)
-You can build without Stripe. When ready:
-1) Add the following env vars in `.env.local`:
-   - NEXT_PUBLIC_STRIPE_PUBLIC_KEY
-   - STRIPE_SECRET_KEY
-   - PREMIUM_PLAN_PRICE_ID
-   - STRIPE_WEBHOOK_SECRET (used to verify webhooks in production)
-   - BILLING_PORTAL_RETURN_URL (e.g., https://yourapp.com/account)
-2) Restart the server. Checkout and billing portal endpoints return mock URLs in dev and use real Stripe in production.
-3) Webhooks: send Stripe events to `/api/webhooks/stripe`. In dev, signature verification is skipped; in production it’s enforced.
-
----
-
-## Database setup (required)
-The app requires Postgres for subscriptions, webhook idempotency, and audit events.
-
-Option A: Hosted Postgres (recommended to get started)
-1) Create a database on your provider
-2) Copy the connection string and set `DATABASE_URL` in `.env.local`
-3) Apply schema:
-```bash
-psql "$DATABASE_URL" -f db/schema.sql
-```
-
-Option B: Local Postgres
-1) Start your local Postgres (via Docker or local install), then set DATABASE_URL and apply schema:
-```bash
-psql "$DATABASE_URL" -f db/schema.sql
-```
-Creates tables: `users`, `subscriptions`, `audit_events`, `webhook_events`.
-
-```bash
-npm run dev
-```
-
----
-
-## Testing
-
-Commands:
-```bash
-```
-
----
-
-## Quick API calls (HTTP examples)
-This repository doesn’t include ready-made HTTP request files. You can use any REST client (VS Code REST Client, Postman, curl) against your running app. A helpful tip is to export a SITE variable for local requests:
-
-```bash
-SITE=http://localhost:3000
-```
-
----
-
-## Seed a local dev user
-You can seed a local user (and ensure a free subscription row) using:
-
-```bash
-export DATABASE_URL=postgresql://postgres:postgres@localhost:5432/quickstart
-psql "$DATABASE_URL" -f db/schema.sql
-npm run db:seed               # optional: set SEED_EMAIL/SEED_PASSWORD envs
-```
-
-Example:
-```bash
-SEED_EMAIL=dev@example.com SEED_PASSWORD='Password123!' npm run db:seed
-```
-
----
-
-## Observability
-- Logs: JSON lines via `lib/logging/log.ts`
-- Audit: `lib/logging/audit.ts` appends events (DB-backed when DATABASE_URL is set)
-- Auth traces: `lib/auth/session.ts` emits debug logs (e.g., `auth_session.dev_bearer`)
-
-- Health: GET `/api/health` returns `{ ok: true, time }`
-
-Tail examples:
-```bash
-npm run dev 2>&1 | grep -E 'auth_session\.|dev_bearer_present_but_disabled'
-```
-
----
-
-## Deploying
-Any Node host works. Remember:
-- Set `NEXT_PUBLIC_SITE_URL` to your deployed URL
-- Provide `NEXTAUTH_SECRET`
-- Configure Stripe keys when enabling real billing
-- Production requires `DATABASE_URL`
-
----
-
-## FAQ
-- Do I need dotenv? Not for Next.js runtime; Next reads `.env.local` directly. We include a small `dotenv` dependency only for Node scripts like `scripts/db-apply.ts` to load `.env.local` outside Next. If you don’t use those scripts, you can remove `dotenv`.
-- How do I format code? There’s no project-wide formatter configured. Use VS Code’s default formatter or add your preferred formatter locally.
-- When are the DB tables created? When you run `psql "$DATABASE_URL" -f db/init.sql`. The script is idempotent; re-run it any time (for a fresh database, or after changing DATABASE_URL).
-
----
-
-## License
-MIT — see `LICENSE`.
-"# userzero" 
-"# viralboost" 

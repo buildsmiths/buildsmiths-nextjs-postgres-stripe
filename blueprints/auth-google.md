@@ -4,7 +4,7 @@
 Activate and seamlessly integrate Google OAuth Sign-In into the existing NextAuth authentication flow.
 
 ## Architecture Decisions
-- Config: Add `GoogleProvider` to the existing NextAuth configuration located in `lib/auth/nextauth-options.ts`.
+- Config: Add `GoogleProvider` to the existing NextAuth configuration located in `lib/auth.ts`.
 - Environment: Set up conditionally enabled logic tied to the presence of `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
 - UI: Expose an "enableGoogle" prop to `components/SignInPanel.tsx` allowing it to conditionally render the "Sign in with Google" button.
 - DB: Depend on the existing NextAuth logic to map OAuth tokens to the `users` table for account linking.

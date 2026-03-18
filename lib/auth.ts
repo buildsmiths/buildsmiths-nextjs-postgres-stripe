@@ -1,7 +1,8 @@
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { compare } from 'bcryptjs';
-import { query } from '../db/simple';
+import { query } from './db';
+import { getServerSession } from 'next-auth';
 
 const providers: any[] = [
     Credentials({
@@ -53,3 +54,24 @@ export const authOptions = {
 };
 
 export type AppAuthOptions = typeof authOptions;
+
+export interface AuthSession {
+    userId: string;
+    email?: string;
+}
+
+export async function getServerAuthSession(): Promise<AuthSession | null> {
+    try {
+        const session: any = await getServerSession(authOptions as any);
+        const user: any = session?.user as any;
+        const id: string | undefined = user?.id as string | undefined;
+        if (id) {
+            const out: AuthSession = { userId: id };
+            if (user?.email) (out as any).email = user.email as string;
+            return out;
+        }
+        return null;
+    } catch {
+        return null;
+    }
+}

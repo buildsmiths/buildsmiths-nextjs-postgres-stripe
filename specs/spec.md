@@ -1,81 +1,56 @@
 # Project Spec
 
-A concise spec for this starter so you can understand the moving parts and extend it safely. Focused on correctness, minimalism, and portability.
+A concise spec for this base starter so you can understand the moving parts and extend it safely. Focused on correctness, minimalism, and portability.
 
 ## Stack and layout
-- Next.js 15 (App Router)
+- Next.js 16.1 (App Router, Turbopack)
   - Pages/UI in `app/`
-  - API routes in `app/api/*`
+  - Actions directly next to pages (e.g. `app/auth/actions.ts`)
 - Auth.js (NextAuth) — Credentials provider (email + password), JWT sessions
-- Postgres — required persistence (users, subscriptions, audit, webhook idempotency)
-- Stripe — optional; mocked in dev, real in production
-- Tailwind CSS v4
+- Postgres — required persistence (users, subscriptions, audit)
+- Tailwind CSS v4 alongside `shadcn/ui` base components.
 
 ## Configuration
 - Required env vars (runtime):
   - `NEXT_PUBLIC_SITE_URL`
   - `DATABASE_URL`
   - `NEXTAUTH_SECRET`
-- Stripe (only when enabling billing):
-  - `NEXT_PUBLIC_STRIPE_PUBLIC_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `PREMIUM_PLAN_PRICE_ID`, `BILLING_PORTAL_RETURN_URL`
 - Loading behavior:
   - The app uses Next.js env loading (.env.local).
-  - The `db:schema` script reads envs outside Next with precedence: Shell > .env.local (non-empty) > .env (non-empty). Empty .env.local values don’t mask .env.
-- Source of truth: `.env.example` and loader `lib/config.ts`.
+  - The `db:schema` script reads envs outside Next with precedence: Shell > .env.local (non-empty) > .env (non-empty).
 
 ## Data model (summary)
 - `users`: id, email, password_hash
 - `subscriptions`: user_id (FK -> users.id), tier ('free'|'premium'), status ('active'|'canceled'|'none'), period/cancellation timestamps
 - `audit_events`: id, ts, actor?, type, payload?
-- `webhook_events`: id, type, processed_at, user_id?, duplicate
-Schema lives in `db/schema.sql` (idempotent).
+Schema lives in `db/schema.sql` (idempotent setup).
 
 ## Auth and access
-- Register: `POST /api/auth/register` (email + password) - Rate limited (5 req/min)
-- Sign-in/out via NextAuth credentials at `/api/auth/[...nextauth]` - POST rate limited (10 req/min)
+- Register: `app/auth/actions.ts` -> `registerAction()`
+- Sign-in/out via NextAuth credentials at `/api/auth/[...nextauth]`
 - Session resolution is JWT-based.
-- Access tiers via `lib/access/policy.ts`: visitor | free | premium
-- Request-level subscription state via `lib/access/subscriptionState.ts`.
 
-## Core API contracts
+## Core App Features
 - Health: `GET /api/health` → `{ ok: true, time }`
-- Auth status: `GET /api/auth/status` → envelope with user and tier
-- Premium example: `GET /api/feature/premium-example` → gated; returns envelope or `NOT_PREMIUM`
-- Subscriptions:
-  - `POST /api/subscriptions/checkout` → 400 `ALREADY_PREMIUM`, 503 `STRIPE_NOT_CONFIGURED`, or `{ id, url }`
-  - `POST /api/subscriptions/portal` → 403 `NOT_PREMIUM`, 503 `STRIPE_NOT_CONFIGURED`, or `{ id, url }`
-- Webhooks (Stripe): `POST /api/webhooks/stripe`
-  - Dev: JSON parsed, signature skip
-  - Prod: signature verified, idempotency via `webhook_events`
+- Middleware Gating: `proxy.ts` strictly gates `/dashboard` and `/account`.
+- Minimal Dashboard: Ready-to-go `app/dashboard/page.tsx` utilizing minimal database queries.
 
-## Stripe behavior
-- Dev/non-prod: `lib/stripe/*` return mock IDs/URLs (no external calls)
-- Prod: Uses Stripe SDK; return_url/read keys from config; webhook signature enforced
+## Persistence
+- Single connection pool instance located at `lib/db.ts`. Do not use heavy ORMs unless required via Blueprint.
 
-## Persistence and repos
-- `lib/db/*` exposes query helpers and typed repos:
-  - Audit: `lib/db/auditRepo.ts`
-  - Webhook idempotency: `lib/db/webhookRepo.ts`
-  - Subscription store facade: `lib/subscriptions/store.ts`
-
-## Logging and audit
-- JSON logs via `lib/logging/log.ts`
-- Audit hooks via `lib/logging/audit.ts` with DB append/read
+## Blueprints
+Optional integrations that can be added incrementally via `.md` specs:
+- `blueprints/billing-stripe.md` -> Stripe payments and webhooks.
+- `blueprints/auth-google.md` -> Google OAuth injection.
 
 ## Developer workflows
 - Apply schema: `npm run db:schema` (reads `.env.local`) or `psql "$DATABASE_URL" -f db/schema.sql`
-- Seed dev user: `npm run db:seed` (configurable with `SEED_EMAIL`, `SEED_PASSWORD`)
+- Seed dev user: `npm run db:seed`
 - Run: `npm run dev`
+- Build: `npm run build`
 - Typecheck: `npm run typecheck`
-
-## Non-goals / boundaries
-- No auto-migrations — you run the schema script
-- Billing disabled by default — safe placeholders; enable with real keys
-- Formatting not enforced — use your editor’s default or add a formatter locally
 
 ## Success criteria
 - Health checks and core routes work locally with a real Postgres
-- Auth register/sign-in flows succeed; tier gating behaves as expected
-- Stripe endpoints return explicit envelopes in placeholder mode; real billing works when configured
-- Typecheck and production build pass
-
+- Auth register/sign-in flows succeed.
+- Typecheck and production build pass without errors.

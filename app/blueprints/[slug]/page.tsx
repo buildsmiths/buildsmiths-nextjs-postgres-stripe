@@ -13,7 +13,7 @@ interface PageProps {
     }>;
 }
 
-import { CopyButton } from '@/components/dev-tools/CopyButton';
+
 
 export async function generateStaticParams() {
     const blueprintsDir = path.join(process.cwd(), 'blueprints');
@@ -61,7 +61,7 @@ export default async function BlueprintPage({ params }: PageProps) {
                             <FileText className="h-4 w-4" />
                             <span className="font-mono">{slug}.md</span>
                         </div>
-                        <CopyButton content={content} label="Copy Context" className="h-7 text-xs" />
+                        
                     </div>
                     <div className="p-0 overflow-hidden bg-zinc-950 text-zinc-50">
                         <div className="overflow-x-auto p-6">

@@ -1,8 +1,8 @@
 import React from 'react';
 import { SignInPanel } from '@/components/SignInPanel';
-import { ContextCard } from '@/components/dev-tools/ContextCard';
 import { headers } from 'next/headers';
-import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { Button } from "@/components/ui/button"
 
 export const metadata = {
@@ -11,24 +11,15 @@ export const metadata = {
 };
 
 export default async function AuthPage() {
-    // Detect existing session on the server; if authenticated, don't show the sign-in form
-    let reqLike: any;
-    try {
-        const hdrs = await headers();
-        reqLike = { headers: hdrs } as any;
-    } catch {
-        // Outside of a Next request context provide a minimal headers shim
-        reqLike = { headers: { get: (_key: string) => null } } as any;
-    }
-    const state = await deriveSubscriptionStateAsync(reqLike);
+    const session = await getServerSession(authOptions as any);
 
-    if (state.authenticated) {
+    if ((session as any)?.user) {
         return (
             <main aria-label="Auth" className="max-w-md mx-auto p-6 space-y-4" data-auth-state="signed-in">
                 <h1 className="text-lg font-semibold">You’re already signed in</h1>
                 <p className="text-sm text-muted-foreground">
-                    {state.rawSession?.email ? (
-                        <>Signed in as <span className="font-medium text-foreground">{state.rawSession.email}</span>.</>
+                    {(session as any).user.email ? (
+                        <>Signed in as <span className="font-medium text-foreground">{(session as any).user.email}</span>.</>
                     ) : (
                         <>You’re signed in and don’t need to authenticate again.</>
                     )}
@@ -49,14 +40,6 @@ export default async function AuthPage() {
             <h1 className="text-lg font-semibold">Sign in</h1>
             <p className="text-sm text-muted-foreground">Access the dashboard after authenticating.</p>
             <SignInPanel enableGoogle={enableGoogle} />
-            <div className="pt-8 border-t mt-8">
-                <ContextCard
-                    title="Auth Configuration Context"
-                    description="Authentication uses NextAuth.js (Auth.js) Credentials provider. Database sessions strategy."
-                    prompt="Analyze `lib/auth/nextauth-options.ts` and `app/api/auth/[...nextauth]/route.ts`. Explain how to add a Google Provider."
-                    fileLocation="lib/auth/"
-                />
-            </div>
         </div>
     );
 }
