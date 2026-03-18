@@ -61,7 +61,7 @@ export async function SetupChecklist() {
                 <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">Config Checklist</CardTitle>
                     <Badge variant="outline" className="font-mono text-xs">
-                        {process.env.NODE_ENV}
+                        development
                     </Badge>
                 </div>
                 <CardDescription>

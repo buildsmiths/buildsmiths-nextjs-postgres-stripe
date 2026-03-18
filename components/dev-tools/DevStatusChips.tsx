@@ -53,7 +53,7 @@ export default async function DevStatusChips() {
     const stripeOk = isStripeConfigured();
     const googleOk = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
     const webhookOk = !!(process.env.STRIPE_WEBHOOK_SECRET && process.env.STRIPE_WEBHOOK_SECRET.trim());
-    const env = process.env.NODE_ENV || 'development';
+    const env = 'development';
 
     const [hasSchema, ms] = await Promise.all([schemaPresent(), healthMs()]);
 

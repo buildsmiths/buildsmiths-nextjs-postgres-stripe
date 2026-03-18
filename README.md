@@ -2,9 +2,7 @@
 
 # BuildSmiths StarterKit (v1)
 
-Craft a subscription-ready SaaS fast: Next.js 15 (App Router) · Postgres · Auth.js (credentials) · optional Stripe · Tailwind v4 · Vitest · JSON logs + audit hooks.
 
-<sub>Minimal by design. Start with billing disabled, enable Stripe when ready. Postgres is required; tests run locally without live Stripe.</sub>
 
 <br />
 <img src="public/screenshot.png" alt="App homepage screenshot" width="800" />
@@ -17,7 +15,6 @@ Craft a subscription-ready SaaS fast: Next.js 15 (App Router) · Postgres · Aut
 - Billing optionality: runs with placeholder Stripe keys; real checkout/portal only when configured
 - DB-backed webhook lifecycle and idempotency seam
 - Structured logs and audit events for key actions
-- Tests via Vitest: contract/integration/unit
 - Database persistence is required. A one-shot bootstrap SQL is included.
 
 ---
@@ -60,11 +57,8 @@ Visit http://localhost:3000, click Sign In, and either:
 - Register a new account (email + password), then sign in
 - Or sign in if you already registered
 
-5) Run tests
 
 ```bash
-npm test           # single run
-npm run test:watch # watch mode
 ```
 
 ---
@@ -165,7 +159,6 @@ SEED_EMAIL=dev@example.com SEED_PASSWORD='Password123!' npm run db:seed
 8) Tests and build
 ```bash
 npm run typecheck
-npm test
 npm run build
 ```
 
@@ -189,15 +182,11 @@ npm start
 ```
 - Verify `/api/health`, auth flows, and gated pages on your deployed URL.
 
-10) Optional Stripe test-mode
-- Replace placeholder Stripe keys with test keys.
-- Verify checkout/portal flows and send a test webhook to /api/webhooks/stripe.
 
 ## Scripts
 - dev: start Next.js dev server
 - build / start: production build and run
 - typecheck: TypeScript check
-- test / test:watch: run tests (single run or watch)
 - db:schema: apply `db/schema.sql` using `.env.local`'s DATABASE_URL (Node-only; no psql required)
 - db:seed: seed a dev user (optional)
 
@@ -212,7 +201,6 @@ lib/access/        # Tier policy + subscription state derivation
 lib/subscriptions/ # Subscription store facade (upgrade/cancel lifecycle)
 db/                # Bootstrap SQL (tables for users/subscriptions/audit/webhooks)
 specs/             # Specs & docs used to drive implementation
-tests/             # Contract, integration, unit tests
 ```
 
 ---
@@ -271,23 +259,16 @@ psql "$DATABASE_URL" -f db/schema.sql
 ```
 Creates tables: `users`, `subscriptions`, `audit_events`, `webhook_events`.
 
-Run app/tests (DATABASE_URL must be set):
 ```bash
 npm run dev
-npm test
 ```
 
 ---
 
 ## Testing
-- Contract tests validate API envelopes and semantics
-- Integration tests cover flows (upgrade → webhook → gated feature)
-- Unit tests exercise logic (policy, config)
 
 Commands:
 ```bash
-npm test
-npm run test:watch
 ```
 
 ---
@@ -326,7 +307,6 @@ SEED_EMAIL=dev@example.com SEED_PASSWORD='Password123!' npm run db:seed
 
 Tail examples:
 ```bash
-npm test -s 2>&1 | grep -E 'auth_session\.|dev_bearer_present_but_disabled'
 npm run dev 2>&1 | grep -E 'auth_session\.|dev_bearer_present_but_disabled'
 ```
 
@@ -344,7 +324,6 @@ Any Node host works. Remember:
 ## FAQ
 - Do I need dotenv? Not for Next.js runtime; Next reads `.env.local` directly. We include a small `dotenv` dependency only for Node scripts like `scripts/db-apply.ts` to load `.env.local` outside Next. If you don’t use those scripts, you can remove `dotenv`.
 - How do I format code? There’s no project-wide formatter configured. Use VS Code’s default formatter or add your preferred formatter locally.
-- Where do config files live? Keep Next.js, Tailwind, PostCSS, and Vitest configs at the repo root unless you re‑wire scripts.
 - When are the DB tables created? When you run `psql "$DATABASE_URL" -f db/init.sql`. The script is idempotent; re-run it any time (for a fresh database, or after changing DATABASE_URL).
 
 ---

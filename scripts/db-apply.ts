@@ -1,14 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import dotenv from 'dotenv';
 import pg from 'pg';
 
 // Load environment variables with precedence:
 // 1. Shell (already in process.env)
 // 2. .env.local (if exists) - loaded first by dotenv, won't overwrite shell
 // 3. .env (if exists) - loaded second, won't overwrite shell or .env.local
-dotenv.config({ path: '.env.local' });
-dotenv.config({ path: '.env' });
 
 // We must import env AFTER loading variables, otherwise validation might fail
 // Dynamic import to avoid hoisting issues

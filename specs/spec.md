@@ -10,7 +10,6 @@ A concise spec for this starter so you can understand the moving parts and exten
 - Postgres — required persistence (users, subscriptions, audit, webhook idempotency)
 - Stripe — optional; mocked in dev, real in production
 - Tailwind CSS v4
-- Vitest — contract, integration, unit tests
 
 ## Configuration
 - Required env vars (runtime):
@@ -67,13 +66,7 @@ Schema lives in `db/schema.sql` (idempotent).
 - Apply schema: `npm run db:schema` (reads `.env.local`) or `psql "$DATABASE_URL" -f db/schema.sql`
 - Seed dev user: `npm run db:seed` (configurable with `SEED_EMAIL`, `SEED_PASSWORD`)
 - Run: `npm run dev`
-- Tests: `npm test`, watch: `npm run test:watch`
 - Typecheck: `npm run typecheck`
-
-## Testing approach
-- Vitest projects: Node + jsdom (`vitest.config.ts`)
-- In tests, `pg` is patched at runtime via `tests/setup/patch-pg.js` to use an in-memory Postgres (`pg-mem`). No module alias needed.
-- Test setup files under `tests/setup/` configure env and testing-library
 
 ## Non-goals / boundaries
 - No auto-migrations — you run the schema script
@@ -84,5 +77,5 @@ Schema lives in `db/schema.sql` (idempotent).
 - Health checks and core routes work locally with a real Postgres
 - Auth register/sign-in flows succeed; tier gating behaves as expected
 - Stripe endpoints return explicit envelopes in placeholder mode; real billing works when configured
-- Tests, typecheck, and production build pass
+- Typecheck and production build pass
 

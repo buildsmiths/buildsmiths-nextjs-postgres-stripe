@@ -18,7 +18,7 @@ export default async function DashboardPage() {
             const hdrs = await headers();
             reqLike = { headers: hdrs } as any;
         } catch {
-            // Outside of a Next request context (e.g., tests), provide a minimal headers shim
+            // Outside of a Next request context provide a minimal headers shim
             reqLike = { headers: { get: (_key: string) => null } } as any;
         }
         const state = await deriveSubscriptionStateAsync(reqLike);

@@ -111,8 +111,6 @@ npm run dev`}
                                     <span className="text-foreground">Database management scripts</span>
                                 </div>
                                 <div className="grid grid-cols-[120px_1fr] p-3 gap-2 hover:bg-muted/30 transition-colors">
-                                    <span className="font-mono text-muted-foreground">tests/</span>
-                                    <span className="text-foreground">Vitest integration/unit tests</span>
                                 </div>
                             </div>
                         </div>
@@ -151,7 +149,6 @@ npm run dev`}
                                 </li>
                                 <li className="flex items-start gap-2">
                                     <Check className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
-                                    <span><strong>Vitest</strong> suite with in-memory DB.</span>
                                 </li>
                             </ul>
                         </CardContent>

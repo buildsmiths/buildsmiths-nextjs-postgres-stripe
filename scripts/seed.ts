@@ -1,7 +1,4 @@
-import dotenv from 'dotenv';
 // Load environment variables with precedence
-dotenv.config({ path: '.env.local' });
-dotenv.config({ path: '.env' });
 
 import bcrypt from 'bcryptjs';
 import pg from 'pg';

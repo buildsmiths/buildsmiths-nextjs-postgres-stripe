@@ -1,4 +1,3 @@
-import dotenv from 'dotenv';
 import fs from 'node:fs';
 import path from 'node:path';
 import pg from 'pg';
@@ -14,10 +13,8 @@ console.log('🩺  Running Buildsmiths Doctor...\n');
 console.log('1. Checking Environment Files...');
 if (fs.existsSync(envLocalPath)) {
     console.log('   ✅ .env.local found');
-    dotenv.config({ path: '.env.local' });
 } else if (fs.existsSync(envPath)) {
     console.log('   ✅ .env found');
-    dotenv.config({ path: '.env' });
 } else {
     console.error('   ❌ No .env or .env.local file found.');
     console.log('      👉 Copy .env.example to .env.local');

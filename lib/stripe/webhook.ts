@@ -19,10 +19,6 @@ export interface WebhookProcessResult {
 
 export function verifySignatureAndParse(rawBody: string, signature: string | undefined): Stripe.Event {
     const cfg = loadConfig();
-    if (cfg.nodeEnv !== 'production') {
-        // Parse directly without verifying in dev/test
-        return JSON.parse(rawBody);
-    }
     const stripe = new Stripe(cfg.stripeSecretKey); // default API version
     return stripe.webhooks.constructEvent(rawBody, signature || '', cfg.stripeWebhookSecret);
 }

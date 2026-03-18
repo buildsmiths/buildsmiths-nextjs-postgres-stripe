@@ -72,41 +72,6 @@ export default [
         }
     },
     // Formatting handled by editor; no Prettier integration
-    // Tests: relax rules and add Vitest globals
-    {
-        files: ['tests/**/*.{ts,tsx}'],
-        languageOptions: {
-            globals: {
-                ...globals.node,
-                ...globals.browser,
-                ...globals.vitest
-            }
-        },
-        rules: {
-            '@typescript-eslint/no-explicit-any': 'off',
-            '@typescript-eslint/no-unused-vars': 'off',
-            'no-undef': 'off',
-            // UI tests often use RegExp literals with quotes; avoid noisy escapes rule
-            'no-useless-escape': 'off'
-        }
-    },
-    // JS test setup files use CommonJS require; allow Node globals
-    {
-        files: ['tests/**/*.{js,jsx}'],
-        languageOptions: {
-            globals: {
-                ...globals.node,
-                ...globals.vitest,
-                console: 'readonly',
-                process: 'readonly',
-                module: 'writable',
-                require: 'readonly'
-            }
-        },
-        rules: {
-            'no-undef': 'off'
-        }
-    },
     // Config and script files: node context
     {
         files: ['*.config.{js,cjs,mjs}', 'scripts/**/*.{js,mjs,ts}'],

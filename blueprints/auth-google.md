@@ -1,34 +1,21 @@
-# Blueprint: Authentication (Google)
+# Spec: Google Authentication
 
-**Goal**: Activate Google OAuth Sign-In for the authentication flow.
+## Goal
+Activate and seamlessly integrate Google OAuth Sign-In into the existing NextAuth authentication flow.
 
-## 1. Context
-The codebase is pre-configured with **NextAuth.js v4** in `lib/auth/nextauth-options.ts`.
-- **Default**: Email/Password (Credentials Provider) is always enabled.
-- **Optional**: Google Provider is conditionally enabled if environment variables are detected.
-- **UI**: The `app/auth/page.tsx` checks for these variables and automatically renders the "Sign in with Google" button.
+## Architecture Decisions
+- Config: Add `GoogleProvider` to the existing NextAuth configuration located in `lib/auth/nextauth-options.ts`.
+- Environment: Set up conditionally enabled logic tied to the presence of `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`.
+- UI: Expose an "enableGoogle" prop to `components/SignInPanel.tsx` allowing it to conditionally render the "Sign in with Google" button.
+- DB: Depend on the existing NextAuth logic to map OAuth tokens to the `users` table for account linking.
 
-## 2. Pre-requisites
-- A Google Cloud Platform (GCP) Project.
-- OAuth 2.0 Credentials (Client ID & Client Secret) configured in GCP.
-- **Environment Variables** (Add these to `.env.local`):
-  ```bash
-  GOOGLE_CLIENT_ID=...
-  GOOGLE_CLIENT_SECRET=...
-  ```
+## Constraints & Rules
+- The Credentials (Email/Password) provider must remain fully functional and default. Google Auth should be wholly optional based on environment configuration.
+- Do not commit any `.env` secrets or keys.
+- Ensure the OAuth redirect URI follows the standard NextAuth route (`[SITE_URL]/api/auth/callback/google`).
+- If implementing custom account linking due to the existing Credential flow, ensure it correctly matches upon the verified `email` field.
 
-## 3. Architecture
-- **Config**: `lib/auth/nextauth-options.ts` adds `GoogleProvider` if keys exist.
-- **UI**: `components/SignInPanel.tsx` receives an `enableGoogle` prop.
-- **Database**: The existing `users` table handles account linking automatically via NextAuth (account linking logic is handled by the `adapter` or internally by NextAuth if using JWT strategy, though this kit uses a custom Credentials flow mixed with JWT. *Note: For full account linking with the custom implementation, ensure email addresses match*).
-
-## 4. Activation Prompt
-> "I want to activate the Google Auth Blueprint.
-> 1. Help me verify that `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` are set in `.env.local`.
-> 2. Explain how to configure the **Authorized Redirect URI** in the Google Cloud Console.
->    (Hint: It should be `YOUR_SITE_URL/api/auth/callback/google` e.g., `http://localhost:3000/api/auth/callback/google`).
-> 3. Verify that `SignInPanel.tsx` is correctly rendering the Google button when the prop is true."
-
-## 5. Security & Safety
-- **Environment Variables**: Never commit secrets to git. Ensure `.env.local` is in `.gitignore`.
-- **Redirect URI**: Must match exactly what is registered in GCP to prevent open redirect vulnerabilities.
+## Acceptance Criteria
+- [ ] Google button naturally conditionally renders when Google API keys are provided.
+- [ ] User can authenticate via Google and correctly route to the logged-in dashboard.
+- [ ] Google user data properly seeds/links into the underlying `users` database table.

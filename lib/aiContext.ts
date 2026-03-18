@@ -27,7 +27,6 @@ components: React components (actions in lib)
 db: SQL migrations (schema.sql)
 lib: Core logic (auth, db, stripe)
 scripts: DB management scripts
-tests: Vitest integration/unit tests
 
 Please assist me with adding features.
 

@@ -1,34 +1,22 @@
-# Blueprint: AI SDK Integration (Vercel AI SDK Core)
+# Spec: AI SDK Integration
 
-**Goal**: Implement a standardized detailed pattern for AI chat/completion integration using the Vercel AI SDK, configured for OpenRouter (model agnosticism) by default.
+## Goal
+Implement a standardized AI chat and completion interface utilizing the modern Vercel AI SDK Core. Enable streaming interfaces with minimal boilerplate.
 
-## 1. Objectives
-- Enable streaming chat interfaces with minimal boilerplate.
-- Support switching models (Claude 3.5 Sonnet, GPT-4o) via environment variables without code changes.
-- Ensure strict runtime validation of API keys.
+## Architecture Decisions
+- Config: Store AI provider settings and configurations in `lib/ai/provider.ts` (e.g., using `@ai-sdk/openai` configured for OpenRouter or OpenAI).
+- Backend: Expose standard streaming routes (e.g. `app/api/chat/route.ts`) acting as standard React Route Handlers.
+- Frontend: Use standard React hooks provided by the Vercel AI SDK, primarily `useChat`.
+- Model: Support switching underlying models seamlessly via standard environment variables.
 
-## 2. Dependencies
-- `ai`: The core Vercel AI SDK.
-- `@ai-sdk/openai`: The generic OpenAI-compatible provider (used for OpenRouter).
-- `zod`: For schema validation of tools (if added).
+## Constraints & Rules
+- Strict TypeScript must be used for tool definitions and responses (using `zod`).
+- Use the modern `streamText` and `generateText` APIs from the `ai` package. Avoid legacy helpers like `OpenAIStream`.
+- Keep API keys strictly server-side. Ensure no API keys or secrets are leaked to the client bundle.
+- Apply rate limiting on the API route utilizing the existing `lib/rate-limit.ts` logic to prevent abuse.
 
-## 3. Architecture & Files
-- **Env**: `OPENROUTER_API_KEY` (Added to `lib/env.ts`).
-- **Provider**: `lib/ai/provider.ts` - Configures the OpenRouter custom provider instance.
-- **Backend**: `app/api/chat/route.ts` - A standard Route Handler implementing `streamText`.
-- **Frontend**: Standard `useChat` hook from `ai/react` in UI components.
-
-## 4. Requirements
-- **Streaming**: Must use `streamText` for optimal latency.
-- **Security**: 
-  - API keys must never be exposed to the client.
-  - Rate limiting (reuse existing `lib/rate-limit.ts`) should be applied to the API route (e.g., 10 req/min).
-- **System Prompt**: Should be configurable (e.g., "You are a helpful assistant").
-
-## 5. Implementation Prompt
-> "Implement the AI SDK Blueprint. Install `ai` and `@ai-sdk/openai`. Update `lib/env.ts` to require `OPENROUTER_API_KEY`. Create `lib/ai/provider.ts` to export a configured `openrouter` provider object using the base URL `https://openrouter.ai/api/v1`. Create `app/api/chat/route.ts` that uses `streamText` with the model `deepseek/deepseek-chat` (as a default example). Add a simple rate limit check."
-
-## 6. Constraints
-- Use strict TypeScript.
-- Do not use the legacy `OpenAIStream` helpers; use the modern `streamText` API from `ai`.
-- Handle errors gracefully (try/catch around the stream creation).
+## Acceptance Criteria
+- [ ] Secure route handler correctly accepts and processes chat messages.
+- [ ] UI accurately streams responses in real-time.
+- [ ] Provider configuration limits API key exposure to server contexts.
+- [ ] Rate limits successfully trigger upon excessive requests.

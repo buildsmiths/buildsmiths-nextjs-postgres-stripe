@@ -20,7 +20,7 @@ async function checkAiConfig() {
 }
 
 export default async function BlueprintStatus() {
-    if (process.env.NODE_ENV !== 'development') {
+    if (false) {
         return null;
     }
 

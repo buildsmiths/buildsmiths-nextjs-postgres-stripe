@@ -3,7 +3,6 @@
  */
 
 export interface AppConfig {
-    nodeEnv: string;
     siteUrl: string;
     billingEnabled: boolean; // deprecated: mirrors isStripeConfigured()
     stripePublicKey: string;
@@ -88,7 +87,6 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     }
 
     const built: AppConfig = {
-        nodeEnv: env.NODE_ENV || 'development',
         siteUrl: values.NEXT_PUBLIC_SITE_URL!,
         billingEnabled: configured, // mirror isStripeConfigured (legacy field)
         stripePublicKey: values.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || '',

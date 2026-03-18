@@ -2,7 +2,6 @@ import { z } from "zod";
 
 const envSchema = z.object({
     // Node
-    NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 
     // Core
     NEXT_PUBLIC_SITE_URL: z.string().url().min(1),
@@ -22,7 +21,6 @@ const envSchema = z.object({
 
 // Parse and validate on import
 const processEnv = {
-    NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
     DATABASE_URL: process.env.DATABASE_URL,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
@@ -38,11 +36,7 @@ const parsed = envSchema.safeParse(processEnv);
 
 if (!parsed.success) {
     console.error("❌ Invalid environment variables:", JSON.stringify(parsed.error.format(), null, 2));
-    // In production, we strictly fail. In dev, we might tolerate some missing keys if we are just verifying.
-    // But for "Foundation & Hygiene" we want to fail fast.
-    if (process.env.NODE_ENV !== "test") {
-        throw new Error("Invalid environment variables");
-    }
+    throw new Error("Invalid environment variables");
 }
 
 export const env = parsed.success ? parsed.data : processEnv as z.infer<typeof envSchema>;
@@ -64,7 +58,6 @@ export function isStripeConfigured(): boolean {
  * Accessor for AppConfig compatibility (Migration layer)
  */
 export const config = {
-    nodeEnv: env.NODE_ENV,
     siteUrl: env.NEXT_PUBLIC_SITE_URL,
     billingEnabled: isStripeConfigured(),
     stripePublicKey: env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY || '',

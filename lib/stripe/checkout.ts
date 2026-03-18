@@ -14,9 +14,6 @@ export interface CheckoutSession {
 export async function createCheckoutSession(userId: string, priceId?: string): Promise<CheckoutSession> {
     const cfg = loadConfig();
     const price = priceId || cfg.premiumPlanPriceId;
-    if (cfg.nodeEnv !== 'production') {
-        return { id: `cs_test_${Math.random().toString(36).slice(2)}`, url: `${cfg.siteUrl}/mock/checkout?price=${price}` };
-    }
     const stripe = new Stripe(cfg.stripeSecretKey); // use default api version from SDK
     const session = await stripe.checkout.sessions.create({
         mode: 'subscription',

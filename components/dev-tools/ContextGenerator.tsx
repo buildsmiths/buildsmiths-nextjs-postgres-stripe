@@ -83,14 +83,6 @@ export function ContextGenerator() {
             <div className="space-y-4">
                 <div className="flex items-center justify-between">
                     <h3 className="font-semibold text-lg text-foreground">AI Context</h3>
-                    <Button
-                        onClick={handleCopy}
-                        size="sm"
-                        className={cn("gap-2 transition-all", copied ? "bg-green-600 hover:bg-green-700" : "")}
-                    >
-                        {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                        {copied ? "Copied!" : "Copy Context"}
-                    </Button>
                 </div>
                 <div className="bg-muted/50 border rounded-lg p-4 text-sm font-mono text-muted-foreground whitespace-pre-wrap">
                     {(AI_CONTEXT_PROMPT.split('Stack:')[0] ?? '').trim()}
@@ -112,42 +104,15 @@ export function ContextGenerator() {
                 </div>
             </div>
 
-            {/* Blueprints Selection */}
-            <div className="space-y-4">
-                <h3 className="flex items-center gap-2 font-semibold text-lg text-foreground">
-                    <Sparkles className="h-5 w-5 text-primary" />
-                    Feature Blueprints (Optional)
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    {BLUEPRINTS.map((bp) => {
-                        const isSelected = selectedBlueprints.includes(bp.id);
-                        return (
-                            <div
-                                key={bp.id}
-                                onClick={() => toggleBlueprint(bp.id)}
-                                className={cn(
-                                    "cursor-pointer group relative flex flex-col gap-2 p-4 rounded-lg border-2 transition-all duration-200",
-                                    isSelected
-                                        ? "border-primary bg-primary/5 shadow-sm"
-                                        : "border-transparent bg-muted/50 hover:bg-muted"
-                                )}
-                            >
-                                <div className="flex items-center justify-between">
-                                    <bp.icon className={cn("h-5 w-5", isSelected ? "text-primary" : "text-muted-foreground")} />
-                                    {isSelected
-                                        ? <CheckSquare className="h-5 w-5 text-primary" />
-                                        : <Square className="h-5 w-5 text-muted-foreground/50 group-hover:text-muted-foreground" />
-                                    }
-                                </div>
-                                <div>
-                                    <div className="font-semibold text-sm">{bp.name}</div>
-                                    <div className="text-xs text-muted-foreground leading-tight mt-1">{bp.description}</div>
-                                </div>
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
+            {/* Generate Button Full Width */}
+            <Button
+                onClick={handleCopy}
+                size="lg"
+                className={cn("w-full gap-2 transition-all font-semibold", copied ? "bg-green-600 hover:bg-green-700" : "")}
+            >
+                {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+                {copied ? "Copied!" : "Copy Full AI Context for Agent"}
+            </Button>
         </div>
     );
 }

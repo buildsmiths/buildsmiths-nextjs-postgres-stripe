@@ -22,7 +22,6 @@ export async function getServerAuthSession(req: RequestLike): Promise<AuthSessio
             NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
             VERCEL_URL: process.env.VERCEL_URL,
             DATABASE_URL: process.env.DATABASE_URL ? '[REDACTED]' : 'MISSING',
-            NODE_ENV: process.env.NODE_ENV,
         });
 
         // Ensure NEXTAUTH_URL is set so Auth.js doesn't fail server-side
@@ -43,7 +42,7 @@ export async function getServerAuthSession(req: RequestLike): Promise<AuthSessio
                 }
             }
         }
-        const allowDevShortcut = (process.env.NODE_ENV !== 'production') && (process.env.ALLOW_DEV_BEARER_SHORTCUT !== '0');
+        const allowDevShortcut = process.env.ALLOW_DEV_BEARER_SHORTCUT !== '0';
 
         const authz = req.headers.get('authorization') || req.headers.get('Authorization');
         if (authz) {
@@ -58,7 +57,7 @@ export async function getServerAuthSession(req: RequestLike): Promise<AuthSessio
                         log.debug('auth_session.dev_bearer', { userId, role: role ?? null });
                         return { userId, ...(role ? { role } : {}) } as AuthSession;
                     } else {
-                        log.warn('dev_bearer_present_but_disabled', { reason: process.env.NODE_ENV === 'production' ? 'production' : 'env_disabled' });
+                        log.warn('dev_bearer_present_but_disabled', { reason: 'env_disabled' });
                         return null;
                     }
                 }

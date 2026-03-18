@@ -40,28 +40,14 @@ function time<T>(_name: string, fn: () => Promise<T>): Promise<T> {
 }
 
 let cachedDbQuery: ((sql: string, params: any[]) => Promise<{ rows: any[] }>) | null = null;
-let dbQueryChain: Promise<any> = Promise.resolve();
-const shouldSerializeDbQueries = () =>
-    process.env.SERIALIZE_DB_QUERIES === '1' ||
-    !!process.env.VITEST_WORKER_ID ||
-    process.env.NODE_ENV === 'test';
 
 function ensureDbQuery() {
     if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL not set for DB');
     if (!cachedDbQuery) {
         const pool = getPool();
         cachedDbQuery = async (sql: string, params: any[]) => {
-            const run = async () => {
-                const res = await pool.query(sql, params);
-                return { rows: res.rows };
-            };
-            if (shouldSerializeDbQueries()) {
-                let out: { rows: any[] } = { rows: [] };
-                dbQueryChain = dbQueryChain.then(async () => { out = await run(); });
-                await dbQueryChain;
-                return out;
-            }
-            return run();
+            const res = await pool.query(sql, params);
+            return { rows: res.rows };
         };
     }
     return cachedDbQuery;
