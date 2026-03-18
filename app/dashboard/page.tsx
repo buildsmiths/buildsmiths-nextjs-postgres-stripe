@@ -1,14 +1,11 @@
 import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
 import BlueprintStatus from '@/components/dev-tools/BlueprintStatus';
 import { SystemActivityChart, ResourceUsageChart } from '@/components/admin/DashboardCharts';
-import { SetupChecklist } from '@/components/admin/SetupChecklist';
-import { StripeChecklist } from '@/components/admin/StripeChecklist';
 import { RecentActivity } from '@/components/admin/RecentActivity';
 // perf metrics removed in lean profile
 import { headers } from 'next/headers';
 import React from 'react';
 import PostCallbackStatus from '@/components/PostCallbackStatus';
-import NextStepsCard from '@/components/NextStepsCard';
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button";
 
@@ -65,24 +62,6 @@ export default async function DashboardPage() {
 
                 <section className="">
                     <SystemActivityChart />
-                </section>
-
-                {/* Top Row: Checklist & Action Items */}
-                <section className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-6">
-                        <SetupChecklist />
-                        <StripeChecklist />
-                    </div>
-                    <div className="space-y-6">
-                        <NextStepsCard
-                            title="Action Items"
-                            items={[
-                                <span><strong>Config Audit</strong>: Review <code>.env.local</code> and ensure <code>STRIPE_SECRET_KEY</code> is set for billing.</span>,
-                                <span><strong>Database</strong>: Run <code>npm run db:seed</code> if tables are empty.</span>,
-                                <span><strong>Users</strong>: You have {state.authenticated ? '1 (Self)' : '0 (Guest)'} active session.</span>,
-                            ]}
-                        />
-                    </div>
                 </section>
 
                 {/* Data Row: Real Logs & Mock Charts */}
