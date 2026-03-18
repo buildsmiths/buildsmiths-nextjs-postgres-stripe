@@ -1,249 +1,147 @@
 import React from 'react';
 import { headers } from 'next/headers';
 import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
-import NextStepsCard from '@/components/NextStepsCard';
-import { Badge } from "@/components/ui/badge"
+import { upgradeSubscription, manageSubscription } from './actions';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
+import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { InfoIcon, Shield, AlertCircle, CheckCircle2 } from "lucide-react"
-import { isStripeConfigured } from '@/lib/config';
-import { upgradeSubscription, manageSubscription } from './actions';
+import { Separator } from "@/components/ui/separator"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+export const metadata = {
+    title: 'Account Settings',
+    description: 'Manage your account and subscription tier'
+};
 
 export default async function AccountPage() {
-    let reqLike: any;
-    try {
-        const hdrs = await headers();
-        reqLike = { headers: hdrs } as any;
-    } catch {
-        // Fallback for build time or environments where headers() might fail
-        reqLike = { headers: { get: (_key: string) => null } } as any;
-    }
-
-    // Fetch current subscription/auth state
+    const hdrs = await headers();
+    const reqLike = { headers: hdrs } as any;
     const state = await deriveSubscriptionStateAsync(reqLike);
-    const isDemo = !state.authenticated;
-    const stripeConfigured = isStripeConfigured();
 
-    // Define display user - real if auth, mock if demo
-    const displayUser = isDemo ? {
-        name: "Guest User",
-        email: "guest@example.com",
-        id: "usr_mock_guest_123",
-        initials: "GU"
-    } : {
-        name: (state.rawSession as any)?.name || "User",
-        email: (state.rawSession as any)?.email || "No email",
-        id: (state.rawSession as any)?.userId || "Unknown ID",
-        initials: ((state.rawSession as any)?.email?.[0] || "U").toUpperCase()
-    };
-
-    // Extract plan details
-    const currentTier = (state.tier || 'free') as string;
-    const isPremium = currentTier === 'premium';
-
-    // Format date if available
-    let periodEnd = "N/A";
-    const anyState = state as any;
-    const rawPeriod = anyState?.subscription?.currentPeriodEnd || anyState?.currentPeriodEnd;
-    if (rawPeriod) {
-        try {
-            const d = (rawPeriod instanceof Date) ? rawPeriod : new Date(rawPeriod);
-            if (!Number.isNaN(d.getTime())) {
-                periodEnd = d.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-            }
-        } catch (e) { }
-    }
+    const email = state.rawSession?.email || "User";
 
     return (
-        <main aria-label="Account" className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-
-            {/* Page Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
+        <main aria-label="Account Settings" className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+            <header className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="space-y-1">
                     <h1 className="text-3xl font-bold tracking-tight">Account Settings</h1>
-                    <p className="text-muted-foreground mt-1">
-                        Manage your profile, billing, and notification preferences.
+                    <p className="text-muted-foreground">
+                        Manage your profile, preferences, and subscription tier.
                     </p>
                 </div>
-                {isDemo && (
-                    <Button variant="outline" asChild>
-                        <a href="/api/auth/signin">Sign In</a>
-                    </Button>
-                )}
-                {!isDemo && (
-                    <Button variant="outline" className="text-muted-foreground" disabled>
-                        Signed in as {displayUser.email}
-                    </Button>
-                )}
-            </div>
+                <div className="flex items-center gap-4">
+                    <Avatar className="h-12 w-12 border-2 border-border">
+                        <AvatarImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`} alt="Avatar" />
+                        <AvatarFallback>{email.substring(0, 2).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                </div>
+            </header>
 
-            {/* Demo Banner */}
-            {isDemo && (
-                <Alert className="bg-muted/50 border-muted-foreground/20">
-                    <InfoIcon className="h-4 w-4" />
-                    <AlertTitle>Public Demo Mode</AlertTitle>
-                    <AlertDescription className="flex items-center justify-between flex-wrap gap-2">
-                        <span>You are viewing this page as a visitor. The data below is mocked for demonstration purposes.</span>
-                        <Button variant="link" className="h-auto p-0 text-primary" asChild>
-                            <a href="/quickstart">Get the Code</a>
-                        </Button>
-                    </AlertDescription>
-                </Alert>
-            )}
-
-            <div className="grid gap-6 md:grid-cols-2">
-
-                {/* Left Column */}
-                <div className="space-y-6">
-
-                    {/* Profile Card */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* Profile Information */}
+                <div className="md:col-span-2 space-y-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Profile</CardTitle>
-                            <CardDescription>Your personal information.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            <div className="flex items-center gap-4">
-                                <Avatar className="h-16 w-16 border-2 border-border shadow-sm">
-                                    <AvatarFallback className="text-lg bg-primary/10 text-primary font-bold">
-                                        {displayUser.initials}
-                                    </AvatarFallback>
-                                </Avatar>
-                                <div className="space-y-1">
-                                    <h3 className="font-medium leading-none">{displayUser.name}</h3>
-                                    <p className="text-sm text-muted-foreground">{displayUser.email}</p>
-                                    <Badge variant="outline" className="font-mono text-[10px] mt-1 text-muted-foreground">
-                                        {displayUser.id}
-                                    </Badge>
-                                </div>
-                            </div>
-
-                            <Separator />
-
-                            <div className="grid gap-4">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="email">Email Address</Label>
-                                    <Input id="email" value={displayUser.email} disabled className="bg-muted/50" />
-                                </div>
-                            </div>
-                        </CardContent>
-                        <CardFooter className="border-t px-6 py-4 bg-muted/50 flex justify-between">
-                            <span className="text-xs text-muted-foreground italic">Managed via Authentication Provider</span>
-                        </CardFooter>
-                    </Card>
-
-                    {/* Subscription/Plan Card */}
-                    <Card className={isPremium ? "border-primary/20 bg-primary/5" : ""}>
-                        <CardHeader>
-                            <CardTitle className="flex items-center justify-between">
-                                <span>Subscription</span>
-                                <Badge variant={isPremium ? "default" : "secondary"} className="uppercase">
-                                    {currentTier}
-                                </Badge>
-                            </CardTitle>
+                            <CardTitle>Profile Details</CardTitle>
                             <CardDescription>
-                                Manage your plan and billing details.
+                                Personal information associated with your account.
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            {!stripeConfigured && (
-                                <Alert variant="destructive">
-                                    <AlertCircle className="h-4 w-4" />
-                                    <AlertTitle>Stripe Not Configured</AlertTitle>
-                                    <AlertDescription className="text-xs mt-1">
-                                        Add Stripe keys to .env.local to enable billing features.
-                                    </AlertDescription>
-                                </Alert>
-                            )}
-                            <div className="flex items-center justify-between text-sm">
-                                <span className="text-muted-foreground">Current Plan</span>
-                                <span className="font-medium capitalize">{currentTier} Tier</span>
-                            </div>
-                            {isPremium && (
-                                <div className="flex items-center justify-between text-sm">
-                                    <span className="text-muted-foreground">Renews on</span>
-                                    <span className="font-medium">{periodEnd}</span>
-                                </div>
-                            )}
-                            <div className="rounded-lg border p-3 bg-background text-sm text-muted-foreground">
-                                {isPremium
-                                    ? "You have full access to all premium features."
-                                    : "Upgrade to unlock premium api endpoints and priority support."
-                                }
+                            <div className="grid gap-2">
+                                <Label htmlFor="email">Email Address</Label>
+                                <Input id="email" type="email" value={email} readOnly disabled />
                             </div>
                         </CardContent>
-                        <CardFooter className="border-t px-6 py-4">
-                            {!stripeConfigured ? (
-                                <Button className="w-full" disabled>Billing Disabled</Button>
-                            ) : isDemo ? (
-                                <Button className="w-full" asChild variant="outline">
-                                    <a href="/api/auth/signin">Sign in to Upgrade</a>
-                                </Button>
-                            ) : isPremium ? (
+                    </Card>
+
+                    {/* Preferences Placeholder */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Preferences</CardTitle>
+                            <CardDescription>
+                                Manage your communication and display preferences.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-6">
+                            <div className="flex items-center justify-between">
+                                <div className="space-y-0.5">
+                                    <Label className="text-base">Marketing Emails</Label>
+                                    <p className="text-sm text-muted-foreground">Receive news and updates.</p>
+                                </div>
+                                <Switch disabled={true} checked={false} aria-label="Marketing emails" />
+                            </div>
+                            <Separator />
+                            <div className="flex items-center justify-between">
+                                <div className="space-y-0.5">
+                                    <Label className="text-base">Security Alerts</Label>
+                                    <p className="text-sm text-muted-foreground">Receive critical security notifications.</p>
+                                </div>
+                                <Switch disabled={true} checked={true} aria-label="Security alerts" />
+                            </div>
+                            <Separator />
+                            <div className="flex items-center justify-between">
+                                <div className="space-y-0.5">
+                                    <Label className="text-base">Public Profile</Label>
+                                    <p className="text-sm text-muted-foreground">Allow others to see your profile.</p>
+                                </div>
+                                <Switch disabled={true} checked={true} aria-label="Public profile" />
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                {/* Subscription Tier */}
+                <div className="space-y-6">
+                    <Card className="h-full flex flex-col">
+                        <CardHeader>
+                            <CardTitle>Subscription</CardTitle>
+                            <CardDescription>
+                                Your current plan and features.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex-1 space-y-4">
+                            <div className="flex items-center gap-2 mb-4">
+                                <span className="text-sm font-medium text-muted-foreground">Current Plan:</span>
+                                <Badge variant={state.tier === 'premium' ? "default" : "secondary"} className="capitalize">
+                                    {state.tier === 'premium' ? 'Pro Plan' : 'Free Plan'}
+                                </Badge>
+                            </div>
+                            {state.tier === 'premium' ? (
+                                <ul className="space-y-2 text-sm">
+                                    <li className="flex items-center gap-2">✓ Priority Support</li>
+                                    <li className="flex items-center gap-2">✓ Unlimited Projects</li>
+                                    <li className="flex items-center gap-2">✓ Advanced Analytics</li>
+                                    <li className="flex items-center gap-2">✓ Custom Domains</li>
+                                </ul>
+                            ) : (
+                                <ul className="space-y-2 text-sm text-muted-foreground">
+                                    <li className="flex items-center gap-2">✓ Basic Support</li>
+                                    <li className="flex items-center gap-2">✓ 1 Project</li>
+                                    <li className="flex items-center gap-2">✓ Standard Analytics</li>
+                                    <li className="flex items-center gap-2 opacity-50">✕ Custom Domains</li>
+                                </ul>
+                            )}
+                        </CardContent>
+                        <CardFooter className="pt-6">
+                            {state.tier === 'premium' ? (
                                 <form action={manageSubscription} className="w-full">
-                                    <Button variant="outline" className="w-full" type="submit">
-                                        Manage Billing
+                                    <Button className="w-full" asChild variant="outline">
+                                        <button type="submit">Manage Subscription</button>
                                     </Button>
                                 </form>
                             ) : (
                                 <form action={upgradeSubscription} className="w-full">
-                                    <Button className="w-full" type="submit">
-                                        Upgrade to Premium
+                                    <Button className="w-full" asChild variant="default">
+                                        <button type="submit">Upgrade to Pro</button>
                                     </Button>
                                 </form>
                             )}
                         </CardFooter>
                     </Card>
-
-                </div>
-
-                {/* Right Column */}
-                <div className="space-y-6">
-
-                    {/* Preferences Card */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Preferences</CardTitle>
-                            <CardDescription>Manage your app notifications and settings.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
-                            <div className="flex items-center justify-between space-x-2">
-                                <div className="space-y-0.5">
-                                    <Label className="text-base">Marketing Emails</Label>
-                                    <p className="text-sm text-muted-foreground">Receive emails about new features and updates.</p>
-                                </div>
-                                <Switch disabled={isDemo} checked={false} aria-label="Marketing emails" />
-                            </div>
-                            <Separator />
-                            <div className="flex items-center justify-between space-x-2">
-                                <div className="space-y-0.5">
-                                    <Label className="text-base">Security Alerts</Label>
-                                    <p className="text-sm text-muted-foreground">Get notified about suspicious activity.</p>
-                                </div>
-                                <Switch disabled={isDemo} checked={true} aria-label="Security alerts" />
-                            </div>
-                            <Separator />
-                            <div className="flex items-center justify-between space-x-2">
-                                <div className="space-y-0.5">
-                                    <Label className="text-base">Public Profile</Label>
-                                    <p className="text-sm text-muted-foreground">Make your profile visible to other users.</p>
-                                </div>
-                                <Switch disabled={isDemo} checked={true} aria-label="Public profile" />
-                            </div>
-                        </CardContent>
-                        {isDemo && (
-                            <CardFooter className="bg-muted/50 px-6 py-3 border-t">
-                                <p className="text-xs text-muted-foreground">Settings are disabled in demo mode.</p>
-                            </CardFooter>
-                        )}
-                    </Card>
-
                 </div>
             </div>
         </main>

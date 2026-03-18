@@ -4,15 +4,11 @@ import pg from 'pg';
 
 // Load environment variables with precedence:
 // 1. Shell (already in process.env)
-// 2. .env.local (if exists) - loaded first by dotenv, won't overwrite shell
 // 3. .env (if exists) - loaded second, won't overwrite shell or .env.local
 
-// We must import env AFTER loading variables, otherwise validation might fail
-// Dynamic import to avoid hoisting issues
 // import { env } from '@/lib/env';
 
 async function run() {
-    // Import env dynamically so dotenv has time to load
     const { env } = await import('@/lib/env');
 
     const sqlFile = process.argv[2] || 'db/schema.sql';

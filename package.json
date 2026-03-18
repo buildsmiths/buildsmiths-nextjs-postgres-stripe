@@ -7,7 +7,6 @@
     "build": "next build --turbopack",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "doctor": "node --import tsx --env-file=.env.local scripts/doctor.ts",
     "db:schema": "node --import tsx --env-file=.env.local scripts/db-apply.ts db/schema.sql",
     "db:seed": "node --import tsx --env-file=.env.local scripts/seed.ts"
   },
@@ -33,6 +32,7 @@
   "devDependencies": {
     "@next/eslint-plugin-next": "^16.1.7",
     "@tailwindcss/postcss": "^4.2.1",
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^25.5.0",
     "@types/pg": "^8.18.0",
     "@types/react": "^19.2.14",

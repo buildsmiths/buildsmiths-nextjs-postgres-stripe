@@ -4,7 +4,6 @@ import bcrypt from 'bcryptjs';
 import pg from 'pg';
 
 async function query(sql: string, params: any[] = []) {
-    // Dynamic import to ensure env is loaded after dotenv
     const { env } = await import('@/lib/env');
     const pool = new pg.Pool({ connectionString: env.DATABASE_URL });
     try {
