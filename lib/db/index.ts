@@ -1,5 +1,5 @@
 // Database adapter entry
-// Provides DB-backed repositories for subscriptions, audit, and webhooks.
+// Provides DB-backed repositories for subscriptions, audit.
 // Note: DATABASE_URL is required only when actually performing DB operations.
 // This allows the UI to boot without a database configured.
 
@@ -26,12 +26,7 @@ export interface AuditRepo {
     recent(limit: number): Promise<Array<{ ts: string; type: string; actor?: string; payload?: any }>>;
 }
 
-export interface WebhookRepo {
-    recordProcessed(id: string, type: string, userId?: string): Promise<{ duplicate: boolean }>;
-    isProcessed(id: string): Promise<boolean>;
-}
 
-import { createDbWebhookRepo } from './webhookRepo';
 import { createDbAuditRepo } from './auditRepo';
 import { getPool } from './simple';
 
@@ -139,15 +134,6 @@ export function getAuditRepo(): AuditRepo {
     return cachedDbAudit;
 }
 
-let cachedDbWebhook: WebhookRepo | null = null;
-export function getWebhookRepo(): WebhookRepo {
-    if (!cachedDbWebhook) {
-        const baseRun = ensureDbQuery();
-        const run = async (sql: string, params: any[]) => baseRun(sql, params);
-        cachedDbWebhook = createDbWebhookRepo(run) as WebhookRepo;
-    }
-    return cachedDbWebhook!;
-}
 
 // Legacy no-ops retained for API compatibility in tests; does nothing in DB mode
 export function resetInMemoryPersistence() { /* no-op under mandatory DB */ }

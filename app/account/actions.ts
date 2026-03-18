@@ -3,12 +3,9 @@
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { getEffectiveTier } from '@/lib/access/policy';
-import { createCheckoutSession } from '@/lib/stripe/checkout';
-import { createPortalSession } from '@/lib/stripe/portal';
 import { recordAudit } from '@/lib/logging/audit';
 import { log } from '@/lib/logging/log';
 import { deriveSubscriptionStateAsync } from '@/lib/access/subscriptionState';
-import { isStripeConfigured } from '@/lib/config';
 
 async function getSession() {
     const hdrs = await headers();
@@ -23,28 +20,8 @@ export async function upgradeSubscription() {
         redirect('/auth');
     }
 
-    if (!isStripeConfigured()) {
-        // In a real app we might show a toast, but for this template check
-        // we'll just throw or return an error state. 
-        // Since this is a form action, raising an error is visible if handled, 
-        // but lets just redirect to account with an error param or similar.
-        // For simplicity:
-        throw new Error('Stripe is not configured');
-    }
-
-    const tier = getEffectiveTier(session);
-    if (tier === 'premium') {
-        // Already premium
-        redirect('/account');
-    }
-
-    const checkout = await createCheckoutSession(session.userId);
-    recordAudit('subscription.checkout.requested', { actor: session.userId, checkoutId: checkout.id });
-    log.info('action.upgradeSubscription.success', { userId: session.userId, checkoutId: checkout.id });
-
-    if (checkout.url) {
-        redirect(checkout.url);
-    }
+    log.info('action.upgradeSubscription.not_implemented', { userId: session.userId });
+    throw new Error('Billing is not implemented. Refer to blueprints/billing-stripe.md to add Stripe integration.');
 }
 
 export async function manageSubscription() {
@@ -53,21 +30,6 @@ export async function manageSubscription() {
         redirect('/auth');
     }
 
-    if (!isStripeConfigured()) {
-        throw new Error('Stripe is not configured');
-    }
-
-    const tier = getEffectiveTier(session);
-    if (tier !== 'premium') {
-        // Not premium, can't manage
-        redirect('/account');
-    }
-
-    const portal = await createPortalSession(session.userId);
-    recordAudit('subscription.portal.requested', { actor: session.userId, portalId: portal.id });
-    log.info('action.manageSubscription.success', { userId: session.userId, portalId: portal.id });
-
-    if (portal.url) {
-        redirect(portal.url);
-    }
+    log.info('action.manageSubscription.not_implemented', { userId: session.userId });
+    throw new Error('Billing is not implemented. Refer to blueprints/billing-stripe.md to add Stripe integration.');
 }

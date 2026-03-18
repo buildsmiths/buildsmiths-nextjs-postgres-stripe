@@ -22,8 +22,6 @@ create unique index if not exists users_email_lower_idx on public.users (lower(e
 -- Subscriptions (single row per user)
 create table if not exists public.subscriptions (
   user_id uuid primary key references public.users(id) on delete cascade,
-  stripe_customer_id text,
-  stripe_subscription_id text,
   tier text not null check (tier in ('free','premium')),
   status text not null check (status in ('active','canceled','none')),
   current_period_end timestamptz,
@@ -31,7 +29,6 @@ create table if not exists public.subscriptions (
   canceled_at timestamptz,
   updated_at timestamptz not null default now()
 );
-create unique index if not exists idx_subscriptions_stripe_customer on public.subscriptions(stripe_customer_id);
 create index if not exists idx_subscriptions_status on public.subscriptions(status);
 
 -- Audit events (append-only)
@@ -47,14 +44,4 @@ create index if not exists idx_audit_events_ts on public.audit_events(ts desc);
 create index if not exists idx_audit_events_actor on public.audit_events(actor);
 create index if not exists idx_audit_events_type on public.audit_events(type);
 
--- Webhook idempotency
-create table if not exists public.webhook_events (
-  id text primary key,
-  type text not null,
-  processed_at timestamptz not null default now(),
-  user_id text,
-  duplicate boolean not null default false
-);
-create index if not exists idx_webhook_events_processed_at on public.webhook_events(processed_at desc);
-create index if not exists idx_webhook_events_type on public.webhook_events(type);
 -- End of bootstrap

@@ -22,7 +22,7 @@ export default function Landing() {
                         <a href="/dashboard">View Demo Dashboard</a>
                     </Button>
                     <Button asChild variant="outline" size="lg" className="h-12 px-8">
-                        <a href="https://github.com/buildsmiths/buildsmiths-nextjs-postgres-stripe" target="_blank" rel="noreferrer">
+                        <a href="https://github.com/buildsmiths/buildsmiths-nextjs-postgres-base" target="_blank" rel="noreferrer">
                             GitHub
                         </a>
                     </Button>
@@ -62,7 +62,7 @@ export default function Landing() {
                                 </div>
                                 <pre className="p-4 text-sm font-mono overflow-x-auto leading-relaxed">
                                     {`# 1. Clone & Enter
-git clone https://github.com/buildsmiths/buildsmiths-nextjs-postgres-stripe.git my-saas
+git clone https://github.com/buildsmiths/buildsmiths-nextjs-postgres-base.git my-saas
 cd my-saas
 
 # 2. Install & Configure
@@ -104,7 +104,7 @@ npm run dev`}
                                 </div>
                                 <div className="grid grid-cols-[120px_1fr] p-3 gap-2 hover:bg-muted/30 transition-colors">
                                     <span className="font-mono text-muted-foreground">lib/</span>
-                                    <span className="text-foreground">Core access, auth, db, and stripe logic</span>
+                                    <span className="text-foreground">Core access, auth, db, payments optional</span>
                                 </div>
                                 <div className="grid grid-cols-[120px_1fr] p-3 gap-2 hover:bg-muted/30 transition-colors">
                                     <span className="font-mono text-muted-foreground">scripts/</span>
@@ -201,10 +201,10 @@ npm run dev`}
                                 Open source and free to use. Licensed under MIT.
                             </p>
                             <div className="bg-muted/50 p-3 rounded text-xs font-mono mb-2">
-                                buildsmiths/buildsmiths-nextjs-postgres-stripe
+                                buildsmiths/buildsmiths-nextjs-postgres-base
                             </div>
                             <Button className="w-full" asChild>
-                                <a href="https://github.com/buildsmiths/buildsmiths-nextjs-postgres-stripe" target="_blank" rel="noreferrer">
+                                <a href="https://github.com/buildsmiths/buildsmiths-nextjs-postgres-base" target="_blank" rel="noreferrer">
                                     <Github className="mr-2 h-4 w-4" />
                                     Star on GitHub
                                 </a>
