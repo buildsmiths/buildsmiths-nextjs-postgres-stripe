@@ -10,7 +10,7 @@
 - Auth-first flow with Auth.js Credentials (email + password) and a built-in server action for registration.
 - Route gating and session strictness via Next.js Middleware (`proxy.ts`).
 - Fully typed data interaction strictly backed by raw PostgreSQL connections natively.
-- No UI component lock-in — Just pure Tailwind CSS V4 and React 19.
+- No UI component lock-in — Just pure Tailwind CSS V4 and React 19..
 - No unused heavy utility packages.
 
 ---
