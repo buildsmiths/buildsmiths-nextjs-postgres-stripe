@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from "@/components/ui/badge"
-import { Check, Terminal, Zap, BookOpen, Layers, Code2, Box, Github, ExternalLink, FolderTree } from "lucide-react"
+import { Check, Terminal, Zap, BookOpen, Layers, Code2, Box, GitBranch, ExternalLink, FolderTree } from "lucide-react"
 
 
 export default function Landing() {
@@ -204,7 +204,7 @@ npm run dev`}
                             </div>
                             <Button className="w-full" asChild>
                                 <a href="https://github.com/buildsmiths/buildsmiths-nextjs-postgres-base" target="_blank" rel="noreferrer">
-                                    <Github className="mr-2 h-4 w-4" />
+                                    <GitBranch className="mr-2 h-4 w-4" />
                                     Star on GitHub
                                 </a>
                             </Button>
