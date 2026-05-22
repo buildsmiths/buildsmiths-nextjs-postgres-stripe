@@ -1,22 +1,9 @@
-// Load environment variables with precedence
-
 import bcrypt from 'bcryptjs';
-import pg from 'pg';
-
-async function query(sql: string, params: any[] = []) {
-    const { env } = await import('@/lib/env');
-    const pool = new pg.Pool({ connectionString: env.DATABASE_URL });
-    try {
-        const res = await pool.query(sql, params);
-        return { rows: res.rows };
-    } finally {
-        await pool.end();
-    }
-}
+import { db } from '../lib/db';
+import { users, subscriptions } from '../db/schema';
+import { eq } from 'drizzle-orm';
 
 async function main() {
-    // These keys are optional and specific to seeding, so we access process.env directly
-    // rather than adding them to the global validation schema.
     const email = process.env.SEED_EMAIL || 'dev@example.com';
     const password = process.env.SEED_PASSWORD || 'Password123!';
 
@@ -24,28 +11,26 @@ async function main() {
 
     const hash = await bcrypt.hash(password, 10);
 
-    // upsert user
-    const userRes = await query(
-        `insert into users (email, password_hash)
-         values ($1, $2)
-         on conflict (email) do update set password_hash = excluded.password_hash
-         returning id`,
-        [email, hash]
-    );
+    let user = await db.select().from(users).where(eq(users.email, email)).limit(1).then(res => res[0]);
+    
+    if (user) {
+        await db.update(users).set({ passwordHash: hash }).where(eq(users.id, user.id));
+    } else {
+        const insertRes = await db.insert(users).values({ email, passwordHash: hash }).returning({ id: users.id });
+        user = insertRes[0] as any;
+    }
 
-    const userId = userRes.rows[0]?.id;
+    const userId = user?.id;
     if (!userId) throw new Error('Failed to create or fetch user');
 
-    // ensure a free subscription row exists
-    await query(
-        `insert into subscriptions (user_id, tier, status)
-         values ($1, 'free', 'none')
-         on conflict (user_id) do nothing`,
-        [userId]
-    );
+    const existingSub = await db.select().from(subscriptions).where(eq(subscriptions.userId, userId)).limit(1).then(res => res[0]);
+    if (!existingSub) {
+        await db.insert(subscriptions).values({ userId, tier: 'free', status: 'none' });
+    }
 
     console.log(`✅ Seeded successfully.`);
     console.log(JSON.stringify({ email, userId }, null, 2));
+    process.exit(0);
 }
 
 main().catch((err) => {

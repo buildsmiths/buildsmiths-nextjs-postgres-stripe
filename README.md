@@ -30,10 +30,10 @@ cp .env.example .env.local
 - DATABASE_URL (Postgres connection string)
 - NEXTAUTH_SECRET (any strong random string)
 
-3) Apply the database schema (idempotent; safe to re-run)
+3) Push the Drizzle database schema
 
 ```bash
-npm run db:schema
+npm run db:push
 ```
 Reads `DATABASE_URL` from `.env.local`.
 
@@ -68,11 +68,11 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 openssl rand -base64 32
 ```
 
-3) Apply the database schema
+3) Push the Drizzle database schema
 ```bash
-npm run db:schema
+npm run db:push
 ```
-This starter does not auto-migrate. Tables are created when you run the bootstrap script above. It’s idempotent and safe to run again.
+This starter uses Drizzle ORM to manage the database schema. The script pushes the current definitions in `db/schema.ts` to your configured `DATABASE_URL`.
 
 4) Install dependencies and run locally
 ```bash

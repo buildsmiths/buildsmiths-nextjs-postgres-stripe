@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <Link href="/" className="font-semibold text-sm">BuildSmiths StarterKit</Link>
                             <nav className="flex items-center gap-4 text-xs text-muted-foreground">
                                 <NavLink className="hover:text-foreground" href="/">Home</NavLink>
-                                <NavLink className="hover:text-foreground" href="/quickstart">Quickstart</NavLink>
+                                <NavLink className="hover:text-foreground" href="/#quickstart">Quickstart</NavLink>
                                 <NavLink className="hover:text-foreground" href="/dashboard">Dashboard</NavLink>
                                 <NavLink className="hover:text-foreground" href="/blueprints">Blueprints</NavLink>
                                 <NavLink className="hover:text-foreground" href="/account">Account</NavLink>
