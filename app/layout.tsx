@@ -6,9 +6,28 @@ import NavLink from '@/components/NavLink';
 import Providers from '@/components/Providers';
 import ThemeToggle from '@/components/ThemeToggle';
 
-export const metadata = {
-    title: 'BuildSmiths StarterKit',
-    description: 'BuildSmiths StarterKit: Next.js, Postgres, and optional Stripe.'
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: {
+        template: '%s | BuildSmiths StarterKit',
+        default: 'BuildSmiths StarterKit | The AI-Native SaaS Starter',
+    },
+    description: 'A minimalist foundation for 2026. Next.js 16, Postgres, and AI-ready Blueprints.',
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+    openGraph: {
+        title: 'BuildSmiths StarterKit | The AI-Native SaaS Starter',
+        description: 'A minimalist foundation for 2026. Next.js 16, Postgres, and AI-ready Blueprints.',
+        url: '/',
+        siteName: 'BuildSmiths StarterKit',
+        locale: 'en_US',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'BuildSmiths StarterKit',
+        description: 'A minimalist foundation for 2026. Next.js 16, Postgres, and AI-ready Blueprints.',
+    },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
