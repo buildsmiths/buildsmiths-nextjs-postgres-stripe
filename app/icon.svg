@@ -1,0 +1,9 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Minimal 2-Tone BuildSmiths geometric logo -->
+  <!-- Top isometric diamond -->
+  <path d="M256 64L64 160L256 256L448 160L256 64Z" fill="#3b82f6"/>
+  <!-- Left/Bottom dark face -->
+  <path d="M64 160V352L256 448V256L64 160Z" fill="#171717"/>
+  <!-- Right bottom accent -->
+  <path d="M448 160V352L256 448V256L448 160Z" fill="#2563eb" fill-opacity="0.2"/>
+</svg>
