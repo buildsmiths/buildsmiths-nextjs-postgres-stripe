@@ -7,13 +7,15 @@
     "build": "next build --turbopack",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "db:schema": "node --import tsx --env-file=.env.local scripts/db-apply.ts db/schema.sql",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
     "db:seed": "node --import tsx --env-file=.env.local scripts/seed.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "drizzle-orm": "^0.45.2",
     "lucide-react": "^1.16.0",
     "next": "^16.2.6",
     "next-auth": "^4.24.14",
@@ -34,6 +36,7 @@
     "@types/pg": "^8.20.0",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
+    "drizzle-kit": "^0.31.10",
     "postcss": "^8.5.15",
     "tsx": "^4.22.3",
     "typescript": "^6.0.3"

@@ -8,8 +8,6 @@ export default withAuth({
 
 export const config = {
   matcher: [
-    "/dashboard/:path*",
-    "/account/:path*",
-    // Add other protected routes here
+    '/((?!api|_next/static|_next/image|favicon.ico$|^/$|^/auth|^/blueprints).*)',
   ],
 };

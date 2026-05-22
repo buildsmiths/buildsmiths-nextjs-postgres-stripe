@@ -1,8 +1,10 @@
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { compare } from 'bcryptjs';
-import { query } from './db';
+import { db } from './db';
+import { users } from '@/db/schema';
 import { getServerSession } from 'next-auth';
+import { eq, sql } from 'drizzle-orm';
 
 const providers: any[] = [
     Credentials({
@@ -15,11 +17,17 @@ const providers: any[] = [
             const email = creds?.email as string | undefined;
             const password = creds?.password as string | undefined;
             if (!email || !password) return null;
-            const { rows } = await query<{ id: string; email: string; password_hash: string }>(
-                'select id, email, password_hash from users where lower(email)=lower($1) limit 1',
-                [email]
-            );
-            const user = rows[0];
+            
+            const userRows = await db.select({
+                id: users.id,
+                email: users.email,
+                password_hash: users.passwordHash
+            })
+            .from(users)
+            .where(sql`lower(${users.email}) = lower(${email})`)
+            .limit(1);
+
+            const user = userRows[0];
             if (!user) return null;
             const ok = await compare(password, user.password_hash);
             return ok ? { id: user.id, email: user.email } : null;

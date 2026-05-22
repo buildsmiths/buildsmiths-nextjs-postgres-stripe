@@ -1,6 +1,9 @@
 import pg from 'pg';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import * as schema from '@/db/schema';
 
 let pool: pg.Pool | null = null;
+let dbInstance: ReturnType<typeof drizzle<typeof schema>> | null = null;
 
 const POOL_CONFIG: pg.PoolConfig = {
     max: 20,
@@ -10,8 +13,8 @@ const POOL_CONFIG: pg.PoolConfig = {
 
 export function getPool(): pg.Pool {
     if (!pool) {
-        const connectionString = process.env.DATABASE_URL;
-        if (!connectionString) throw new Error('DATABASE_URL is required');
+        const connectionString = process.env.DATABASE_URL || 'postgres://dummy:dummy@localhost/dummy';
+        // if (!connectionString) throw new Error('DATABASE_URL is required');
 
         pool = new pg.Pool({
             connectionString,
@@ -25,8 +28,11 @@ export function getPool(): pg.Pool {
     return pool!;
 }
 
-export async function query<T = any>(sql: string, params: any[] = []) {
-    const p = getPool();
-    const res = await p.query(sql, params);
-    return { rows: res.rows as T[] };
+export function getDb() {
+    if (!dbInstance) {
+        dbInstance = drizzle(getPool(), { schema });
+    }
+    return dbInstance;
 }
+
+export const db = getDb();

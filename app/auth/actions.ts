@@ -1,7 +1,8 @@
 'use server';
 
 import { hash } from 'bcryptjs';
-import { query } from '@/lib/db';
+import { db } from '@/lib/db';
+import { users } from '@/db/schema';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -26,7 +27,7 @@ export async function registerAction(prevState: any, formData: FormData) {
     const pw = await hash(password, 12);
 
     try {
-        await query('insert into users(email, password_hash) values ($1, $2)', [email, pw]);
+        await db.insert(users).values({ email, passwordHash: pw });
     } catch (e: any) {
         if (/unique|duplicate/i.test(e?.message || '')) {
             return { ok: false, code: 'EMAIL_IN_USE', message: 'This email is already registered.' };

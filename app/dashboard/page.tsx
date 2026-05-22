@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { SystemActivityChart, ResourceUsageChart } from '@/components/admin/DashboardCharts';
@@ -10,6 +11,10 @@ import { Badge } from "@/components/ui/badge";
 export default async function DashboardPage() {
 
     const session = await getServerSession(authOptions);
+
+    if (!session || !(session as any).user) {
+        redirect('/auth');
+    }
 
     return (
         <main aria-label="Admin Dashboard" className="max-w-5xl mx-auto px-4 py-10 space-y-8">

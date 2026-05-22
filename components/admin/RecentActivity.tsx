@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { query } from '@/lib/db';
+import { db } from '@/lib/db';
+import { auditEvents } from '@/db/schema';
+import { desc } from 'drizzle-orm';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from "@/components/ui/badge"
 
@@ -15,13 +17,11 @@ interface AuditEvent {
 export async function RecentActivity() {
     let events: AuditEvent[] = [];
     try {
-        const res = await query<AuditEvent>(`
-            select id, ts, actor, type, payload 
-            from audit_events 
-            order by ts desc 
-            limit 5
-        `);
-        events = res.rows;
+        const result = await db.select().from(auditEvents).orderBy(desc(auditEvents.ts)).limit(5);
+        events = result.map(evt => ({
+            ...evt,
+            ts: new Date(evt.ts)
+        }));
     } catch (e) {
         console.error("Failed to fetch audit events", e);
     }
