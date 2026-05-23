@@ -1,5 +1,5 @@
 {
-  "name": "buildsmiths-nextjs-postgres-base",
+  "name": "buildsmiths-nextjs-postgres",
   "version": "1.0.0",
   "private": true,
   "scripts": {

@@ -22,7 +22,7 @@ export default function Landing() {
                         <a href="/dashboard">View Demo Dashboard</a>
                     </Button>
                     <Button asChild variant="outline" size="lg" className="h-12 px-8">
-                        <a href="https://github.com/buildsmiths/buildsmiths-nextjs-postgres-base" target="_blank" rel="noreferrer">
+                        <a href="https://github.com/buildsmiths/buildsmiths-nextjs-postgres" target="_blank" rel="noreferrer">
                             GitHub
                         </a>
                     </Button>
@@ -61,7 +61,7 @@ export default function Landing() {
                                 </div>
                                 <pre className="p-4 text-sm font-mono overflow-x-auto leading-relaxed">
                                     {`# 1. Clone & Enter
-git clone https://github.com/buildsmiths/buildsmiths-nextjs-postgres-base.git my-saas
+git clone https://github.com/buildsmiths/buildsmiths-nextjs-postgres.git my-saas
 cd my-saas
 
 # 2. Install & Configure
@@ -200,10 +200,10 @@ npm run dev`}
                                 Open source and free to use. Licensed under MIT.
                             </p>
                             <div className="bg-muted/50 p-3 rounded text-xs font-mono mb-2">
-                                buildsmiths/buildsmiths-nextjs-postgres-base
+                                buildsmiths/buildsmiths-nextjs-postgres
                             </div>
                             <Button className="w-full" asChild>
-                                <a href="https://github.com/buildsmiths/buildsmiths-nextjs-postgres-base" target="_blank" rel="noreferrer">
+                                <a href="https://github.com/buildsmiths/buildsmiths-nextjs-postgres" target="_blank" rel="noreferrer">
                                     <GitBranch className="mr-2 h-4 w-4" />
                                     Star on GitHub
                                 </a>

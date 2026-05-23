@@ -9,8 +9,8 @@
 ## What you get
 - Auth-first flow with Auth.js Credentials (email + password) and a built-in server action for registration.
 - Route gating and session strictness via Next.js Middleware (`proxy.ts`).
-- Fully typed data interaction strictly backed by raw PostgreSQL connections natively.
-- No UI component lock-in — Just pure Tailwind CSS V4 and React 19..
+- Fully typed data interaction strictly backed by Drizzle ORM and PostgreSQL natively.
+- No UI component lock-in — Just pure Tailwind CSS V4 and React 19.
 - No unused heavy utility packages.
 
 ---
@@ -19,8 +19,8 @@
 1) Install and set env
 
 ```bash
-git clone https://github.com/buildsmiths/buildsmiths-nextjs-postgres-base.git
-cd buildsmiths-nextjs-postgres-base
+git clone https://github.com/buildsmiths/buildsmiths-nextjs-postgres.git
+cd buildsmiths-nextjs-postgres
 npm install
 cp .env.example .env.local
 ```
@@ -106,6 +106,6 @@ Example blueprints available:
 app/               # App Router pages, Server Actions
 blueprints/        # AI spec documentation to instantly enable extensions securely
 components/        # Lean UI layout wrappers (Tailwind only)
-lib/               # Core configuration, auth handling, and minimal raw postgres wrappers
-scripts/           # Native Node scripts for db application and seeding without dotenv overhead
+lib/               # Core configuration, auth handling, and Drizzle instances
+scripts/           # Native Node scripts for Drizzle seeding without dotenv overhead
 ```
