@@ -86,3 +86,8 @@ scripts/           # Native Node TS scripts for Drizzle seeding without overhead
 - `npm run db:generate`: Generate new Drizzle SQL migrations.
 - `npm run db:push`: Push local Drizzle schema changes to your DB directly.
 - `npm run typecheck`: Run strict TypeScript validation suite.
+
+---
+
+## 📈 Deploy to Vercel
+Just import the repo — Vercel will automatically use the correct Next.js settings thanks to `vercel.json`.
